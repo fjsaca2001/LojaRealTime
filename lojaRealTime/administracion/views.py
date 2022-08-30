@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+import pyrebase
 from django.contrib import messages
 from django.views.generic import View 
 import requests
@@ -15,6 +16,9 @@ from firebase_admin import firestore
 
 def proyecto(request):
     return render(request, "project.html")
+
+def dashboard(request):
+    return render(request, "login.html")
 
 def postAPI():
 
@@ -32,50 +36,58 @@ def postAPI():
 
     return dic['lD']
 
+# Login del sistema
+
+config={
+    "apiKey": "AIzaSyB_3NtWDjh-EXBpqx-zAKYk1DdA4Uyu7DA",
+    "authDomain": "lojarealtime-b480a.firebaseapp.com",
+    "databaseURL": "https://lojarealtime-b480a-default-rtdb.firebaseio.com",
+    "projectId": "lojarealtime-b480a",
+    "storageBucket": "lojarealtime-b480a.appspot.com",
+    "messagingSenderId": "892103784621",
+    "appId": "1:892103784621:web:1960109f370d8f0c51ee24",
+    "measurementId": "G-3T15P7QS0Y"
+}
+
+# Llamo al archivo JSON que contiene mi clave privada
+credenciales = credentials.Certificate("serviceAccountKey.json")
+# Iniciamos los servicios de Firebase con las credenciales
+firebase_admin.initialize_app(credenciales, config)
+db = firestore.client()
+
+#Agrego los valores a la base de datos
+for vehiculo in postAPI():
+    db.collection('vehiculos').add(vehiculo)
 
 class Index(View):
+    
     # Especifico la plantilla o template que usaré
     template = "index.html"
-    # Llamo al archivo JSON que contiene mi clave privada
-    credenciales = credentials.Certificate("serviceAccountKey.json")
-    # Iniciamos los servicios de Firebase con las credenciales
-    firebase_admin.initialize_app(credenciales)
- 
-    db = firestore.client()
-    #Agrego los valores a la base de datos
-    for vehiculo in postAPI():
-        db.collection('vehiculos').add(vehiculo)
-
+    
     def get(self, request):
         return render(request, self.template)
 
-
-# Login del sistema
 def ingreso(request):
-    """"
-    if request.method == "POST":
-        form = AuthenticationForm(request=request, data=request.POST)
-        print(form.errors)
-        if form.is_valid():
-            username = form.data.get("username")
-            raw_password = form.data.get("password")
-            user = authenticate(username=username, password=raw_password)
-            if user is not None:
-                login(request, user)
-                return redirect(Index)
-    else:
-        form = AuthenticationForm()
+    authe = firebase_admin.auth()
+    #database=firebase_admin.database()
+    email=request.POST.get('email')
+    pasw=request.POST.get('pass')
+    try:
+        # if there is no error then signin the user with given email and password
+        user=authe.sign_in_with_email_and_password(email,pasw)
+    except:
+        message="Invalid Credentials!!Please ChecK your Data"
+        return render(request,"login.html",{"message":message})
+    session_id=user['idToken']
+    request.session['uid']=str(session_id)
+    return render(request,"dashboard.html",{"email":email})
 
-    informacion_template = {'form': form}
-    
-    return render(request, 'login.html', informacion_template)
-    """
-    return render(request, 'login.html')
-    
 # logout del sistema
 def logout_view(request):
-    """"
-    logout(request)
-    messages.info(request, "Has salido del sistema")
-    """
-    return redirect(Index)
+
+    message = "Has salido del sistema"
+    try:
+        del request.session['uid']
+    except:
+        pass
+    return render(request,"login.html",{"message":message})

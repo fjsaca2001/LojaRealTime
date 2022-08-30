@@ -11,6 +11,7 @@ urlpatterns = [
    #path('', views.index, name="index"),
    path('', Index.as_view(), name="index"), 
    path('proyecto/', views.proyecto, name="proyecto"),
+   path('dashboard/', views.dashboard, name="dashboard"),
    
    # Ingreso/Salida del sistema
     path('saliendo/logout/', views.logout_view, name="logout_view"),

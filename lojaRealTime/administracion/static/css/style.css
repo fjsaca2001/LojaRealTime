@@ -157,3 +157,19 @@ ul.tabs li a .tab-text{
     margin: 30px;
     font: size 45px;
 }
+.head-index{
+    width: 70%;
+    margin: 50px auto;
+    text-align: center;
+    font-family: "Poppins";
+    color: #1B65A7;
+    
+}
+.head-index h3{
+    color: #A8A5A5;
+    font-size: 20px;
+    padding-top: 15px;
+}
+.secciones-indicadores{
+    
+}
