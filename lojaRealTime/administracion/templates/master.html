@@ -10,6 +10,9 @@
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js">
+    </script>
+    <script src="{% static 'js/wrap.js' %}"></script>
     <title>
       {% block title%}
       {% endblock%}
@@ -37,16 +40,26 @@
             </a>
         </section>
     </section>
-    <div id="head" style="background-image: url('{% static "img/font.png" %}');">
+    <div id="head" style="background-image: url('{% static "img/font.png" %}')">
       <section id="upHead">
       <section id="upHead-left">
         <img src="{% static 'img/logo.png' %}" alt="Logo">
       </section>
       <section id="upHead-rigth">
+        <!--
+          <a href="{% url 'proyecto' %}">
         <button type="button" class="btn btn-outline-light">Inicio</button>
+        </a>
+      -->
+      <a href="{% url 'proyecto' %}">
         <button type="button" class="btn btn-outline-light">Proyecto</button>
+      </a>
+      <a href="{% url 'index' %}">
         <button type="button" class="btn btn-outline-light">Movilidad</button>
+      </a>
+        <a href="{% url 'login' %}">
         <button type="button" class="btn btn-outline-light">Dashboard</button>
+      </a>
       </section>
     </section>
     <section id="downHead">
@@ -59,6 +72,7 @@
     {% block content%}
     {% endblock%}
 
+    
     <div id="footer">
         <img src="{% static 'img/logoUtpl.png' %}" alt="Logo">
         <img src="{% static 'img/logoClipp.png' %}" alt="Logo">

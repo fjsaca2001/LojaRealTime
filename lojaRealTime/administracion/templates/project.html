@@ -1,0 +1,46 @@
+{% extends "master.html" %}
+{% block title %}
+  LojaRealTime | Proyecto
+{% endblock%}
+
+{% block content%}
+  <div class="wrap">
+    <ul class="tabs">
+        <li><a href="#tab1"><span class=""></span><span class="tab-text">CROWDSENSING</span></a></li>
+        <li><a href="#tab2"><span class=""></span><span class="tab-text">DESARROLLADORES</span></a></li>
+        <li><a href="#tab3"><span class=""></span><span class="tab-text">ACERCA DE</span></a></li>
+    </ul>
+
+    <div class="secciones">
+        <article id="tab1">
+            <h1>CROWDSENSING</h1>
+            <p>CrowdSensing móvil que permite recolectar datos utilizando el teléfono inteligente mediante los sensores con los que esta cuenta, posterior a esto se pasan los datos a los proveedores de servicios para finalmente entregárselos al usuario final como datos trabajados, cuyo fin es el de informar de manera estadística mediante graficas o ilustraciones varias situaciones. </p>
+            <p></p>
+        </article>
+        <article id="tab2">
+            <h1>DESARROLADORES</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel voluptates unde, consequuntur aliquid architecto rem numquam expedita minima dolorem pariatur recusandae, eius quod quia aspernatur id impedit, tenetur! Aspernatur incidunt molestiae dolores animi ea praesentium ipsam tenetur voluptas cupiditate perspiciatis eum nihil, natus exercitationem libero earum fuga dignissimos impedit numquam, quasi, placeat officiis voluptates, ad reprehenderit fugiat? Fugiat aperiam et magni, molestiae, numquam consectetur vitae sapiente cupiditate totam laboriosam voluptate obcaecati, aliquam placeat? Suscipit dolores fuga laudantium sed, qui magni iusto dolore quia. Quis fugit exercitationem porro. Rerum nihil omnis recusandae ratione fuga alias eligendi, earum sunt veritatis praesentium eum perspiciatis. Molestias deserunt, iure neque animi quod! Impedit reprehenderit cumque, numquam velit quae cum eius quidem similique laudantium hic deleniti!</p>
+        </article>
+        <article id="tab3">
+            <h1>ACERCA DE</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea numquam odio voluptate. Aliquam incidunt similique, et quasi ducimus quos aut autem non dignissimos dicta sit provident, voluptatibus ut blanditiis perspiciatis cum, vel temporibus minima enim. Asperiores omnis placeat officiis a tenetur sit recusandae, reprehenderit neque. Tempora quibusdam, perferendis id ratione culpa dolorum! Nemo, animi?</p><br>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum dignissimos at esse, ipsum rerum assumenda nisi obcaecati! Aliquam iure voluptatem incidunt, explicabo sit labore, perferendis eius ad vel quia. Praesentium, doloribus. Quisquam provident nostrum totam itaque debitis, minima, tempore dolores!</p>
+        </article>
+    </div>
+</div>
+<script>
+    $('ul.tabs li a:first').addClass('active');
+	$('.secciones article').hide();
+	$('.secciones article:first').show();
+
+	$('ul.tabs li a').click(function(){
+		$('ul.tabs li a').removeClass('active');
+		$(this).addClass('active');
+		$('.secciones article').hide();
+
+		var activeTab = $(this).attr('href');
+		$(activeTab).show();
+		return false;
+	});
+</script>
+{% endblock %}

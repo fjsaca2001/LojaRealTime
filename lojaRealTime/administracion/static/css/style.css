@@ -99,3 +99,61 @@ body{
     border-top: solid 1px #4D4D4D;
     font-family: "Poppins";
 }
+
+.wrap{
+	width: 70%;
+	margin: 60px auto;
+}
+
+ul.tabs{
+	width: 100%;
+	list-style: none;
+	display: flex;
+    align-items: center;
+}
+
+ul.tabs li{
+    margin: auto;
+}
+
+ul.tabs li a{
+	color: rgb(0, 0, 0);
+	text-decoration: none;
+	font-size: 20px;
+	text-align: center;
+	display: block;
+	padding: 20px 10px;
+    font-family: "Noto Sans";
+}
+
+.active{
+    background: rgb(2,0,36);
+    background: linear-gradient(180deg, rgba(27,101,167,1) 0%, rgba(67,117,161,1) 50%, rgba(198,226,251,1) 100%); 
+    border-radius: 20px;
+    color: #F2F4F5 !important;
+}
+
+ul.tabs li a .tab-text{
+	margin-left: 8px;
+}
+
+.secciones{
+	width: 100%;
+}
+
+.secciones article{
+	padding: 30px;
+}
+
+.secciones article p{
+	text-align: justify;
+    font-size: 22px;
+}
+.secciones article h1{
+    text-align: center;
+    font-family: "Poppins";
+    color: #1B65A7;
+    font-weight:lighter;
+    margin: 30px;
+    font: size 45px;
+}

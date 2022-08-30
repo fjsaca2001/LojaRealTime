@@ -11,13 +11,8 @@ headers = {
 
 response = requests.request("POST", url, headers=headers, data=payload)
 dic = response.json()
-cont = 0
-for x in dic['lD']:
-    print(dic['lD'][cont]['id_vehiculo'], " | ", str(cont))
-    cont = cont + 1
 
-print(cont)
-print(len(dic['lD']))
+print(dic['lD'][0]['id_vehiculo'])
 
 
 
