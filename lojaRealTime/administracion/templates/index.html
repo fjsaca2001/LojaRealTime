@@ -4,6 +4,7 @@
 {% endblock%}
 
 {% block content%}
+{% load static %}
 <div class="head-index">
    <h1>MOVILIDAD EN LA CIUDAD</h1>
    <H3>Reporte actual de la ciudad en el área de movilidad</H3>
@@ -11,34 +12,81 @@
 <div class="secciones-indicadores">
    <section id="sec-indi#1">
       <p>Rutas</p>
-      <img src="" alt="Rutas">
-      <p>numero</p>
+      <img src="{% static 'img/bus.png' %}" alt="Rutas">
+      <p>número</p>
    </section>
    <section id="sec-indi#2">
       <p>Ciclistas</p>
-      <img src="" alt="Ciclistas">
+      <img src="{% static 'img/bike.png' %}" alt="Ciclistas">
       <p>numero</p>
    </section>
    <section id="sec-indi#3">
       <p>Incidentes</p>
-      <img src="" alt="Incidentes">
+      <img src="{% static 'img/insident.png' %}" alt="Incidentes">
       <p>numero</p>
    </section>
    <section id="sec-indi#4">
       <p>Accesibilidad</p>
-      <img src="" alt="Accesibilidad">
+      <img src="{% static 'img/acces.png' %}" alt="Accesibilidad">
       <p>numero</p>
    </section>
    <section id="sec-indi#5">
-      <p>Vehiculos</p>
-      <img src="" alt="Vehiculos">
+      <p>Vehículos</p>
+      <img src="{% static 'img/car.png' %}" alt="Vehiculos">
       <p>numero</p>
    </section>
    <section id="sec-indi#6">
       <p>Conductores</p>
-      <img src="" alt="Conductores">
+      <img src="{% static 'img/driver.png' %}" alt="Conductores">
       <p>numero</p>
    </section>
 </div>
-  <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1824.8921496681864!2d-79.20121662582437!3d-3.9961700208999984!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2sec!4v1661318468457!5m2!1ses!2sec" width="100%" height="850" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<div class="secciones-indicadores">
+   <section id="sec-indi#1">
+      <p>Rutas</p>
+      <img src="{% static 'img/bus.png' %}" alt="Rutas">
+      <p>numero</p>
+   </section>
+   <section id="sec-indi#2">
+      <p>Ciclistas</p>
+      <img src="{% static 'img/bike.png' %}" alt="Ciclistas">
+      <p>numero</p>
+   </section>
+   <section id="sec-indi#3">
+      <p>Incidentes</p>
+      <img src="{% static 'img/insident.png' %}" alt="Incidentes">
+      <p>numero</p>
+   </section>
+   <section id="sec-indi#4">
+      <p>Accesibilidad</p>
+      <img src="{% static 'img/acces.png' %}" alt="Accesibilidad">
+      <p>numero</p>
+   </section>
+   <section id="sec-indi#5">
+      <p>Vehiculos</p>
+      <img src="{% static 'img/car.png' %}" alt="Vehiculos">
+      <p>numero</p>
+   </section>
+   <section id="sec-indi#6">
+      <p>Conductores</p>
+      <img src="{% static 'img/driver.png' %}" alt="Conductores">
+      <p>numero</p>
+   </section>
+</div>
+<br>
+<div class="div-iframe">
+   <p id="titulo-map">MAPA DE CALOR DE TRÁFICO</p>
+   <P>Observa el mapa de calor en relación al tiempo real</P>
+</div>
+<iframe class="iframe-map" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1824.8921496681864!2d-79.20121662582437!3d-3.9961700208999984!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2sec!4v1661318468457!5m2!1ses!2sec" width="100%" height="850" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+</iframe>
+<div class="indicadores-trafico" style="background-image: url('{% static "img/traficoIndicadores.png" %}')">
+   <br>
+   <section>
+      <a href="">
+      <p>Indicadores de Movilidad</p>
+      <h4>Velocidad, tráfico, horas pico, etc.</h4>
+      </a>
+   </section>
+</div>
 {% endblock %}
