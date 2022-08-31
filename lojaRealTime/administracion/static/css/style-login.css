@@ -1,0 +1,63 @@
+body{
+    background-repeat: no-repeat;
+    width: 100%; 
+    background-size: cover;
+    height: 100vh;
+}
+.user-login{
+    padding-top: 50px;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    background-color: rgba(254, 254, 254, 0.50);
+    width: 40%;
+    margin-left: 50px;
+}
+.user-login img{
+    height: 50px;
+    margin: auto;
+    display: block;
+}
+.user-login h1{
+    line-height: 51px;
+    font-size: 51px;
+    font-family: "Means Web";
+    font-weight: 600;
+    margin: 40px 90px;
+}
+.user-login p{
+    line-height: 18px;
+    font-size: 25px;
+    font-family: "Graphik Web";
+    margin: 30px 90px;
+}
+.user-login label{
+    font-size: 27px;
+    font-family: "Graphik Web";
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 1px;
+    margin-left: 90px;
+}
+.user-login input{
+    border: 1px solid rgb(0, 0, 0);
+    width: 70%;
+    background-color: rgba(255, 0, 0, 0);
+    font-size: 27px;
+    font-family: "Graphik Web";
+    font-weight: 600;
+    margin: 5px 90px;
+}
+#boton{
+    color: rgb(249, 249, 249);
+    padding: 10px;
+    border: 0px;
+    width: 70%;
+    background-color: #51487C;
+    font-size: 25px;
+    font-family: "Graphik Web";
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 1px;
+    margin-left: 90px;
+}
+

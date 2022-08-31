@@ -1,22 +1,38 @@
-{% extends "master.html" %}
-{% block title %}
-  LojaRealTime | Proyecto
-{% endblock%}
-
-{% block content%}
-  <h1>Login</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style-login.css' %}">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js">
+    </script>
+    <script src="{% static 'js/wrap.js' %}"></script>
+  <title>LojaRealTime | Login</title>
+</head>
+<body style="background-image: url('{% static "img/font.png" %}')">
+  <div class="user-login">
+    <img src="{% static "img/logo2.png" %}" alt="">
+    <h1>Log In</h1>
+    <p>¿No tienes una cuenta? Contactanos</p>
   <form action="/entrando/login/" method="post">
     {% csrf_token %}
-    <br/>
    <!-- Enter Your Email: -->
-    <label for="Email">Email</label>
-    <input type="email"id="Email" name="email"><br><br>
+    <label for="Email">Correo</label><br>
+    <input type="email"id="Email" name="email"><br>
    <!-- Enter Your Password: -->
-    <label for="Password">Password</label>
-    <input type="password" id="Password" name="pass"><br><br>
-    <input type="submit" value="SignIn"><br><br>
+    <label for="Password">Contraseña</label><br>
+    <input type="password" id="Password" name="pass"><br>
+    <input id="boton" type="submit" value="Log In">
     <label>
       <input type="checkbox" checked="checked" name="remember"> Remember me
     </label>
 </form>
-{% endblock %}
+</div>
+</body>
+</html>
