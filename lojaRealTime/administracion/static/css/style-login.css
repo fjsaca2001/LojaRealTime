@@ -8,7 +8,7 @@ body{
     padding-top: 50px;
     height: 100%;
     backdrop-filter: blur(10px);
-    background-color: rgba(254, 254, 254, 0.50);
+    background-color: rgba(254, 254, 254, 0.40);
     width: 40%;
     margin-left: 50px;
 }
@@ -18,11 +18,12 @@ body{
     display: block;
 }
 .user-login h1{
-    line-height: 51px;
-    font-size: 51px;
-    font-family: "Means Web";
-    font-weight: 600;
     margin: 40px 90px;
+    font-family: "Means Web",Georgia,Times,"Times New Roman",serif;
+    font-size: 4.4rem;
+    margin-bottom: 6px;
+    text-transform: capitalize;
+    line-height: 1.1;
 }
 .user-login p{
     line-height: 18px;
@@ -33,19 +34,30 @@ body{
 .user-login label{
     font-size: 27px;
     font-family: "Graphik Web";
-    font-weight: 600;
     margin-top: 20px;
-    margin-bottom: 1px;
     margin-left: 90px;
+    color: #241c15;
+    font-weight: 500;
+    display: block;
+    padding-bottom: 12px;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
 }
 .user-login input{
-    border: 1px solid rgb(0, 0, 0);
-    width: 70%;
+    width: 80%;
     background-color: rgba(255, 0, 0, 0);
     font-size: 27px;
     font-family: "Graphik Web";
-    font-weight: 600;
-    margin: 5px 90px;
+    font-weight: 500;
+    margin: 1px 90px;
+    display: inline-block;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    vertical-align: middle;
+    border-radius: 5px;
+    border: 1px solid rgba(36,28,21,0.3);
 }
 #boton{
     color: rgb(249, 249, 249);
@@ -54,10 +66,20 @@ body{
     width: 70%;
     background-color: #51487C;
     font-size: 25px;
-    font-family: "Graphik Web";
-    font-weight: 600;
+    font-family: "Means Web",Georgia,Times,"Times New Roman",serif;
+    font-weight: 200;
     margin-top: 20px;
     margin-bottom: 1px;
     margin-left: 90px;
 }
-
+.user-login input:focus{
+    border: 1px solid rgba(36,28,21,0.3);
+    background-color: rgba(34, 1, 1, 0);
+}
+.user-login a{
+    text-decoration: none;
+    color: #51487C;    
+}
+.user-login a:hover{
+    font-weight: 700; 
+}

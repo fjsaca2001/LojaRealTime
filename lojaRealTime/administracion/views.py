@@ -46,18 +46,18 @@ config={
     "storageBucket": "lojarealtime-b480a.appspot.com",
     "messagingSenderId": "892103784621",
     "appId": "1:892103784621:web:1960109f370d8f0c51ee24",
-    "measurementId": "G-3T15P7QS0Y"
+    "measurementId": "G-3T15P7QS0Y",
 }
 
 # Llamo al archivo JSON que contiene mi clave privada
 credenciales = credentials.Certificate("serviceAccountKey.json")
 # Iniciamos los servicios de Firebase con las credenciales
-firebase_admin.initialize_app(credenciales, config)
+firebase_admin.initialize_app(credenciales)
 db = firestore.client()
 
-#Agrego los valores a la base de datos
-for vehiculo in postAPI():
-    db.collection('vehiculos').add(vehiculo)
+firebase=pyrebase.initialize_app(config)
+authe = firebase.auth()
+
 
 class Index(View):
     
@@ -67,20 +67,32 @@ class Index(View):
     def get(self, request):
         return render(request, self.template)
 
+def dashboardRealtime(request):
+    return render(request, "dashboardRealtime.html")
+
+def dashboardIndicadores(request):
+    return render(request, "dashboardIndicadores.html")
+
+def dashboardTransito(request):
+    return render(request, "dashboardTransito.html")
+
+def dashboardPerfil(request):
+    return render(request, "dashboardPerfil.html")
+
 def ingreso(request):
-    authe = firebase_admin.auth()
-    #database=firebase_admin.database()
+    
     email=request.POST.get('email')
     pasw=request.POST.get('pass')
+   
     try:
         # if there is no error then signin the user with given email and password
         user=authe.sign_in_with_email_and_password(email,pasw)
     except:
         message="Invalid Credentials!!Please ChecK your Data"
-        return render(request,"login.html",{"message":message})
+        return render(request,"index.html",{"message":message})
     session_id=user['idToken']
     request.session['uid']=str(session_id)
-    return render(request,"dashboard.html",{"email":email})
+    return render(request,"dashboardRealtime.html",{"email":email.split("@")[0]})
 
 # logout del sistema
 def logout_view(request):

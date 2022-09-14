@@ -19,7 +19,9 @@
   <div class="user-login">
     <img src="{% static "img/logo2.png" %}" alt="">
     <h1>Log In</h1>
-    <p>¿No tienes una cuenta? Contactanos</p>
+    <p>
+      ¿No tienes una cuenta? <a href="http://">Contactanos</a>
+    </p>
   <form action="/entrando/login/" method="post">
     {% csrf_token %}
    <!-- Enter Your Email: -->
@@ -29,10 +31,7 @@
     <label for="Password">Contraseña</label><br>
     <input type="password" id="Password" name="pass"><br>
     <input id="boton" type="submit" value="Log In">
-    <label>
-      <input type="checkbox" checked="checked" name="remember"> Remember me
-    </label>
-</form>
+    </form>
 </div>
 </body>
 </html>
