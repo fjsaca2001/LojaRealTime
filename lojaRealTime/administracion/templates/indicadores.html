@@ -1,0 +1,44 @@
+{% extends "master.html" %}
+{% block title %}
+  LojaRealTime | Indicadores de Movilidad
+{% endblock%}
+
+{% block content%}
+{% load static %}
+
+<div class="seccion-movilidad">
+  <h1>Indicadores de Movilidad</h1>
+  <div class="seccion-movilidad1">
+    <div class="card">
+      <img class="card-img-top" src="{% static 'img/velocidad.png' %}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Avenidas con mayor velocidad</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top" src="{% static 'img/trafico.png' %}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Vias con mayor congestión de trafico</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      </div>
+    </div>
+  </div>
+  <div class="seccion-movilidad2">
+    <div class="card">
+      <img class="card-img-top" src="{% static 'img/hcongestion.png' %}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Horarios de congestión de trafico</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top" src="{% static 'img/menorTrafico.png' %}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Vias centricas con menor congestión</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

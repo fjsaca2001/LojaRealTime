@@ -13,7 +13,7 @@
    <section id="sec-indi#1">
       <p>Rutas</p>
       <img src="{% static 'img/bus.png' %}" alt="Rutas">
-      <p>número</p>
+      <p>9</p>
    </section>
    <section id="sec-indi#2">
       <p>Ciclistas</p>
@@ -21,56 +21,24 @@
       <p>numero</p>
    </section>
    <section id="sec-indi#3">
-      <p>Incidentes</p>
-      <img src="{% static 'img/insident.png' %}" alt="Incidentes">
+      <p>Parqueaderos</p>
+      <img src="{% static 'img/insident.png' %}" alt="Parqueaderos">
       <p>numero</p>
    </section>
    <section id="sec-indi#4">
       <p>Accesibilidad</p>
       <img src="{% static 'img/acces.png' %}" alt="Accesibilidad">
-      <p>numero</p>
+      <p>29</p>
    </section>
    <section id="sec-indi#5">
       <p>Vehículos</p>
       <img src="{% static 'img/car.png' %}" alt="Vehiculos">
-      <p>numero</p>
+      <p>{{vehiculosActivos}}</p>
    </section>
    <section id="sec-indi#6">
       <p>Conductores</p>
       <img src="{% static 'img/driver.png' %}" alt="Conductores">
-      <p>numero</p>
-   </section>
-</div>
-<div class="secciones-indicadores">
-   <section id="sec-indi#1">
-      <p>Rutas</p>
-      <img src="{% static 'img/bus.png' %}" alt="Rutas">
-      <p>numero</p>
-   </section>
-   <section id="sec-indi#2">
-      <p>Ciclistas</p>
-      <img src="{% static 'img/bike.png' %}" alt="Ciclistas">
-      <p>numero</p>
-   </section>
-   <section id="sec-indi#3">
-      <p>Incidentes</p>
-      <img src="{% static 'img/insident.png' %}" alt="Incidentes">
-      <p>numero</p>
-   </section>
-   <section id="sec-indi#4">
-      <p>Accesibilidad</p>
-      <img src="{% static 'img/acces.png' %}" alt="Accesibilidad">
-      <p>numero</p>
-   </section>
-   <section id="sec-indi#5">
-      <p>Vehiculos</p>
-      <img src="{% static 'img/car.png' %}" alt="Vehiculos">
-      <p>numero</p>
-   </section>
-   <section id="sec-indi#6">
-      <p>Conductores</p>
-      <img src="{% static 'img/driver.png' %}" alt="Conductores">
-      <p>numero</p>
+      <p>{{vehiculosActivos}}</p>
    </section>
 </div>
 <br>
@@ -83,7 +51,7 @@
 <div class="indicadores-trafico" style="background-image: url('{% static "img/traficoIndicadores.png" %}')">
    <br>
    <section>
-      <a href="">
+      <a href="{% url 'indicadores' %}">
       <p>Indicadores de Movilidad</p>
       <h4>Velocidad, tráfico, horas pico, etc.</h4>
       </a>

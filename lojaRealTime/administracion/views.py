@@ -1,7 +1,9 @@
+from concurrent.futures import ThreadPoolExecutor
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 import pyrebase
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.views.generic import View 
 import requests
@@ -13,12 +15,6 @@ from firebase_admin import credentials
 
 # Importo el Servicio Cloud Firestore 
 from firebase_admin import firestore
-
-def proyecto(request):
-    return render(request, "project.html")
-
-def dashboard(request):
-    return render(request, "login.html")
 
 def postAPI():
 
@@ -58,32 +54,33 @@ db = firestore.client()
 firebase=pyrebase.initialize_app(config)
 authe = firebase.auth()
 
+ #Agrego los valores a la base de datos
+#print(type(postAPI()))
+#executor = ThreadPoolExecutor(max_workers=4)
+"""for vehiculo in postAPI():
+    #executor.submit(db.collection('vehiculos').add(vehiculo))
+    db.collection('vehiculos').add(vehiculo)
+"""
+totalVehiculos = len(postAPI())
 
-class Index(View):
-    
-    # Especifico la plantilla o template que usaré
-    template = "index.html"
-    
-    def get(self, request):
-        return render(request, self.template)
+def index(request):
+    return render(request, "index.html", {"vehiculosActivos":totalVehiculos})
 
-def dashboardRealtime(request):
-    return render(request, "dashboardRealtime.html")
+def proyecto(request):
+    return render(request, "project.html")
 
-def dashboardIndicadores(request):
-    return render(request, "dashboardIndicadores.html")
+def indicadores(request):
+    return render(request, "indicadores.html")
 
-def dashboardTransito(request):
-    return render(request, "dashboardTransito.html")
+def login(request):
+    return render(request, "login.html")
 
-def dashboardPerfil(request):
-    return render(request, "dashboardPerfil.html")
+def dashboard(request):
+    return render(request, "dashboard.html")
 
 def ingreso(request):
-    
     email=request.POST.get('email')
     pasw=request.POST.get('pass')
-   
     try:
         # if there is no error then signin the user with given email and password
         user=authe.sign_in_with_email_and_password(email,pasw)
@@ -92,14 +89,14 @@ def ingreso(request):
         return render(request,"index.html",{"message":message})
     session_id=user['idToken']
     request.session['uid']=str(session_id)
-    return render(request,"dashboardRealtime.html",{"email":email.split("@")[0]})
+    return render(request,"dashboard.html",{"email":email.split("@")[0]})
+
 
 # logout del sistema
 def logout_view(request):
-
     message = "Has salido del sistema"
     try:
         del request.session['uid']
     except:
         pass
-    return render(request,"login.html",{"message":message})
+    return render(request,"index.html",{"message":message, "vehiculosActivos":totalVehiculos})

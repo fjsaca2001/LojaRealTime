@@ -202,6 +202,14 @@ ul.tabs li a .tab-text{
     padding-top: 8px;
     font-weight: 400;
 }
+.secciones-indicadores section:hover{
+    width: 16%;
+    height: 185px;
+    background-color: #6c4f19;
+    font-size: 23px;
+    border-radius: 10px;
+    font-weight: 700;
+}
 .div-iframe{
     text-align: center;
     width: 100%;
@@ -248,4 +256,34 @@ ul.tabs li a .tab-text{
 .indicadores-trafico h4{
     padding-right: 200px;
     font-size: 20px;
+}
+.seccion-movilidad h1{
+    color: #1B65A7;
+    font-family: "Poppins";
+    font-size: 45px;
+}
+.seccion-movilidad{
+    text-align: center;
+    margin: 50px auto;
+    width: 70%;
+    background-color: #F3F3F3;
+}
+.seccion-movilidad img{
+    
+    height: 300px !important;
+}
+.seccion-movilidad1{
+    display: flex;
+    margin: 50px auto;
+    width: 100%;
+}
+.seccion-movilidad2{
+    display: flex;
+    margin: 50px auto;
+    width: 100%;
+    background-color: #F3F3F3;
+}
+.card{
+    width: 50% !important;
+    margin: 20px 40px;
 }
