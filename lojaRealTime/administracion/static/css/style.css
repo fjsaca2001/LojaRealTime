@@ -128,7 +128,7 @@ ul.tabs li a{
 
 .active{
     background: rgb(2,0,36);
-    background: linear-gradient(180deg, rgba(27,101,167,1) 0%, rgba(67,117,161,1) 50%, rgba(198,226,251,1) 100%); 
+    background: linear-gradient(#FFBE84, #ED872D);
     border-radius: 20px;
     color: #F2F4F5 !important;
 }
