@@ -219,6 +219,7 @@ ul.tabs li a .tab-text{
     padding: 10px;
     position: absolute;
     background-color: rgba(255, 255, 255, 0.6);
+    z-index: 1;
 }
 .div-iframe p{
     color: #2F41A2;
@@ -286,4 +287,10 @@ ul.tabs li a .tab-text{
 .card{
     width: 50% !important;
     margin: 20px 40px;
+}
+#map{
+    width: 100%;
+    height: 850px;
+    border:0;
+    overflow: hidden;
 }

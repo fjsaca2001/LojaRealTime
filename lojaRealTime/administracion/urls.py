@@ -12,6 +12,8 @@ urlpatterns = [
    path('proyecto/', views.proyecto, name="proyecto"),
    path('login/', views.login, name="pageLogin"),
    path('indicadores/', views.indicadores, name="indicadores"),
+   path('getUbicaciones/', views.getUbicaciones, name="getUbicaciones"),
+
    
    # Ingreso/Salida del sistema
     path('saliendo/logout/', views.logout_view, name="logout_view"),

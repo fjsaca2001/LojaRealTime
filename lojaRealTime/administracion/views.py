@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -62,6 +63,13 @@ authe = firebase.auth()
     db.collection('vehiculos').add(vehiculo)
 """
 totalVehiculos = len(postAPI())
+
+def getUbicaciones(_request):
+    if(len(postAPI()) >= 0):
+        data = {'mensaje': "Correcto", "vehiculos":postAPI()}
+    else:
+        data = {'mensaje': "Error", "vehiculos":postAPI()}
+    return JsonResponse(data)
 
 def index(request):
     return render(request, "index.html", {"vehiculosActivos":totalVehiculos})
