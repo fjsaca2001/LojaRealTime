@@ -42,19 +42,16 @@ body{
 }
 
 #panel-lateral{
-    height: 90vh;
-    width: 25%;
-    background-color: #e8e8e8;
-    border-radius: 20px;
-    margin: 20px;
+    width: 15%;
+    background-color: #f1f1f1;
     padding-top: 20px;
     font-family: "Poppins";
     color: #1B65A7;
-    box-shadow: 8px -5px 5px -2px #888;
+    box-shadow: 5px 0px 5px -2px #888;
 }
 #panel-lateral a{
     margin: 20px;
-    font-size: 25px;
+    font-size: 15px;
     font-weight: 500;
     text-decoration: none;
     color: #1B65A7;
@@ -62,7 +59,7 @@ body{
 }
 #panel-lateral img{
     margin: 20px;
-    width: 30px;
+    width: 18px;
 }
 #panel-lateral p{
     font-size: 30px;
@@ -78,8 +75,8 @@ body{
     display: flex;
 }
 #contenidoIzq{
-    width: 70%;
-    margin: 20px;
+    width: 90%;
+    margin: 5px 35px;
     padding-top: 20px;
 }
 
@@ -103,8 +100,8 @@ body{
     display: flex;
 }
 .dashRT-Central{
-    width: 80%;
-    margin: 10px;
+    width: 95%;
+    margin: 30px;
     font-family: "Poppins";
 }
 .dashRT-Central h1{
@@ -167,4 +164,9 @@ body{
     font-size: 40px;
     font-weight: 900;
     color: #293855;
+}
+#map{
+    width: 96%;
+    height: 480px;
+    border:0;
 }

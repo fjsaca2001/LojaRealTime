@@ -3,6 +3,7 @@ body{
     width: 100%; 
     background-size: cover;
     height: 100vh;
+    font-family: "Poppins";
 }
 .user-login{
     padding-top: 50px;
@@ -19,7 +20,7 @@ body{
 }
 .user-login h1{
     margin: 40px 90px;
-    font-family: "Means Web",Georgia,Times,"Times New Roman",serif;
+    
     font-size: 4.4rem;
     margin-bottom: 6px;
     text-transform: capitalize;

@@ -30,11 +30,7 @@ function initMap(){
     let loja = {lat: -3.99313, lng: -79.20422}
     map = new google.maps.Map(document.getElementById("map"),{
         center: loja,
-        zoom: 14
+        zoom: 16
     })
-    /*const marcador = new google.maps.Marker({
-        position: loja,
-        map: map,
-    }) */
     localizaciones()
 }
