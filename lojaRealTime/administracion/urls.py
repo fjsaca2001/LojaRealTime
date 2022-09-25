@@ -13,6 +13,7 @@ urlpatterns = [
    path('login/', views.login, name="pageLogin"),
    path('indicadores/', views.indicadores, name="indicadores"),
    path('getUbicaciones/', views.getUbicaciones, name="getUbicaciones"),
+   path('getValoresMapa/', views.getValoresMapa, name="getValoresMapa"),
 
    
    # Ingreso/Salida del sistema

@@ -35,6 +35,24 @@ def getUbicaciones(_request):
         data = {'mensaje': "Error", "vehiculos":postAPI()}
     return JsonResponse(data)
 
+def getValoresMapa(_request):
+    
+    docs = db.collection('vehiculos').where('velocidad', '==', 0).get()
+
+    #docs = db.collection(u'vehiculos').where(u'velocidad', u'==', 0).stream()
+
+    for doc in docs:
+        key = doc.id
+        print(key)
+        #print(f'{doc.to_dict()}')
+        doc.collection('vehiculos').document(key).delete()
+
+    """if(len(postAPI()) >= 0):
+        data = {'mensaje': "Correcto", "vehiculos":ref}
+    else:
+        data = {'mensaje': "Error", "vehiculos":ref}
+    return JsonResponse(data)"""
+
 def index(request):
     return render(request, "index.html", {"vehiculosActivos":len(postAPI())})
 
@@ -75,11 +93,6 @@ def logout_view(request):
     return render(request,"index.html",{"message":message, "vehiculosActivos":len(postAPI())})
     #return redirect("index")
 
-#Agrego los valores a la base de datos
-def cargaDatos():
-    for vehiculo in postAPI():
-        db.collection('vehiculos').add(vehiculo)
-
 #Configuraciones del proyecto y la base de datos
 config={
     "apiKey": "AIzaSyB_3NtWDjh-EXBpqx-zAKYk1DdA4Uyu7DA",
@@ -100,5 +113,3 @@ db = firestore.client()
 
 firebase=pyrebase.initialize_app(config)
 authe = firebase.auth()
-
-#cargaDatos()

@@ -2,7 +2,7 @@ let map;
 
 const localizaciones = async()=>{
     try{
-        const response = await fetch("getUbicaciones");
+        const response = await fetch("getValoresMapa");
         const data = await response.json();
         //console.log(data)
         if (data.mensaje == "Correcto"){
