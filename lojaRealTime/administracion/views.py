@@ -14,7 +14,9 @@ import firebase_admin
 from firebase_admin import credentials
 # Importo el Servicio Cloud Firestore 
 from firebase_admin import firestore
+from datetime import datetime
 
+from administracion.models import Vehiculos
 def postAPI():
     url = "https://www.ktaxifacilsegurorapido.kradac.com/api/utpl/ultimaPosicion"
 
@@ -36,22 +38,22 @@ def getUbicaciones(_request):
     return JsonResponse(data)
 
 def getValoresMapa(_request):
-    
-    docs = db.collection('vehiculos').where('velocidad', '==', 0).get()
-
-    #docs = db.collection(u'vehiculos').where(u'velocidad', u'==', 0).stream()
-
-    for doc in docs:
-        key = doc.id
-        print(key)
-        #print(f'{doc.to_dict()}')
-        doc.collection('vehiculos').document(key).delete()
-
-    """if(len(postAPI()) >= 0):
-        data = {'mensaje': "Correcto", "vehiculos":ref}
+    horaFecha = datetime.now()
+    fechaActual = horaFecha.strftime("%D")
+    horaActual = horaFecha.strftime("%H:%M:%S")
+    datos = list()
+    cur = Vehiculos.objects.all()
+    for v in cur:
+        fechaVehiculo = (v.hora_actual).split(" ")[0]
+        horaVehiculo = (v.hora_actual).split(" ")[1]
+        if((fechaVehiculo == fechaActual) and (horaActual.split(":")[0] == horaVehiculo.split(":")[0] and horaActual.split(":")[1] == horaVehiculo.split(":")[1])):
+            dic = {"latitud": v.latitud, "longitud": v.longitud, "hora_actual" : v.hora_actual}
+            datos.append(dic)
+    if(len(postAPI()) >= 0):
+        data = {'mensaje': "Correcto", "vehiculos":datos}
     else:
-        data = {'mensaje': "Error", "vehiculos":ref}
-    return JsonResponse(data)"""
+        data = {'mensaje': "Error", "vehiculos":datos}
+    return JsonResponse(data)
 
 def index(request):
     return render(request, "index.html", {"vehiculosActivos":len(postAPI())})

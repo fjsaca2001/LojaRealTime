@@ -4,10 +4,10 @@ const localizaciones = async()=>{
     try{
         const response = await fetch("getValoresMapa");
         const data = await response.json();
-        //console.log(data)
+        console.log(data)
         if (data.mensaje == "Correcto"){
             data.vehiculos.forEach(vehiculo => {
-                posVehiculo = {lat: vehiculo.latitud, lng: vehiculo.longitud}
+                posVehiculo = {lat: Number(vehiculo.latitud), lng: Number(vehiculo.longitud)}
                 const marcador = new google.maps.Marker({
                     position: posVehiculo,
                     map: map,

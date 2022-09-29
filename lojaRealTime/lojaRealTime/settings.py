@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'administracion',
-    'clear_cache',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'lojaRealTime.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / '/home/fjsaca/Documentos/proyectoGit/LojaRealTime/flask/tempVehiculos.db',
     }
 }
 
@@ -107,8 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
-
+#TIME_ZONE = 'UTC'
+#Configuracion de la hora de Ecuador
+TIME_ZONE = 'America/Guayaquil'
 USE_I18N = True
 
 USE_L10N = True
@@ -127,3 +128,5 @@ STATICFILES_DIRS = ['/home/fjsaca/Documentos/proyectoGit/LojaRealTime/lojaRealTi
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ORIGIN_ALLOW_ALL = True
