@@ -12,7 +12,7 @@ headers = {
 response = requests.request("POST", url, headers=headers, data=payload)
 dic = response.json()
 
-print(dic['lD'][0]['id_vehiculo'])
+print(len(dic['lD']))
 
 
 

@@ -15,6 +15,8 @@ from firebase_admin import credentials
 # Importo el Servicio Cloud Firestore 
 from firebase_admin import firestore
 from datetime import datetime
+from datetime import timedelta
+import math
 
 from administracion.models import Vehiculos
 def postAPI():
@@ -36,23 +38,66 @@ def getUbicaciones(_request):
     else:
         data = {'mensaje': "Error", "vehiculos":postAPI()}
     return JsonResponse(data)
+#Funcion para calcular la distancia con latitud y longitud
+def calcularDistancia(lng_A, lat_A, lng_B, lat_B):
+    R = 6371.004
+    pi = 3.141592654
+
+    Mlng_A = lng_A
+    Mlat_A = 90 - lat_A
+
+    Mlng_B = lng_B
+    Mlat_B = 90 - lat_B
+
+    C = math.sin(Mlat_A*pi/180) * math.sin(Mlat_B*pi/180) * math.cos((Mlng_A - Mlng_B)*pi/180) +math.cos(Mlat_A*pi/180) * math.cos(Mlat_B*pi/180)
+
+    if(C > 1):
+        C = 1
+
+    print("Cos: " + str(C))
+    Distance = R * math.acos(C)
+
+    return Distance
 
 def getValoresMapa(_request):
     horaFecha = datetime.now()
+    horaFecha = horaFecha - timedelta(seconds=35)
     fechaActual = horaFecha.strftime("%D")
-    horaActual = horaFecha.strftime("%H:%M:%S")
-    datos = list()
-    cur = Vehiculos.objects.all()
-    for v in cur:
-        fechaVehiculo = (v.hora_actual).split(" ")[0]
-        horaVehiculo = (v.hora_actual).split(" ")[1]
-        if((fechaVehiculo == fechaActual) and (horaActual.split(":")[0] == horaVehiculo.split(":")[0] and horaActual.split(":")[1] == horaVehiculo.split(":")[1])):
-            dic = {"latitud": v.latitud, "longitud": v.longitud, "hora_actual" : v.hora_actual}
-            datos.append(dic)
+    horaActual = horaFecha.strftime("%H:%M")
+    datosActuales = list()
+    datosAntiguos = list()
+
+    # Consulta que retorna todos los vehiculos en tiempo actual
+    datosTiempoReal = Vehiculos.objects.filter(hora_actual__startswith=fechaActual + " " +  horaActual)
+
+    # Consulta que retorna todos los vehiculos en 3 min antes actual
+    horaFechaAntigua = horaFecha - timedelta(minutes=3)
+    horaAntigua = horaFechaAntigua.strftime("%H:%M")
+    datosTiempoAtras = Vehiculos.objects.filter(hora_actual__startswith=fechaActual + " " +  horaAntigua)
+
+    # Hora con 3 min atras
+    horaFechaAntigua = horaFecha - timedelta(minutes=3)
+    horaAntigua = horaFechaAntigua.strftime("%H:%M")
+
+    for vehiculoActual in datosTiempoReal:
+        for vehiculosAntiguo in datosTiempoAtras:
+            if(vehiculoActual.id_vehiculo == vehiculosAntiguo.id_vehiculo):
+                #print("lgA: " + vehiculoActual.longitud + " laA: " + vehiculoActual.latitud +" lgB: " +  vehiculosAntiguo.longitud + " laB: " +  vehiculosAntiguo.latitud)
+                distancia = calcularDistancia(float(vehiculoActual.longitud), float(vehiculoActual.latitud), float(vehiculosAntiguo.longitud), float(vehiculosAntiguo.latitud))
+                if (distancia < 0.5):
+                    #print("Id_vehiculo: " + vehiculoActual.id_vehiculo + " La distancia es (Metros): " + str(round(distancia,1)))
+                    dic = {"latitud": vehiculoActual.latitud, "longitud": vehiculoActual.longitud, "id_vehiculo" : vehiculoActual.id_vehiculo, "hora_actual": vehiculoActual.hora_actual}
+                    datosActuales.append(dic)
+
+
+    """for v in datosTiempoReal:
+        dic = {"latitud": vehiculoActual.latitud, "longitud": vehiculoActual.longitud, "id_vehiculo" : vehiculoActual.id_vehiculo, "hora_actual": vehiculoActual.hora_actual}
+        datosActuales.append(dic)
+    """
     if(len(postAPI()) >= 0):
-        data = {'mensaje': "Correcto", "vehiculos":datos}
+        data = {'mensaje': "Correcto", "vehiculos":datosActuales}
     else:
-        data = {'mensaje': "Error", "vehiculos":datos}
+        data = {'mensaje': "Error", "vehiculos":datosActuales}
     return JsonResponse(data)
 
 def index(request):

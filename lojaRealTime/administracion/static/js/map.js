@@ -11,6 +11,7 @@ const localizaciones = async()=>{
                 const marcador = new google.maps.Marker({
                     position: posVehiculo,
                     map: map,
+                    icon: "./home/fjsaca/Documentos/proyectoGit/LojaRealTime/lojaRealTime/administracion/static/img/marcador.png"
                 }) 
             });
         }else{
