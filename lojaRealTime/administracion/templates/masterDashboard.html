@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/style-Dashboard.css' %}">
     {% load static %}
     <!-- Link del js para manipular el mapa de Google -->
-    <script src="{% static 'js/map.js' %}"></script>
+    <script src="{% static 'js/mapD.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js">
     </script>
     <script src="{% static 'js/wrap.js' %}"></script>
@@ -37,7 +37,7 @@
             </a>
         </section>
         <section id="info-social">
-            <p>Bienvenido: {{email}}</p>
+            <p>Bienvenido {{email}}</p>
             <img src="{% static 'img/user.png' %}" alt="User">
             <a href="{% url 'logout_view' %}">
             <img src="{% static 'img/logOut.png' %}" alt="Logout">

@@ -3,7 +3,8 @@ body{
     width: 100%; 
     background-size: cover;
     height: 100vh;
-    font-family: "Poppins";
+    font-family: serif;
+    color: aliceblue;
 }
 .user-login{
     padding-top: 50px;
@@ -14,13 +15,13 @@ body{
     margin-left: 50px;
 }
 .user-login img{
-    height: 50px;
+    height: 60px;
     margin: auto;
     display: block;
 }
 .user-login h1{
     margin: 40px 90px;
-    
+    color: aliceblue;
     font-size: 4.4rem;
     margin-bottom: 6px;
     text-transform: capitalize;
@@ -29,15 +30,15 @@ body{
 .user-login p{
     line-height: 18px;
     font-size: 25px;
-    font-family: "Graphik Web";
+    font-family: serif;
     margin: 30px 90px;
 }
 .user-login label{
     font-size: 27px;
-    font-family: "Graphik Web";
+    font-family: serif;
     margin-top: 20px;
     margin-left: 90px;
-    color: #241c15;
+    color: aliceblue;
     font-weight: 500;
     display: block;
     padding-bottom: 12px;
