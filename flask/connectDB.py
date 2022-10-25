@@ -25,6 +25,7 @@ class Vehiculos(db.Model):
     red = db.Column(db.Integer)
     bateria = db.Column(db.Integer)
     hora_actual = db.Column(db.String)
+    #ubicacion = db.Column(db.String)
 
     def __repr__(self):
         return "<Vehiculo %r" % self.id_vehiculo

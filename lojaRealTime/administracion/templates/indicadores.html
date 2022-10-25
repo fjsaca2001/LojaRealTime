@@ -39,14 +39,24 @@
       <img class="card-img-top" src="{% static 'img/hcongestion.png' %}" alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">Horarios de congestión de trafico</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <ul>
+          {% for hora in horasCongestion %}
+          <li>{{hora}}</li>
+          {% endfor %}
+        </ul>
+        <p class="card-text">Aqui van las horas</p>
       </div>
     </div>
     <div class="card">
       <img class="card-img-top" src="{% static 'img/menorTrafico.png' %}" alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">Vias centricas con menor congestión</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <ul>
+          {% for via in viasMenorCongestion %}
+          <li>{{via}}</li>
+          {% endfor %}
+        </ul>
+        <p class="card-text">Aqui se muestran las vias</p>
       </div>
     </div>
   </div>

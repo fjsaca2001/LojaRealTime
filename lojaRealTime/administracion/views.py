@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
+import random
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -79,9 +80,9 @@ def getValoresMapa(_request):
     for vehiculoActual in datosTiempoReal:
         for vehiculosAntiguo in datosTiempoAtras:
             if(vehiculoActual.id_vehiculo == vehiculosAntiguo.id_vehiculo):
-                distancia = calcularDistancia(float(vehiculoActual.longitud), float(vehiculoActual.latitud), float(vehiculosAntiguo.longitud), float(vehiculosAntiguo.latitud))
-                if (distancia[1] < 10 and (distancia[0] > 0.09 and distancia[0] < 0.4)):
-                    dic = {"latitud": vehiculoActual.latitud, "longitud": vehiculoActual.longitud, "id_vehiculo" : vehiculoActual.id_vehiculo, "hora_actual": vehiculoActual.hora_actual, "distancia": round(distancia[0], 2), "velocidad" : round(distancia[1],2)}
+                distanciaVelocidad = calcularDistancia(float(vehiculoActual.longitud), float(vehiculoActual.latitud), float(vehiculosAntiguo.longitud), float(vehiculosAntiguo.latitud))
+                if (distanciaVelocidad[1] < 10 and (distanciaVelocidad[0] > 0.09 and distanciaVelocidad[0] < 0.4)):
+                    dic = {"latitud": vehiculoActual.latitud, "longitud": vehiculoActual.longitud, "id_vehiculo" : vehiculoActual.id_vehiculo, "hora_actual": vehiculoActual.hora_actual, "distancia": round(distanciaVelocidad[0], 2), "velocidad" : round(distanciaVelocidad[1],2)}
                     datosActuales.append(dic)
 
     if(len(postAPI()) >= 0):
@@ -100,46 +101,71 @@ def proyecto(request):
 
 def indicadores(request):
     gmaps = googlemaps.Client(key='AIzaSyBmcEHbItWXSbgIH8BiQuD6Ns5bfyBoLtY')
-    #for x in range(1,10):
-        #reverse_geocode_result = gmaps.reverse_geocode((40.714224, -73.961452))
-        #print(reverse_geocode_result[0]["formatted_address"])
     
     avVelocidad = list()
+    autosViasCongestion = list()
     viasCongestion = list()
+    horasCongestion = list()
+    viasMenorCongestion = list()
+
 
     # Consulta que retorna todos los vehiculos en tiempo actual
     datosTiempoReal = Vehiculos.objects.filter(hora_actual__startswith=obtenerHora()[0])
 
     # Consulta que retorna todos los vehiculos en 3 min antes actual
     datosTiempoAtras = Vehiculos.objects.filter(hora_actual__startswith=obtenerHora()[1])
-
+    # Obtencion de las avenidas con mayor velocidad
     for vehiculoActual in datosTiempoReal:
         for vehiculosAntiguo in datosTiempoAtras:
             if(vehiculoActual.id_vehiculo == vehiculosAntiguo.id_vehiculo):
                 distanciaVelocidad = calcularDistancia(float(vehiculoActual.longitud), float(vehiculoActual.latitud), float(vehiculosAntiguo.longitud), float(vehiculosAntiguo.latitud))
-                if (distanciaVelocidad[1] > 35):
+                if (distanciaVelocidad[1] > 30):
                     reverse_geocode_result = gmaps.reverse_geocode((vehiculoActual.latitud, vehiculoActual.longitud))
-                    if("Av." in reverse_geocode_result[0]["formatted_address"]):
-                        #for calle in reverse_geocode_result[0]["formatted_address"].split(","):
-                            #if("Av." in calle):
-                                #print(calle)
-                        
-                        #print(reverse_geocode_result[0]["formatted_address"].split(","))
-                        avVelocidad.append(reverse_geocode_result[0]["formatted_address"])
-                        #datosActuales.append(reverse_geocode_result[0]["address_components"][1]["short_name"])
-                elif (distanciaVelocidad[1] < 10 and distanciaVelocidad[1] > 0):
-                    reverse_geocode_result = gmaps.reverse_geocode((vehiculoActual.latitud, vehiculoActual.longitud))
-                    if("Loja" in reverse_geocode_result[0]["formatted_address"]):
-                        viasCongestion.append(reverse_geocode_result[0]["formatted_address"])
+                    if("Av." in reverse_geocode_result[0]['formatted_address']):
+                        avVelocidad.append(reverse_geocode_result[0]['formatted_address'])
+                    else:
+                        try:
+                            if(reverse_geocode_result[0]['address_components'][1]['types'] == ['route']):
+                                viasMenorCongestion.append(reverse_geocode_result[0]['address_components'][1]['long_name'])
+                        except:
+                            pass 
+                elif(distanciaVelocidad[1] < 10):
+                    autosViasCongestion.append([float(vehiculoActual.latitud), float(vehiculosAntiguo.longitud)])
 
-    data = {"vehiculos" : avVelocidad}
-    print(data)
+
+    if len(autosViasCongestion) > 10:
+        autosViasCongestion = random.choices(autosViasCongestion, k=10)
     
+    for v in autosViasCongestion:
+        reverse_geocode_result = gmaps.reverse_geocode((v[0], v[1]))
+        try:
+            if(reverse_geocode_result[0]['address_components'][1]['types'] == ['route']):
+                viasCongestion.append(reverse_geocode_result[0]['address_components'][1]['long_name'])
+                print(reverse_geocode_result[0]['address_components'][1]['long_name'])
+        except:
+            pass
+    
+    avVelocidad = set(avVelocidad)
+    viasCongestion = set(viasCongestion)
+
+
     # Horarios de congestion de trafico 
+    hora = datetime.now()
+    fecha = hora.strftime("%D")
+    rango = int(int(hora.strftime("%H:%M").split(":")[0])/ 2) - 2
+    cHora = 6
+    for i in range(1, rango + 1):
+        datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = cHora).strftime("%H") and fecha + " " + hora.replace(hour = cHora + 1).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=10).count()
+        horasCongestion.append([hora.replace(hour = cHora).strftime("%H")+":00 - " + hora.replace(hour = cHora+1).strftime("%H")+ ":59", datosHoras])
+        cHora = cHora + 2
+    horasCongestion.sort(reverse=True)
+    horasCongestion = horasCongestion[:5]
     # Vias centricas con menor congestion 
-    # Consulta que retorna todos los vehiculos en tiempo actual
-    
-    return render(request, "indicadores.html", {"avVelocidad": avVelocidad, "viasCongestion": viasCongestion})
+    if len(viasMenorCongestion) > 10:
+        viasMenorCongestion = random.choices(viasMenorCongestion, k=10)
+
+
+    return render(request, "indicadores.html", {"avVelocidad": avVelocidad, "viasCongestion": viasCongestion, "horasCongestion": horasCongestion , "viasMenorCongestion": viasMenorCongestion})
 
 def login(request):
     return render(request, "login.html")

@@ -170,3 +170,30 @@ body{
     height: 480px;
     border:0;
 }
+/*.infoPantalla{
+    position: absolute;
+    top:10vh;
+    left: 5vw;
+    bottom: 30vh;
+    width: fit-content;
+    border: 2px solid black;
+    z-index: 5;
+    color: white;
+    background-color: #333;
+    opacity: 0.8;
+    border-radius: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.infoPantalla > h3{
+    text-align: center;
+    padding: 2rem;
+    border-bottom: 3px solid lightblue; 
+}
+.punto__info{
+    flex: 1;
+    padding: 2rem;
+}*/

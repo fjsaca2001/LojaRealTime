@@ -8,6 +8,8 @@ from firebase_admin import credentials, initialize_app, firestore
 from connectDB import Vehiculos
 from connectDB import db
 from flask_sqlalchemy import SQLAlchemy
+#import googlemaps
+from geopy.geocoders import Nominatim
 
 
 # Llamo al archivo JSON que contiene mi clave privada
@@ -37,9 +39,18 @@ def createApp():
     jsonData = requests.get("http://127.0.0.1:8000/getUbicaciones/")
     vehiculos = json.loads(jsonData.content)['vehiculos']
     print("Escrito a las: " + str(hora))
+    #gmaps = googlemaps.Client(key='AIzaSyBmcEHbItWXSbgIH8BiQuD6Ns5bfyBoLtY')
+    geolocalizador = Nominatim(user_agent="appLoja")
+
     for vehiculo in vehiculos:
+        #reverse_geocode_result = gmaps.reverse_geocode((vehiculo["latitud"], vehiculo["longitud"]))
+        ubicacion = ""
+        """if(vehiculo["velocidad"] > 5):
+            try:
+                ubicacion = (geolocalizador.reverse((vehiculo["latitud"], vehiculo["longitud"]))).raw['address']['road']
+            except:
+                ubicacion = """""
         vehiculo["hora_actual"] = hora
-        #db.collection('vehiculos').add(vehiculo)
         newVehiculo = Vehiculos(
             id_usuario = vehiculo["id_usuario"],
             id_vehiculo =  vehiculo["id_vehiculo"],
@@ -57,12 +68,13 @@ def createApp():
             consumo =  vehiculo["consumo"],
             red =  vehiculo["red"],
             bateria =  vehiculo["bateria"],
-            hora_actual =  vehiculo["hora_actual"]
+            hora_actual =  vehiculo["hora_actual"],
+            #ubicacion = reverse_geocode_result[0]["formatted_address"]
+            #ubicacion = ubicacion
         )
         db.session.add(newVehiculo)
     db.session.commit()
     print("Ejecucion Dormida")
     sleep(58)
-
 while(True):
     createApp()
