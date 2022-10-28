@@ -294,3 +294,7 @@ ul.tabs li a .tab-text{
     border:0;
     overflow: hidden;
 }
+.card-text{
+    text-align: left !important;
+    margin-left: 20px !important;
+}

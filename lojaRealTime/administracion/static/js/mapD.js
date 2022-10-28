@@ -10,11 +10,11 @@ const localizaciones = async () => {
             scale: 3,
             anchor: new google.maps.Point(0, 0),
         };
-
         const response = await fetch("getValoresMapaDash");
         const data = await response.json();
         const total = (Object.keys(data.vehiculos)).length;
         console.log(total)
+        document.getElementById('vDetenidos').innerHTML=total;
         if (data.mensaje == "Correcto") {
             data.vehiculos.forEach(vehiculo => {
                 posVehiculo = { lat: Number(vehiculo.latitud), lng: Number(vehiculo.longitud) }

@@ -22,5 +22,6 @@ urlpatterns = [
 
     # Url Para el Dashboard
     path('dashboard/', views.dashboard, name="dashboard"),
+    path('dashboardIndicadores/', views.dashboardIndicadores, name="dashboardIndicadores"),
     path('dashboard/getValoresMapaDash/', views.getValoresMapa, name="getValoresMapaDash"),
 ]

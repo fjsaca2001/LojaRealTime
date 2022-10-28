@@ -14,32 +14,26 @@
     <h3>Vehículos</h3>
     <div class="seccion-dashRT">
       <div class="secciones-dashRT">
-        <h3>54</h3>
-        <p>Enbotellamientos</p>
+        <h3>{{vehiculosHoy}}</h3>
+        <p>Vehiculos activos hoy</p>
       </div>
       <div class="secciones-dashRT">
-        <h3>354</h3>
+        <h3>{{vActivos}}</h3>
         <p>Vehiculos Activos</p>
       </div>
       <div class="secciones-dashRT">
-        <h3>54</h3>
+        <h3>{{vParados}}</h3>
         <p>Vehiculos Detenidos</p>
       </div>
     </div>
     <h3>Velocidades</h3>
     <div class="seccion-dashRT">
+      {% for calle in listaVias %}
       <div class="secciones-dashRT">
-        <h3>50 Km/h</h3>
-        <p>Sucre</p>
+        <h3>{{calle.1}} Km/h</h3>
+        <p>{{calle.0}}</p>
       </div>
-      <div class="secciones-dashRT">
-        <h3>35 Km/h</h3>
-        <p>Lourdes</p>
-      </div>
-      <div class="secciones-dashRT">
-        <h3>90 Km/h</h3>
-        <p>Av. Universitaria</p>
-      </div>
+      {% endfor %}
     </div>
   </div>
   <div class="dashRT-Derecho">
@@ -50,19 +44,15 @@
       <div class="bodyResumen">
         <section class="resumen">
           <h3>25</h3>
-          <p>Enbotellamientos</p>
+          <p>Embotellamientos en la mañana</p>
         </section>
         <section class="resumen">
           <h3>25</h3>
-          <p>Enbotellamientos</p>
+          <p>Embotellamientos en la tarde</p>
         </section>
         <section class="resumen">
           <h3>25</h3>
-          <p>Enbotellamientos</p>
-        </section>
-        <section class="resumen">
-          <h3>25</h3>
-          <p>Enbotellamientos</p>
+          <p>Embotellamientos en la noche</p>
         </section>
       </div>
     </div>
@@ -73,8 +63,8 @@
       </section>
       <div class="bodyResumen">
         <section class="resumen">
-          <h3>25</h3>
-          <p>Enbotellamientos</p>
+          <h3 id="vDetenidos">...</h3>
+          <p>Embotellamientos en tiempo real</p>
         </section>
       </div>
     </div>

@@ -13,24 +13,18 @@
       <img class="card-img-top" src="{% static 'img/velocidad.png' %}" alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">Avenidas con mayor velocidad</h5>
-        <ul>
           {% for calle in avVelocidad %}
-          <li>{{calle}}</li>
+            <p class="card-text">{{calle}}</p>
           {% endfor %}
-        </ul>
-        <p class="card-text">Aqui se muestran las calles</p>
       </div>
     </div>
     <div class="card">
       <img class="card-img-top" src="{% static 'img/trafico.png' %}" alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">Vias con mayor congestión de trafico</h5>
-        <ul>
           {% for calle in viasCongestion %}
-          <li>{{calle}}</li>
+            <p class="card-text">{{calle}}</p>
           {% endfor %}
-        </ul>
-        <p class="card-text">Aqui se muestran las calles</p>
       </div>
     </div>
   </div>
@@ -39,24 +33,18 @@
       <img class="card-img-top" src="{% static 'img/hcongestion.png' %}" alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">Horarios de congestión de trafico</h5>
-        <ul>
           {% for hora in horasCongestion %}
-          <li>{{hora}}</li>
+          <p class="card-text">{{hora.0}}</p>
           {% endfor %}
-        </ul>
-        <p class="card-text">Aqui van las horas</p>
       </div>
     </div>
     <div class="card">
       <img class="card-img-top" src="{% static 'img/menorTrafico.png' %}" alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">Vias centricas con menor congestión</h5>
-        <ul>
           {% for via in viasMenorCongestion %}
-          <li>{{via}}</li>
+          <p class="card-text">{{via}}</p>
           {% endfor %}
-        </ul>
-        <p class="card-text">Aqui se muestran las vias</p>
       </div>
     </div>
   </div>
