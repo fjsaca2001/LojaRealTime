@@ -174,7 +174,7 @@ def login(request):
     return render(request, "login.html")
 
 def dashboard(request):
-    
+
     listaVias = list()
     viasVelocidad = list(Vehiculos.objects.filter(hora_actual__startswith=obtenerHora()[0].split(" ")[0]).values_list('velocidad', 'latitud', 'longitud','id_vehiculo'))
     viasVelocidad.sort(reverse=True)
@@ -190,7 +190,31 @@ def dashboard(request):
     vehiculosHoy = len(Vehiculos.objects.filter(hora_actual__startswith=obtenerHora()[0].split(" ")[0]).values_list('id_usuario').distinct())
     vParados = len([x for x in postAPI() if x['velocidad'] == 0])
 
-    return render(request, "dashboard.html",{"vActivos" : len(postAPI()), "vParados": vParados, "vehiculosHoy": vehiculosHoy, "listaVias" :listaVias})
+    #Resumen del trfico (Mañana, tarde, noche)
+    hora = datetime.now()
+    fecha = hora.strftime("%D")
+
+    eManana = 0
+    eTarde = 0
+    eNoche = 0
+    for h in range(6,12):
+        datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+        eManana = eManana + datosHoras
+
+    for h in range(12,19):
+        datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+        eTarde = eManana + datosHoras
+
+    for h in range(19,24):
+        datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+        eNoche = eManana + datosHoras
+    
+    eManana = int(eManana / 6)
+    eTarde = int(eTarde / 7)
+    eNoche = int(eNoche / 5)
+    
+    
+    return render(request, "dashboard.html",{"vActivos" : len(postAPI()), "vParados": vParados, "vehiculosHoy": vehiculosHoy, "listaVias" :listaVias, "eManana": eManana, "eTarde": eTarde, "eNoche": eNoche})
 
 def dashboardIndicadores(request):
     return render(request, "dashboardIndicadores.html")
