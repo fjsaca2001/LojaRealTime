@@ -19,8 +19,7 @@ from datetime import datetime
 from datetime import timedelta
 from geopy.distance import geodesic
 import googlemaps
-
-import math
+import calendar
 
 from administracion.models import Vehiculos
 
@@ -68,7 +67,6 @@ def obtenerHora():
 
     return (fechaActual + " " +  horaActual), (fechaActual + " " +  horaAntigua)
     
-
 def getValoresMapa(_request):
     datosActuales = list()
 
@@ -203,11 +201,11 @@ def dashboard(request):
 
     for h in range(12,19):
         datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-        eTarde = eManana + datosHoras
+        eTarde = eTarde + datosHoras
 
     for h in range(19,24):
         datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-        eNoche = eManana + datosHoras
+        eNoche = eNoche + datosHoras
     
     eManana = int(eManana / 6)
     eTarde = int(eTarde / 7)
@@ -218,6 +216,64 @@ def dashboard(request):
 
 def dashboardIndicadores(request):
     return render(request, "dashboardIndicadores.html")
+
+def estadisticasPost(_request):
+    #Resumen del trfico (Mañana, tarde, noche)
+    estadisticasDias = list()
+    horaFechaActual = datetime.now()
+    fecha = horaFechaActual.strftime("%D")
+    mes, dia, anio = (int(i) for i in fecha.split("/"))
+    nroDia = calendar.weekday(anio, mes, dia)
+    dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
+    
+    if(dias[nroDia] == "Lunes"):
+        horaFechaActual = horaFechaActual - timedelta(days = 7)
+    elif(dias[nroDia] == "Martes"):
+        horaFechaActual = horaFechaActual - timedelta(days = 8)
+    elif(dias[nroDia] == "Miercoles"):
+        horaFechaActual = horaFechaActual - timedelta(days = 9)
+    elif(dias[nroDia] == "Jueves"):
+        horaFechaActual = horaFechaActual - timedelta(days = 10)
+    elif(dias[nroDia] == "Viernes"):
+        horaFechaActual = horaFechaActual - timedelta(days = 11)
+    elif(dias[nroDia] == "Sabado"):
+        horaFechaActual = horaFechaActual - timedelta(days = 12)
+    elif(dias[nroDia] == "Domingo"):
+        horaFechaActual = horaFechaActual - timedelta(days = 6)
+    
+    fecha = horaFechaActual.strftime("%D")
+
+    eManana = 0
+    eTarde = 0
+    eNoche = 0
+    for x in range(1,8):
+        for h in range(6,12):
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            eManana = eManana + datosHoras
+
+        for h in range(12,19):
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            eTarde = eTarde + datosHoras
+
+        for h in range(19,24):
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            eNoche = eNoche + datosHoras
+        
+        horaFechaActual = horaFechaActual + timedelta(days = 1)
+        fecha = horaFechaActual.strftime("%D")
+        eManana = int(eManana / 6)
+        eTarde = int(eTarde / 7)
+        eNoche = int(eNoche / 5)
+        estadisticasDias.append(eManana + eTarde + eNoche)
+
+
+    data = {'mensaje': "Correcto", "estadisticasDias":estadisticasDias}
+    
+    return JsonResponse(data)
+
+def estadisticas(request):
+    return render(request, "estadisticas.html")
+
 
 def ingreso(request):
     email=request.POST.get('email')

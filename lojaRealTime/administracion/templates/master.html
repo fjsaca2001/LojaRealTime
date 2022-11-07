@@ -22,6 +22,11 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js">
     </script>
     <script src="{% static 'js/wrap.js' %}"></script>
+    <!-- Llamada a los scripts para graficas -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <title>
       {% block title%}
       {% endblock%}
@@ -66,6 +71,9 @@
       <a href="{% url 'index' %}">
         <button type="button" class="btn btn-outline-light">Movilidad</button>
       </a>
+      <a href="{% url 'estadisticas' %}">
+        <button type="button" class="btn btn-outline-light">Estadísticas</button>
+      </a>
         <a href="{% url 'pageLogin' %}">
         <button type="button" class="btn btn-outline-light">Dashboard</button>
       </a>
@@ -74,7 +82,9 @@
     <section id="downHead">
       <h1>Móvil CrowdSensing Loja</h1>
       <h3>Arquitectura Para la Gestión de Datos en Tiempo Real</h3>
+      <!--
       <button type="button" class="btn btn-warning">Más Información</button>
+      -->
        </section>
     </div>
 

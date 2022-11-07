@@ -1,0 +1,187 @@
+{% extends "master.html" %} {% block title %} LojaRealTime | Indicadores de
+Movilidad {% endblock%} {% block content%} {% load static %}
+<!--
+<div class="seccion-movilidad">
+  <h1>Indicadores de Movilidad</h1>
+  <div class="seccion-movilidad1">
+    <div class="card">
+      <img class="card-img-top" src="{% static 'img/velocidad.png' %}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Avenidas con mayor velocidad</h5>
+          {% for calle in avVelocidad %}
+            <p class="card-text">{{calle}}</p>
+          {% endfor %}
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top" src="{% static 'img/trafico.png' %}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Vias con mayor congestión de trafico</h5>
+          {% for calle in viasCongestion %}
+            <p class="card-text">{{calle}}</p>
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="seccion-movilidad2">
+    <div class="card">
+      <img class="card-img-top" src="{% static 'img/hcongestion.png' %}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Horarios de congestión de trafico</h5>
+          {% for hora in horasCongestion %}
+          <p class="card-text">{{hora.0}}</p>
+          {% endfor %}
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top" src="{% static 'img/menorTrafico.png' %}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Vias centricas con menor congestión</h5>
+          {% for via in viasMenorCongestion %}
+          <p class="card-text">{{via}}</p>
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+-->
+{{estadisticasDias}}
+<h2>Estadísticas por día</h2>
+<figure class="highcharts-figure">
+  <div id="container"></div>
+  <p class="highcharts-description">
+    Pie chart showing a hollow semi-circle. This is a compact visualization,
+    often used in dashboards.
+  </p>
+</figure>
+<h2>Estadisticas por semana</h2>
+<div class="graficaSemana">
+  <figure class="highcharts-figure">
+    <div id="container-semana"></div>
+    <p class="highcharts-description">
+      A basic column chart comparing emissions by pollutant. Oil and gas
+      extraction has the overall highest amount of emissions, followed by
+      manufacturing industries and mining. The chart is making use of the axis
+      crosshair feature, to highlight years as they are hovered over.
+    </p>
+  </figure>
+</div>
+<script type="application/javascript">
+      try {
+          const response = fetch("estadisticasPost");
+          const data = response.json();
+          // Data retrieved from https://netmarketshare.com/
+    Highcharts.chart("container", {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: 0,
+        plotShadow: false,
+      },
+      title: {
+        text: "Lunes",
+        align: "center",
+        verticalAlign: "middle",
+        y: 60,
+      },
+      tooltip: {
+        pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>",
+      },
+      accessibility: {
+        point: {
+          valueSuffix: "%",
+        },
+      },
+      plotOptions: {
+        pie: {
+          dataLabels: {
+            enabled: true,
+            distance: -50,
+            style: {
+              fontWeight: "bold",
+              color: "white",
+            },
+          },
+          startAngle: -90,
+          endAngle: 90,
+          center: ["50%", "75%"],
+          size: "110%",
+        },
+      },
+      series: [
+        {
+          type: "pie",
+          name: "Porcentaje de trafico",
+          innerSize: "50%",
+          colorByPoint: true,
+          data: [
+            ["Mañana", 73.86],
+            ["Tarde", 11.97],
+            ["Noche", 5.52],
+            /*{
+              name: "Other",
+              y: 3.77,
+              dataLabels: {
+                enabled: false,
+              },
+            },
+            */
+          ],
+        },
+      ],
+    });
+
+    Highcharts.chart('container-semana', {
+      chart: {
+          type: 'column'
+      },
+      title: {
+          text: 'Reporte semanal de embotellamientos'
+      },
+      subtitle: {
+          text: 'Reporte de columnas'
+      },
+      xAxis: {
+          categories: [
+              'Lunes',
+              'Martes',
+              'Miercoles',
+              'Jueves',
+              'Viernes',
+              'Sabado',
+              'Domingo'
+          ],
+          crosshair: true
+      },
+      yAxis: {
+          title: {
+              useHTML: true,
+              text: 'Porcentaje de embotellamientos'
+          }
+      },
+      tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+              '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
+      },
+      plotOptions: {
+          column: {
+              pointPadding: 0.2,
+              borderWidth: 0
+          }
+      },
+      series: [{
+          name: 'Embotellamientos',
+          showInLegend: false,
+          colorByPoitn: true,
+          data: data.estadisticasDias
+      }]
+  });
+      } catch (e) {
+          console.log(e)
+          alert("Error")
+      }
+</script>
+{% endblock %}
