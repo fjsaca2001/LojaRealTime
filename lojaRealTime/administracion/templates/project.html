@@ -4,24 +4,83 @@
 {% endblock%}
 
 {% block content%}
+{% load static %}
   <div class="wrap">
     <ul class="tabs">
         <li><a href="#tab1"><span class=""></span><span class="tab-text">CROWDSENSING</span></a></li>
-        <li><a href="#tab2"><span class=""></span><span class="tab-text">DESARROLLADORES</span></a></li>
-        <li><a href="#tab3"><span class=""></span><span class="tab-text">ACERCA DE</span></a></li>
+        <!--
+          <li><a href="#tab2"><span class=""></span><span class="tab-text">DESARROLLADORES</span></a></li>
+        -->
+        <li><a href="#tab2"><span class=""></span><span class="tab-text">ACERCA DE</span></a></li>
     </ul>
 
     <div class="secciones">
         <article id="tab1">
-            <h1>CROWDSENSING</h1>
-            <p>CrowdSensing móvil que permite recolectar datos utilizando el teléfono inteligente mediante los sensores con los que esta cuenta, posterior a esto se pasan los datos a los proveedores de servicios para finalmente entregárselos al usuario final como datos trabajados, cuyo fin es el de informar de manera estadística mediante graficas o ilustraciones varias situaciones. </p>
-            <p></p>
+          <div class="seccionTab" style="width: 35% !important;">
+            <img src="{% static 'img/phoneProject.png' %}" alt="img">
+        </div>
+            <div class="seccionTab" style="width: 60% !important;">
+                <p>
+                    <strong>CrowdSensing móvil</strong> permite recolectar datos utilizando los teléfonos inteligentes mediante los sensores con los que esta cuenta y posterior enviar los datos a los proveedores de servicios para trabajar con estos datos en temas estadisticos, finalmente se los retorna al usuario final como datos importantes, cuyo fin es el de informar de manera estadística mediante graficas o ilustraciones varias situaciones. 
+                    La movilidad es un tema que siempre ha estado presente. Con una correcta recolección de datos e interpretación de estos se podrá obtener varios beneficios. En la ciudad de Loja existen aplicaciones dedicadas a la movilidad, junto a la empresa Kradac, los mismos que mantienen una de las principales aplicaciones <strong> (Ktaxi) </strong> se recolectará datos en tiempo real que con una arquitectura <strong>CrowdSensing Mobile (MCS)</strong> se podrá hacer esto posible. 
+                </p>
+            </div>
+            <br>
+            <h1>Metas del CrowdSensing Movil en la Movilidad</h1>
+            <div class="seccionImagenes">
+                <div class="example-2 card" style="background-image: url('{% static "img/Loja1.png" %}') !important">
+                    <div class="wrapper" style="background-image: url('{% static "img/Loja1.png" %}') !important">
+                      <div class="data">
+                        <div class="content">
+                          <h1 class="title">Estadísticas de embotellamientos</h1>
+                          <p class="text">Revisa las estadisticas semanales de embotellamientos en la ciudad de Loja con los datos obtenidos de los taxis</p>
+                          <a href="{% url 'estadisticas' %}" class="button">Comenzár</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="example-2 card" style="background-image: url('{% static "img/Loja2.png" %}') !important">
+                    <div class="wrapper" style="background-image: url('{% static "img/Loja2.png" %}') !important">
+                      <div class="data">
+                        <div class="content">
+                          <h1 class="title">Trafico en tiempo real</h1>
+                          <p class="text">Verifica el estado actual de la ciudad de Loja en temas de tráfico vehicular con la ayuda de un mapa de calor.</p>
+                          <a href="{% url 'index' %}" class="button">Comenzár</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="example-2 card" style="background-image: url('{% static "img/Loja3.png" %}') !important">
+                    <div class="wrapper" style="background-image: url('{% static "img/Loja3.png" %}') !important">
+                      <div class="data">
+                        <div class="content">
+                          <h1 class="title">Indicadores de movilidad</h1>
+                          <p class="text">Observa los horarios, vias y avenidas con mayor o menor congestión de tráfico vehicular en la ciudad de Loja.</p>
+                          <a href="{% url 'indicadores' %}" class="button">Comenzár</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            <br>
+            <h1>Proceso del CrowdSensing</h1>
+            <br>
+            <div style="width: 72% !important; margin: auto !important; text-aling: center !important;">
+              <div class="seccionTab" style="width: 60% !important; vertical-align:top !important;">
+                  <p>
+                      El proceso del <strong>CrowdSensing móvil</strong> parte desde un smartphone el mismo que cuenta con sensores de los cuales para temas de movilidad se enfoca en el <strong> GPS </strong> estos datos se recolectan y envian a una base de datos, pero el proceso no se detiene ahí, ya que se reutilizan estos datos para procesarlos y brindar graficas estadisticas con datos importantes para que finalmente el usuario aproveche al maximo estos datos y continuar con un ciclo de vida. 
+                  </p>
+              </div>
+              <div class="seccionTab" style="width: 35% !important;">
+                <img src="{% static 'img/street.png' %}" alt="img">
+            </div>
+          </div>
+            <div class="proceso">
+              <img src="{% static 'img/proceso.png' %}" alt="">
+            </div>
+              <br>
         </article>
         <article id="tab2">
-            <h1>DESARROLADORES</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel voluptates unde, consequuntur aliquid architecto rem numquam expedita minima dolorem pariatur recusandae, eius quod quia aspernatur id impedit, tenetur! Aspernatur incidunt molestiae dolores animi ea praesentium ipsam tenetur voluptas cupiditate perspiciatis eum nihil, natus exercitationem libero earum fuga dignissimos impedit numquam, quasi, placeat officiis voluptates, ad reprehenderit fugiat? Fugiat aperiam et magni, molestiae, numquam consectetur vitae sapiente cupiditate totam laboriosam voluptate obcaecati, aliquam placeat? Suscipit dolores fuga laudantium sed, qui magni iusto dolore quia. Quis fugit exercitationem porro. Rerum nihil omnis recusandae ratione fuga alias eligendi, earum sunt veritatis praesentium eum perspiciatis. Molestias deserunt, iure neque animi quod! Impedit reprehenderit cumque, numquam velit quae cum eius quidem similique laudantium hic deleniti!</p>
-        </article>
-        <article id="tab3">
             <h1>ACERCA DE</h1>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea numquam odio voluptate. Aliquam incidunt similique, et quasi ducimus quos aut autem non dignissimos dicta sit provident, voluptatibus ut blanditiis perspiciatis cum, vel temporibus minima enim. Asperiores omnis placeat officiis a tenetur sit recusandae, reprehenderit neque. Tempora quibusdam, perferendis id ratione culpa dolorum! Nemo, animi?</p><br>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum dignissimos at esse, ipsum rerum assumenda nisi obcaecati! Aliquam iure voluptatem incidunt, explicabo sit labore, perferendis eius ad vel quia. Praesentium, doloribus. Quisquam provident nostrum totam itaque debitis, minima, tempore dolores!</p>

@@ -1,5 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 import random
+from django.views.generic import TemplateView
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -217,62 +218,81 @@ def dashboard(request):
 def dashboardIndicadores(request):
     return render(request, "dashboardIndicadores.html")
 
-def estadisticasPost(_request):
-    #Resumen del trfico (Mañana, tarde, noche)
-    estadisticasDias = list()
-    horaFechaActual = datetime.now()
-    fecha = horaFechaActual.strftime("%D")
-    mes, dia, anio = (int(i) for i in fecha.split("/"))
-    nroDia = calendar.weekday(anio, mes, dia)
-    dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
-    
-    if(dias[nroDia] == "Lunes"):
-        horaFechaActual = horaFechaActual - timedelta(days = 7)
-    elif(dias[nroDia] == "Martes"):
-        horaFechaActual = horaFechaActual - timedelta(days = 8)
-    elif(dias[nroDia] == "Miercoles"):
-        horaFechaActual = horaFechaActual - timedelta(days = 9)
-    elif(dias[nroDia] == "Jueves"):
-        horaFechaActual = horaFechaActual - timedelta(days = 10)
-    elif(dias[nroDia] == "Viernes"):
-        horaFechaActual = horaFechaActual - timedelta(days = 11)
-    elif(dias[nroDia] == "Sabado"):
-        horaFechaActual = horaFechaActual - timedelta(days = 12)
-    elif(dias[nroDia] == "Domingo"):
-        horaFechaActual = horaFechaActual - timedelta(days = 6)
-    
-    fecha = horaFechaActual.strftime("%D")
+class EstadisticasPage(TemplateView):
+    template_name = "estadisticas.html"
 
-    eManana = 0
-    eTarde = 0
-    eNoche = 0
-    for x in range(1,8):
-        for h in range(6,12):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-            eManana = eManana + datosHoras
-
-        for h in range(12,19):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-            eTarde = eTarde + datosHoras
-
-        for h in range(19,24):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-            eNoche = eNoche + datosHoras
-        
-        horaFechaActual = horaFechaActual + timedelta(days = 1)
+    def estadisticasPost(self):
+        #Resumen del trfico (Mañana, tarde, noche)
+        estadisticasDias = list()
+        estadisticaManana = list()
+        estadisticaTarde = list()
+        estadisticaNoche = list()
+        estadisticasSemana = list()
+        horaFechaActual = datetime.now()
         fecha = horaFechaActual.strftime("%D")
-        eManana = int(eManana / 6)
-        eTarde = int(eTarde / 7)
-        eNoche = int(eNoche / 5)
-        estadisticasDias.append(eManana + eTarde + eNoche)
+        mes, dia, anio = (int(i) for i in fecha.split("/"))
+        nroDia = calendar.weekday(anio, mes, dia)
+        dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
+        
+        if(dias[nroDia] == "Lunes"):
+            horaFechaActual = horaFechaActual - timedelta(days = 7)
+        elif(dias[nroDia] == "Martes"):
+            horaFechaActual = horaFechaActual - timedelta(days = 8)
+        elif(dias[nroDia] == "Miercoles"):
+            horaFechaActual = horaFechaActual - timedelta(days = 9)
+        elif(dias[nroDia] == "Jueves"):
+            horaFechaActual = horaFechaActual - timedelta(days = 10)
+        elif(dias[nroDia] == "Viernes"):
+            horaFechaActual = horaFechaActual - timedelta(days = 11)
+        elif(dias[nroDia] == "Sabado"):
+            horaFechaActual = horaFechaActual - timedelta(days = 12)
+        elif(dias[nroDia] == "Domingo"):
+            horaFechaActual = horaFechaActual - timedelta(days = 6)
+        
+        fecha = horaFechaActual.strftime("%D")
 
+        eManana = 0
+        eTarde = 0
+        eNoche = 0
+        for x in range(1,8):
+            for h in range(6,12):
+                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+                eManana = eManana + datosHoras
 
-    data = {'mensaje': "Correcto", "estadisticasDias":estadisticasDias}
-    
-    return JsonResponse(data)
+            for h in range(12,19):
+                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+                eTarde = eTarde + datosHoras
 
-def estadisticas(request):
-    return render(request, "estadisticas.html")
+            for h in range(19,24):
+                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+                eNoche = eNoche + datosHoras
+            
+            horaFechaActual = horaFechaActual + timedelta(days = 1)
+            fecha = horaFechaActual.strftime("%D")
+            eManana = int(eManana / 6)
+            eTarde = int(eTarde / 7)
+            eNoche = int(eNoche / 5)
+            estadisticasSemana.append(eManana + eTarde + eNoche)
+            estadisticasDias.append([eManana, eTarde, eNoche])
+            estadisticaManana.append(eManana)
+            estadisticaTarde.append(eTarde)
+            estadisticaNoche.append(eNoche)
+
+        return estadisticasSemana, estadisticasDias, estadisticaManana, estadisticaTarde, estadisticaNoche
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        estadisticas = self.estadisticasPost()
+        context['estadisticasSemana'] = estadisticas[0]
+        context['estadisticasDias'] = estadisticas[1]
+        context['estadisticaManana'] = estadisticas[2]
+        context['estadisticaTarde'] = estadisticas[3]
+        context['estadisticaNoche'] = estadisticas[4]
+        return context
+        
+
+#def estadisticas(request):
+    #return render(request, "estadisticas.html")
 
 
 def ingreso(request):

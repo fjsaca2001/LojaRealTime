@@ -171,7 +171,11 @@ body{
     height: 480px;
     border:0;
 }
-
+#map2{
+    width: 96%;
+    height: 480px;
+    border:0;
+}
 /*.infoPantalla{
     position: absolute;
     top:10vh;

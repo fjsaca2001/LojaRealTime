@@ -14,8 +14,10 @@ urlpatterns = [
    path('indicadores/', views.indicadores, name="indicadores"),
    path('getUbicaciones/', views.getUbicaciones, name="getUbicaciones"),
    path('getValoresMapa/', views.getValoresMapa, name="getValoresMapa"),
-   path('estadisticas/', views.estadisticas, name="estadisticas"),
-   path('estadisticas/estadisticasPost/', views.estadisticasPost, name="estadisticasPost"),
+   path('estadisticas/', EstadisticasPage.as_view(), name='estadisticas'),
+
+   #path('estadisticas/', views.estadisticas, name="estadisticas"),
+   #path('estadisticas/estadisticasPost/', views.estadisticasPost, name="estadisticasPost"),
 
    
    # Ingreso/Salida del sistema
@@ -26,4 +28,5 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name="dashboard"),
     path('dashboardIndicadores/', views.dashboardIndicadores, name="dashboardIndicadores"),
     path('dashboard/getValoresMapaDash/', views.getValoresMapa, name="getValoresMapaDash"),
+    path('dashboard/getUbicacionesDash/', views.getUbicaciones, name="getUbicacionesDash"),
 ]

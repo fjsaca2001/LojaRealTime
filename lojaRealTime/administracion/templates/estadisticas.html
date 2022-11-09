@@ -1,144 +1,59 @@
 {% extends "master.html" %} {% block title %} LojaRealTime | Indicadores de
 Movilidad {% endblock%} {% block content%} {% load static %}
-<!--
-<div class="seccion-movilidad">
-  <h1>Indicadores de Movilidad</h1>
-  <div class="seccion-movilidad1">
-    <div class="card">
-      <img class="card-img-top" src="{% static 'img/velocidad.png' %}" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">Avenidas con mayor velocidad</h5>
-          {% for calle in avVelocidad %}
-            <p class="card-text">{{calle}}</p>
-          {% endfor %}
-      </div>
+<div class="seccionInfoEstadistica">
+    <h2>Estadísticas de movilidad</h2>
+    <div class="dataEstadistica" style="width: 55% !important;">
+        <p>
+            En la ciudad de Loja existen alrededor de 28 operadoras de taxis convencionales y 12 compañias de taxi ejecutivo. Como bien sabemos los conductores de taxis conocen todo el estado vial de la ciudad de Loja, , gracias a la ayuda de la empresa <a href="https://kradac.com/">Kradac</a> conjunto a su aplicación <strong>Ktaxi</strong>, se recolecta la informacion generada por los conductores de taxis para visualizar el estado actual de la ciudad en temas de control de trafico. 
+            A continuación puede ver mediante graficas estadisticas lo que ha ocurrido a lo largo de la semana, estas estadisticas estan calculadas en base a horarios a lo largo de todo el dia. 
+        </p>
     </div>
-    <div class="card">
-      <img class="card-img-top" src="{% static 'img/trafico.png' %}" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">Vias con mayor congestión de trafico</h5>
-          {% for calle in viasCongestion %}
-            <p class="card-text">{{calle}}</p>
-          {% endfor %}
-      </div>
+    <div class="dataEstadistica" style="width: 35% !important;">
+        <img src="{% static 'img/taxiEst.jpg' %}" alt="Taxis Loja">
     </div>
-  </div>
-  <div class="seccion-movilidad2">
-    <div class="card">
-      <img class="card-img-top" src="{% static 'img/hcongestion.png' %}" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">Horarios de congestión de trafico</h5>
-          {% for hora in horasCongestion %}
-          <p class="card-text">{{hora.0}}</p>
-          {% endfor %}
-      </div>
-    </div>
-    <div class="card">
-      <img class="card-img-top" src="{% static 'img/menorTrafico.png' %}" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">Vias centricas con menor congestión</h5>
-          {% for via in viasMenorCongestion %}
-          <p class="card-text">{{via}}</p>
-          {% endfor %}
-      </div>
-    </div>
-  </div>
 </div>
--->
-{{estadisticasDias}}
-<h2>Estadísticas por día</h2>
-<figure class="highcharts-figure">
-  <div id="container"></div>
-  <p class="highcharts-description">
-    Pie chart showing a hollow semi-circle. This is a compact visualization,
-    often used in dashboards.
-  </p>
-</figure>
-<h2>Estadisticas por semana</h2>
-<div class="graficaSemana">
-  <figure class="highcharts-figure">
-    <div id="container-semana"></div>
-    <p class="highcharts-description">
-      A basic column chart comparing emissions by pollutant. Oil and gas
-      extraction has the overall highest amount of emissions, followed by
-      manufacturing industries and mining. The chart is making use of the axis
-      crosshair feature, to highlight years as they are hovered over.
-    </p>
-  </figure>
+<div class="seccionGraficas">
+  <div class="graficaDia">
+    <h2>Embotellamientos por día</h2>
+    <div class="graficaHorarios" style="width: 70%;">
+      <figure class="highcharts-figure">
+        <div id="containerHorarios"></div>
+      </figure>
+    </div>
+    <div class="graficaHorarios" style="width: 25%;">
+      <p class="highcharts-description">
+        En la grafica <strong>embotellamientos por día </strong>. Se observa un promedio de los embotellamientos de la ciudad de Loja dividida en horarios para una mejor visualización, la misma que se la realiza con rangos de horarios como: <strong><i>6am - 12pm</i></strong> corresponde a la mañana; <strong><i>12pm - 7pm</i></strong> corresponde a la tarde y finalmente de <strong><i>7pm en adelante</i></strong> corresponde a noche. Esta información es calculada por medio de la velocidad del conductor de un vehiculo tipo taxi y un intervalo de tiempo. El gráfico es interactivo y se puede seleccionar el horario al que desee ver.  
+      </p>
+    </div>
+  </div>
+
+  <div class="graficaDia">
+    <h2>Embotellamientos por semana</h2>
+    <div class="graficaHorarios" style="width: 25%;">
+        <p class="highcharts-description">
+            El gráfico <strong> embotellamientos por semana</strong>. Recauda toda la
+            información generada a lo largo de la ultima semana para brindar una
+            vista estadistica que permite al usuario comparar los datos de un dia con los demás días de la semana. Este grafico se genera en base a un calculo de velocidad y distancia recorrida de un taxi para finamente realizar un promedio entre todos los datos recolectados cada día.  
+        </p>
+    </div>
+    <div class="graficaHorarios" style="width: 70%;">
+    <figure class="highcharts-figure">
+        <div id="container-semana"></div>
+    </figure>
+    </div>
 </div>
 <script type="application/javascript">
-      try {
-          const response = fetch("estadisticasPost");
-          const data = response.json();
-          // Data retrieved from https://netmarketshare.com/
-    Highcharts.chart("container", {
-      chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: 0,
-        plotShadow: false,
-      },
-      title: {
-        text: "Lunes",
-        align: "center",
-        verticalAlign: "middle",
-        y: 60,
-      },
-      tooltip: {
-        pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>",
-      },
-      accessibility: {
-        point: {
-          valueSuffix: "%",
-        },
-      },
-      plotOptions: {
-        pie: {
-          dataLabels: {
-            enabled: true,
-            distance: -50,
-            style: {
-              fontWeight: "bold",
-              color: "white",
-            },
-          },
-          startAngle: -90,
-          endAngle: 90,
-          center: ["50%", "75%"],
-          size: "110%",
-        },
-      },
-      series: [
-        {
-          type: "pie",
-          name: "Porcentaje de trafico",
-          innerSize: "50%",
-          colorByPoint: true,
-          data: [
-            ["Mañana", 73.86],
-            ["Tarde", 11.97],
-            ["Noche", 5.52],
-            /*{
-              name: "Other",
-              y: 3.77,
-              dataLabels: {
-                enabled: false,
-              },
-            },
-            */
-          ],
-        },
-      ],
-    });
+      // Data retrieved from https://netmarketshare.com/
 
-    Highcharts.chart('container-semana', {
+  Highcharts.chart('containerHorarios', {
       chart: {
           type: 'column'
       },
       title: {
-          text: 'Reporte semanal de embotellamientos'
+          text: 'Reporte de embotellamiento en base a horarios'
       },
       subtitle: {
-          text: 'Reporte de columnas'
+          text: 'Horarios: ' + 'Mañana: 6am - 12pm; Tarde: 12pm - 19pm; Noche: 19pm - 12am'
       },
       xAxis: {
           categories: [
@@ -155,13 +70,13 @@ Movilidad {% endblock%} {% block content%} {% load static %}
       yAxis: {
           title: {
               useHTML: true,
-              text: 'Porcentaje de embotellamientos'
+              text: 'Número de embotellamientos'
           }
       },
       tooltip: {
           headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
           pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-              '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+              '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
           footerFormat: '</table>',
           shared: true,
           useHTML: true
@@ -173,15 +88,56 @@ Movilidad {% endblock%} {% block content%} {% load static %}
           }
       },
       series: [{
-          name: 'Embotellamientos',
-          showInLegend: false,
-          colorByPoitn: true,
-          data: data.estadisticasDias
+          name: 'Mañana',
+          data: {{ estadisticaManana }}
+
+      }, {
+          name: 'Tarde',
+          data: {{ estadisticaTarde }}
+
+      }, {
+          name: 'Noche',
+          data: {{ estadisticaNoche }}
+
       }]
   });
-      } catch (e) {
-          console.log(e)
-          alert("Error")
-      }
+
+  // Data retrieved from https://olympics.com/en/olympic-games/beijing-2022/medals
+estadisticasSemana = {{estadisticasSemana|safe}}
+console.log(estadisticasSemana[0])
+  Highcharts.chart('container-semana', {
+    chart: {
+        type: 'pie',
+        options3d: {
+            enabled: true,
+            alpha: 45
+        }
+    },
+    title: {
+        text: 'Reporte semanal de embotellamientos'
+    },
+    subtitle: {
+        text: 'Reporte diario'
+    },
+    plotOptions: {
+        pie: {
+            innerSize: 100,
+            depth: 45
+        }
+    },
+    series: [{
+        name: 'Numero de embotellamientos',
+        data: [
+            ['Lunes', estadisticasSemana[0]],
+            ['Martes', estadisticasSemana[1]],
+            ['Miercoles', estadisticasSemana[2]],
+            ['Jueves', estadisticasSemana[3]],
+            ['Viernes', estadisticasSemana[4]],
+            ['Sabado', estadisticasSemana[5]],
+            ['Domingo', estadisticasSemana[6]],
+        ]
+    }]
+});
+
 </script>
 {% endblock %}
