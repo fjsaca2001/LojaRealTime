@@ -5,6 +5,9 @@ body{
     height: 60px;
     display: flex;
     background-color: #1B65A7;
+    position: fixed;
+    width: 100%;
+    z-index: 2;
 }
 
 #info-contac img{
@@ -43,11 +46,14 @@ body{
 
 #panel-lateral{
     width: 15%;
-    background-color: #f1f1f1;
+    background-color: #ffffff;
     padding-top: 20px;
+    margin-top: 60px;
+    height: 100vh;
+    position: fixed;
     font-family: "Poppins";
     color: #1B65A7;
-    box-shadow: 5px 0px 5px -2px #888;
+    box-shadow: 5px 0px 5px -2px #d3d3d3;
 }
 #panel-lateral a{
     margin: 20px;
@@ -78,6 +84,8 @@ body{
     width: 90%;
     margin: 5px 35px;
     padding-top: 20px;
+    margin-left: 17%;
+    margin-top: 60px;
 }
 
 #footer{
@@ -96,12 +104,31 @@ body{
     border-top: solid 1px #4D4D4D;
     font-family: "Poppins";
 }
+.indicadorTarget{
+    display: inline-block;
+    width: 30%;
+    margin: 10px 10px 40px 10px;
+    text-align: center;
+    border-left: 2px solid #ADB2B5;
+}
+.indicadorTarget p{
+    font-size: 15px;
+    color: #888;
+}
+.indicadorTarget h1{
+    font-size: 50px !important;
+    color: #1B65A7;
+    font-weight: bolder !important;
+}
+.indicadorTarget h4{
+    font-size: 20px;
+    color: #E2C112;
+}
 .dashRT {
     display: flex;
 }
 .dashRT-Central{
-    width: 95%;
-    margin: 30px;
+    width: 100%;
     font-family: "Poppins";
 }
 .dashRT-Central h1{
@@ -115,23 +142,24 @@ body{
 .seccion-dashRT{
 
     margin: auto;
-    width: 95%;
+    width: 100%;
 }
 .secciones-dashRT{
     display: inline-grid;
     color: #293855;
-    width: 30%;
+    width: 31%;
     font-size: 20px;
-    padding: 20px 10px;
     text-align: center;
-    margin: 20px 10px;
-    background-color: #e9e9e9;
+    margin: auto 10px;
+    background-color: #ffffff;
     border: 1px solid #C6C5C5;
     border-radius: 5px;
 }
 .secciones-dashRT p{
     font-size: 15px;
     margin-top: 10px;
+    color: #888;
+    margin: 0px 10px;
 }
 .secciones-dashRT h3{
     font-size: 40px;
@@ -139,7 +167,7 @@ body{
 }
 .dashRT-Derecho{
     margin: 10px auto;
-    width: 25%;
+    width: 30%;
     text-align: center;
 }
 .seccion-resumen{
@@ -151,30 +179,30 @@ body{
     font-family: "Poppins";
     color: #FFFFFF;
     border: 1px solid #C6C5C5;
-    background-color: #E2C112;
+    background-color: #ffe661;
 }
 .resumen{
     padding: 10px;
 }
 .bodyResumen{
-    background-color: #e9e9e9;
+    background-color: #ffffff;
     border: 1px solid #C6C5C5;
     box-shadow: 1px 8px 4px -5px #888;
 }
 .bodyResumen h3{
     font-size: 40px;
     font-weight: 900;
-    color: #293855;
 }
 #map{
     width: 96%;
-    height: 480px;
+    height: 640px;
     border:0;
 }
 #map2{
-    width: 96%;
-    height: 480px;
+    width: 100%;
+    height: 680px;
     border:0;
+    grid-column: span 3;
 }
 /*.infoPantalla{
     position: absolute;
@@ -203,3 +231,32 @@ body{
     flex: 1;
     padding: 2rem;
 }*/
+.highcharts-background{
+    fill: #ffffff;
+    
+}
+.seccionMapaVelocidad{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    grid-gap: 40px;
+    margin-bottom: 40px;
+}   
+
+.seccioneCaracteristicas{
+    border: solid 1px #C6C5C5;
+    padding: 5px 20px;
+    border-radius: 10px;
+    text-align: center;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.seccioneCaracteristicas h3{
+    font-size: 35px;
+    color: #4265D6;
+}
+.seccioneCaracteristicas p{
+    font-size: 17px;
+    color: #888;
+}

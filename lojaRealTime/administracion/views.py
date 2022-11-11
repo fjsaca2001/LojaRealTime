@@ -172,49 +172,6 @@ def indicadores(request):
 def login(request):
     return render(request, "login.html")
 
-def dashboard(request):
-
-    listaVias = list()
-    viasVelocidad = list(Vehiculos.objects.filter(hora_actual__startswith=obtenerHora()[0].split(" ")[0]).values_list('velocidad', 'latitud', 'longitud','id_vehiculo'))
-    viasVelocidad.sort(reverse=True)
-    viasVelocidad = viasVelocidad[:8]
-    for c in viasVelocidad:
-        reverse_geocode_result = gmaps.reverse_geocode((c[1], c[2]))
-        try:
-            if(reverse_geocode_result[0]['address_components'][1]['types'] == ['route']):
-                listaVias.append([reverse_geocode_result[0]['address_components'][1]['long_name'], c[0]])
-        except:
-            pass
-
-    vehiculosHoy = len(Vehiculos.objects.filter(hora_actual__startswith=obtenerHora()[0].split(" ")[0]).values_list('id_usuario').distinct())
-    vParados = len([x for x in postAPI() if x['velocidad'] == 0])
-
-    #Resumen del trfico (Mañana, tarde, noche)
-    hora = datetime.now()
-    fecha = hora.strftime("%D")
-
-    eManana = 0
-    eTarde = 0
-    eNoche = 0
-    for h in range(6,12):
-        datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-        eManana = eManana + datosHoras
-
-    for h in range(12,19):
-        datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-        eTarde = eTarde + datosHoras
-
-    for h in range(19,24):
-        datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-        eNoche = eNoche + datosHoras
-    
-    eManana = int(eManana / 6)
-    eTarde = int(eTarde / 7)
-    eNoche = int(eNoche / 5)
-    
-    
-    return render(request, "dashboard.html",{"vActivos" : len(postAPI()), "vParados": vParados, "vehiculosHoy": vehiculosHoy, "listaVias" :listaVias, "eManana": eManana, "eTarde": eTarde, "eNoche": eNoche})
-
 def dashboardIndicadores(request):
     return render(request, "dashboardIndicadores.html")
 
@@ -280,6 +237,31 @@ class EstadisticasPage(TemplateView):
 
         return estadisticasSemana, estadisticasDias, estadisticaManana, estadisticaTarde, estadisticaNoche
 
+    def estadisticaHoy(self):
+        #Resumen del trfico (Mañana, tarde, noche)
+        hora = datetime.now()
+        fecha = hora.strftime("%D")
+
+        eManana = 0
+        eTarde = 0
+        eNoche = 0
+        for h in range(6,12):
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            eManana = eManana + datosHoras
+
+        for h in range(12,19):
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            eTarde = eTarde + datosHoras
+
+        for h in range(19,24):
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            eNoche = eNoche + datosHoras
+        
+        eManana = int(eManana / 6)
+        eTarde = int(eTarde / 7)
+        eNoche = int(eNoche / 5)
+        return [eManana, eTarde, eNoche]
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         estadisticas = self.estadisticasPost()
@@ -288,12 +270,146 @@ class EstadisticasPage(TemplateView):
         context['estadisticaManana'] = estadisticas[2]
         context['estadisticaTarde'] = estadisticas[3]
         context['estadisticaNoche'] = estadisticas[4]
+        context['estadisticaDia'] = self.estadisticaHoy()
+
         return context
         
+class DashboardPage(TemplateView):
+    template_name = "dashboard.html"
 
-#def estadisticas(request):
-    #return render(request, "estadisticas.html")
+    def calculosDashboard(self):
+        listaVias = list()
+        coordenadasVias = list()
+        viasVelocidad = list(Vehiculos.objects.filter(hora_actual__startswith=obtenerHora()[0].split(" ")[0]).values_list('velocidad', 'latitud', 'longitud','id_vehiculo'))
+        viasVelocidad.sort(reverse=True)
+        viasVelocidad = viasVelocidad[:8]
+        for c in viasVelocidad:
+            reverse_geocode_result = gmaps.reverse_geocode((c[1], c[2]))
+            try:
+                if(reverse_geocode_result[0]['address_components'][1]['types'] == ['route']):
+                    listaVias.append([reverse_geocode_result[0]['address_components'][1]['long_name'], c[0]])
+                    coordenadasVias.append([c[1], c[2]])
+            except:
+                pass
 
+        vehiculosHoy = len(Vehiculos.objects.filter(hora_actual__startswith=obtenerHora()[0].split(" ")[0]).values_list('id_usuario').distinct())
+        vParados = len([x for x in postAPI() if x['velocidad'] == 0])
+
+        #Resumen del trfico (Mañana, tarde, noche)
+        hora = datetime.now()
+        fecha = hora.strftime("%D")
+
+        eManana = 0
+        eTarde = 0
+        eNoche = 0
+        for h in range(6,12):
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            eManana = eManana + datosHoras
+
+        for h in range(12,19):
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            eTarde = eTarde + datosHoras
+
+        for h in range(19,24):
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            eNoche = eNoche + datosHoras
+        
+        eManana = int(eManana / 6)
+        eTarde = int(eTarde / 7)
+        eNoche = int(eNoche / 5)
+
+        return len(postAPI()), vParados, vehiculosHoy, listaVias, eManana, eTarde, eNoche,coordenadasVias
+
+    def obtenerSemana(self):
+
+        estadisticaManana = list()
+        estadisticaTarde = list()
+        estadisticaNoche = list()
+        horaFechaActual = datetime.now()
+        fecha = horaFechaActual.strftime("%D")
+        mes, dia, anio = (int(i) for i in fecha.split("/"))
+        nroDia = calendar.weekday(anio, mes, dia)
+        dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
+        
+        if(dias[nroDia] == "Lunes"):
+            horaFechaActual = horaFechaActual - timedelta(days = 7)
+        elif(dias[nroDia] == "Martes"):
+            horaFechaActual = horaFechaActual - timedelta(days = 8)
+        elif(dias[nroDia] == "Miercoles"):
+            horaFechaActual = horaFechaActual - timedelta(days = 9)
+        elif(dias[nroDia] == "Jueves"):
+            horaFechaActual = horaFechaActual - timedelta(days = 10)
+        elif(dias[nroDia] == "Viernes"):
+            horaFechaActual = horaFechaActual - timedelta(days = 11)
+        elif(dias[nroDia] == "Sabado"):
+            horaFechaActual = horaFechaActual - timedelta(days = 12)
+        elif(dias[nroDia] == "Domingo"):
+            horaFechaActual = horaFechaActual - timedelta(days = 6)
+        
+        fecha = horaFechaActual.strftime("%D")
+
+        eManana = 0
+        eTarde = 0
+        eNoche = 0
+        for x in range(1,8):
+            for h in range(6,12):
+                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+                eManana = eManana + datosHoras
+
+            for h in range(12,19):
+                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+                eTarde = eTarde + datosHoras
+
+            for h in range(19,24):
+                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+                eNoche = eNoche + datosHoras
+            
+            horaFechaActual = horaFechaActual + timedelta(days = 1)
+            fecha = horaFechaActual.strftime("%D")
+            eManana = int(eManana / 6)
+            eTarde = int(eTarde / 7)
+            eNoche = int(eNoche / 5)
+            estadisticaManana.append(eManana)
+            estadisticaTarde.append(eTarde)
+            estadisticaNoche.append(eNoche)
+
+        return estadisticaManana, estadisticaTarde, estadisticaNoche
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        datosDashboard = self.calculosDashboard()
+        datosSemanales = self.obtenerSemana()
+        context['vActivos'] = datosDashboard[0]
+        context['vParados'] = datosDashboard[1]
+        context['vehiculosHoy'] = datosDashboard[2]
+        context['listaVias'] = datosDashboard[3]
+        context['eManana'] = datosDashboard[4]
+        context['eTarde'] = datosDashboard[5]
+        context['eNoche'] = datosDashboard[6]
+        context['coordenadasVias'] = datosDashboard[7]
+        context['estadisticaManana'] = datosSemanales[0]
+        context['estadisticaTarde'] = datosSemanales[1]
+        context['estadisticaNoche'] = datosSemanales[2]
+        return context
+
+def rutasDash(_request):
+    listaVias = list()
+    viasVelocidad = list(Vehiculos.objects.filter(hora_actual__startswith=obtenerHora()[0].split(" ")[0]).values_list('velocidad', 'latitud', 'longitud','id_vehiculo'))
+    viasVelocidad.sort(reverse=True)
+    viasVelocidad = viasVelocidad[:8]
+    for c in viasVelocidad:
+        reverse_geocode_result = gmaps.reverse_geocode((c[1], c[2]))
+        try:
+            if(reverse_geocode_result[0]['address_components'][1]['types'] == ['route']):
+                listaVias.append({"via": reverse_geocode_result[0]['address_components'][1]['long_name'] + ", Loja-Ecuador", "lat" : c[1], "long": c[2], 'velocidad':c[0]})
+        except:
+            pass
+
+    if(len(listaVias) >= 0):
+        data = {'mensaje': "Correcto", "vias": listaVias}
+    else:
+        data = {'mensaje': "Error", "vias": listaVias}
+    return JsonResponse(data)
 
 def ingreso(request):
     email=request.POST.get('email')

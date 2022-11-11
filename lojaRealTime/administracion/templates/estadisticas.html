@@ -4,8 +4,8 @@ Movilidad {% endblock%} {% block content%} {% load static %}
     <h2>Estadísticas de movilidad</h2>
     <div class="dataEstadistica" style="width: 55% !important;">
         <p>
-            En la ciudad de Loja existen alrededor de 28 operadoras de taxis convencionales y 12 compañias de taxi ejecutivo. Como bien sabemos los conductores de taxis conocen todo el estado vial de la ciudad de Loja, , gracias a la ayuda de la empresa <a href="https://kradac.com/">Kradac</a> conjunto a su aplicación <strong>Ktaxi</strong>, se recolecta la informacion generada por los conductores de taxis para visualizar el estado actual de la ciudad en temas de control de trafico. 
-            A continuación puede ver mediante graficas estadisticas lo que ha ocurrido a lo largo de la semana, estas estadisticas estan calculadas en base a horarios a lo largo de todo el dia. 
+            En la ciudad de Loja existen alrededor de 28 operadoras de taxis convencionales y 12 compañías de taxi ejecutivo. Como bien sabemos los conductores de taxis conocen todo el estado vial de la ciudad de Loja, gracias a la ayuda de la empresa <a href="https://kradac.com/">Kradac</a> conjunto a su aplicación <strong>Ktaxi</strong>, se recolecta la información generada por los conductores de taxis para visualizar el estado actual de la ciudad en temas de control de tráfico. 
+            A continuación puede ver mediante gráficas estadísticas lo que ha ocurrido a lo largo de la semana, estas estadísticas están calculadas con base en horarios a lo largo de todo el día. 
         </p>
     </div>
     <div class="dataEstadistica" style="width: 35% !important;">
@@ -14,7 +14,7 @@ Movilidad {% endblock%} {% block content%} {% load static %}
 </div>
 <div class="seccionGraficas">
   <div class="graficaDia">
-    <h2>Embotellamientos por día</h2>
+    <h2>Embotellamientos en la última semana</h2>
     <div class="graficaHorarios" style="width: 70%;">
       <figure class="highcharts-figure">
         <div id="containerHorarios"></div>
@@ -22,26 +22,33 @@ Movilidad {% endblock%} {% block content%} {% load static %}
     </div>
     <div class="graficaHorarios" style="width: 25%;">
       <p class="highcharts-description">
-        En la grafica <strong>embotellamientos por día </strong>. Se observa un promedio de los embotellamientos de la ciudad de Loja dividida en horarios para una mejor visualización, la misma que se la realiza con rangos de horarios como: <strong><i>6am - 12pm</i></strong> corresponde a la mañana; <strong><i>12pm - 7pm</i></strong> corresponde a la tarde y finalmente de <strong><i>7pm en adelante</i></strong> corresponde a noche. Esta información es calculada por medio de la velocidad del conductor de un vehiculo tipo taxi y un intervalo de tiempo. El gráfico es interactivo y se puede seleccionar el horario al que desee ver.  
+        En la gráfica <strong>embotellamientos por día </strong>. Se observa un promedio de los embotellamientos de la ciudad de Loja, dividida en horarios para una mejor visualización, la misma que se la realiza con rangos de horarios como: <strong><i>6 am - 12 pm</i></strong> corresponde a la mañana; <strong><i>12 pm - 7 pm</i></strong> corresponde a la tarde y finalmente de <strong><i>7 pm en adelante</i></strong> corresponde a noche. Esta información es calculada por medio de la velocidad del conductor de un vehículo tipo taxi y un intervalo de tiempo. El gráfico es interactivo y se puede seleccionar el horario al que desee ver.  
       </p>
     </div>
   </div>
 
   <div class="graficaDia">
-    <h2>Embotellamientos por semana</h2>
+    <h2>Embotellamientos de hoy y Reporte semanal</h2>
+    <div class="graficaHorarios" style="width: 35%;">
+        <figure class="highcharts-figure">
+            <div id="container-Dia"></div>
+        </figure>
+    </div>
     <div class="graficaHorarios" style="width: 25%;">
         <p class="highcharts-description">
-            El gráfico <strong> embotellamientos por semana</strong>. Recauda toda la
-            información generada a lo largo de la ultima semana para brindar una
-            vista estadistica que permite al usuario comparar los datos de un dia con los demás días de la semana. Este grafico se genera en base a un calculo de velocidad y distancia recorrida de un taxi para finamente realizar un promedio entre todos los datos recolectados cada día.  
+            El gráfico <strong> reporte semanal de embotellamientos</strong> recauda toda la
+            información generada a lo largo de la última semana para brindar una
+            vista estadística que permite al usuario comparar los datos de un día con los demás días de la semana. Este gráfico se genera con base en un cálculo de velocidad y distancia recorrida de un taxi para finamente realizar un promedio entre todos los datos recolectados cada día.   
         </p>
     </div>
-    <div class="graficaHorarios" style="width: 70%;">
+    <div class="graficaHorarios" style="width: 30%;">
     <figure class="highcharts-figure">
         <div id="container-semana"></div>
     </figure>
     </div>
 </div>
+
+
 <script type="application/javascript">
       // Data retrieved from https://netmarketshare.com/
 
@@ -138,6 +145,51 @@ console.log(estadisticasSemana[0])
         ]
     }]
 });
+
+// Data retrieved https://en.wikipedia.org/wiki/List_of_cities_by_average_temperature
+Highcharts.chart('container-Dia', {
+    chart: {
+        type: 'spline'
+    },
+    title: {
+        text: 'Embotellamientos de hoy'
+    },
+    subtitle: {
+        text: 'Horarios: ' + 'Mañana: 6am - 12pm; Tarde: 12pm - 19pm; Noche: 19pm - 12am'
+    },
+    xAxis: {
+        categories: ['Mañana', 'Tarde', 'Noche'],
+        accessibility: {
+            description: 'Months of the year'
+        }
+    },
+    yAxis: {
+        title: {
+            text: 'Número de embotellamientos'
+        }
+    },
+    tooltip: {
+        crosshairs: true,
+        shared: true
+    },
+    plotOptions: {
+        spline: {
+            marker: {
+                radius: 4,
+                lineColor: '#666666',
+                lineWidth: 1
+            }
+        }
+    },
+    series: [{
+        name: 'Embotellamientos',
+        marker: {
+            symbol: 'square'
+        },
+        data: {{estadisticaDia}}
+    }]
+});
+
 
 </script>
 {% endblock %}

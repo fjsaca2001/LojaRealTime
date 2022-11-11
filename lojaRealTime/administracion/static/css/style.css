@@ -321,7 +321,7 @@ ul.tabs li a .tab-text{
 }
 .graficaDia p{
     text-align: justify;
-    margin: 15px;
+    /*margin: 15px;*/
     font-size: 20px;
 }
 .seccionGraficas{
@@ -540,4 +540,15 @@ h1 {
 }
 .proceso img{
     width: 100%;
+}
+.acercade{
+    text-align: center;
+    width: 85%;
+    margin: 20px auto;
+    padding: 0 2em 4em 2em;
+}
+.acercade img{
+    width: 20%;
+    margin: 0px 45px;
+    display: inline-block;
 }

@@ -25,8 +25,10 @@ urlpatterns = [
     path('entrando/login/', views.ingreso, name="login"),
 
     # Url Para el Dashboard
-    path('dashboard/', views.dashboard, name="dashboard"),
+    #path('dashboard/', views.dashboard, name="dashboard"),
+    path('dashboard/', DashboardPage.as_view(), name='dashboard'),
     path('dashboardIndicadores/', views.dashboardIndicadores, name="dashboardIndicadores"),
     path('dashboard/getValoresMapaDash/', views.getValoresMapa, name="getValoresMapaDash"),
+    path('dashboard/getRutasMapaDash/', views.rutasDash, name="getRutasMapaDash"),
     path('dashboard/getUbicacionesDash/', views.getUbicaciones, name="getUbicacionesDash"),
 ]

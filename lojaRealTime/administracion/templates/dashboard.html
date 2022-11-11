@@ -1,48 +1,34 @@
-{% extends "masterDashboard.html" %}
-{% block title %}
-  LojaRealTime | DashBoard
-{% endblock%}
-
-{% block content%}
-{% load static %}
+{% extends "masterDashboard.html" %} {% block title %} LojaRealTime | DashBoard
+{% endblock%} {% block content%} {% load static %}
 <div class="dashRT">
   <div class="dashRT-Central">
-    <h1>MAPA DE CALOR DE TRAFICO</h1>
+    <div class="indicadoresTRDashboard">
+      <div class="indicadorTarget" style="border-left: 0px !important">
+        <h4>Taxis activos hoy</h4>
+        <h1>{{vehiculosHoy}}</h1>
+        <p id="fecha">dd/mm/yy</p>
+      </div>
+      <div class="indicadorTarget">
+        <h4>Taxis activos ahora</h4>
+        <h1>{{vActivos}}</h1>
+        <p id="hora">hh:mm</p>
+      </div>
+      <div class="indicadorTarget">
+        <h4>Taxis detenidos</h4>
+        <h1>{{vParados}}</h1>
+        <p>Velocidad: 0km/h</p>
+      </div>
+    </div>
+    <h1>Mapa de Calor de Tráfico</h1>
     <div id="map">
       <!-- Mapa API Google -->
     </div>
-    <h3>Vehículos</h3>
-    <div class="seccion-dashRT">
-      <div class="secciones-dashRT">
-        <h3>{{vehiculosHoy}}</h3>
-        <p>Taxis activos hoy</p>
-      </div>
-      <div class="secciones-dashRT">
-        <h3>{{vActivos}}</h3>
-        <p>Taxis Activos ahora</p>
-      </div>
-      <div class="secciones-dashRT">
-        <h3>{{vParados}}</h3>
-        <p>Taxis Detenidos</p>
-      </div>
-    </div>
-    <h3>Velocidades</h3>
-    <div class="seccion-dashRT">
-      {% for calle in listaVias %}
-      <div class="secciones-dashRT">
-        <h3>{{calle.1}} Km/h</h3>
-        <p>{{calle.0}}</p>
-      </div>
-      {% endfor %}
-    </div>
-    <div id="map2">
-      <!-- Mapa API Google -->
-    </div>
   </div>
-  <div class="dashRT-Derecho">
+
+  <div class="dashRT-Central dashRT-Derecho">
     <div class="seccion-resumen">
       <section class="headResumen">
-        <p>Resumen del trafico</p>
+        <p>Resumen del tráfico</p>
       </section>
       <div class="bodyResumen">
         <section class="resumen">
@@ -65,7 +51,7 @@
 
     <div class="seccion-resumen">
       <section class="headResumen">
-        <p>Vias de la ciudad</p>
+        <p>Vías de la ciudad</p>
       </section>
       <div class="bodyResumen">
         <section class="resumen">
@@ -76,5 +62,215 @@
     </div>
   </div>
 </div>
+<div>
+  <h3 style="margin: 30px 0px; font-family: 'Poppins'">Cuadros Estadísticos</h3>
+  <div class="seccion-dashRT">
+    <div class="secciones-dashRT">
+      <section class="resumen">
+        <figure class="highcharts-figure">
+          <div id="container" style="height: 320px"></div>
+          <p class="highcharts-description" style="text-align: justify !important;">
+            Gráfica de pastel que representa el total de taxis activos,
+            divididos por taxis detenidos (Con velocidad 0) y taxis en
+            movimiento (Posición cambiante).
+          </p>
+        </figure>
+      </section>
+    </div>
+    <div class="secciones-dashRT">
+      <div class="">
+        <section class="resumen">
+          <figure class="highcharts-figure">
+            <div id="container-barrasX" style="height: 320px"></div>
+            <p class="highcharts-description" style="text-align: justify !important;">
+              Datos de la semana divididos en tres secciones: mañana (6 am -
+              12 pm), tarde(12 pm - 7 pm) y noche (7 pm - Adelante). Finalmente,
+              obtenemos un promedio por día.
+            </p>
+          </figure>
+        </section>
+      </div>
+    </div>
+    <div class="secciones-dashRT">
+      <div class="">
+        <section class="resumen">
+          <figure class="highcharts-figure">
+            <div id="container-barras" style="height: 320px"></div>
+            <p class="highcharts-description" style="text-align: justify !important;">
+              Datos de los embotellamientos del día de hoy, divididos en tres
+              secciones. Mañana (6 am - 12 pm), tarde(12 pm - 7 pm) y noche (7
+              pm - Adelante)
+            </p>
+          </figure>
+        </section>
+      </div>
+    </div>
+  </div>
+  <h3 style="margin: 30px 0px; font-family: 'Poppins'">
+    Mapa de las vías con mayor velocidad
+  </h3>
+  <div class="seccionMapaVelocidad">
+    <div id="map2">
+      <!-- Mapa API Google -->
+    </div>
+    <div class="caracteristicasVelocidades">
+      <p id="reemplazar1"></p>
+      <p id="reemplazar2"></p>
+      <p id="reemplazar3"></p>
+      <p id="reemplazar4"></p>
+      <p id="reemplazar5"></p>
+      <p id="reemplazar6"></p>
+      <p id="reemplazar7"></p>
+      <p id="reemplazar8"></p>
+      <p id="reemplazar9"></p>
+      <p id="reemplazar10"></p>
+    <!--
+      {% for calle in listaVias %}
+      <div class="seccioneCaracteristicas">
+        <h3>{{calle.1}} Km/h</h3>
+        <p id="nombreVia">...</p>
+      </div>
+      {% endfor %}
+      -->
+    </div>
+  </div>
+</div>
 
+<script>
+  // Grafica para los taxis activos
+  Highcharts.chart("container", {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: "pie",
+      },
+      title: {
+        text: "Taxis Activos",
+      },
+      tooltip: {
+        pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>",
+      },
+      accessibility: {
+        point: {
+          valueSuffix: "%",
+        },
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: "pointer",
+          dataLabels: {
+            enabled: false,
+          },
+          showInLegend: true,
+        },
+      },
+      series: [
+        {
+          name: "Nro Taxis",
+          colorByPoint: true,
+          data: [
+            {
+              name: "Taxis en movimiento",
+              y: {{vActivos|safe}},
+              sliced: true,
+              selected: true,
+            },
+            {
+              name: "Taxis detenidos",
+              y: {{vParados|safe}},
+            },
+          ],
+        },
+      ],
+    });
+
+  // Grafica para la estadistica y promedio semanal
+  promedio = []
+  mananas = {{estadisticaManana}}
+  tardes = {{estadisticaTarde}}
+  noches = {{estadisticaNoche}}
+  for(i = 0; i < mananas.length; i++){
+    promedio[i] = parseInt((mananas[i] + tardes[i] + noches[i]) / mananas.length);
+    console.log(promedio[i])
+  }
+
+  Highcharts.chart('container-barrasX', {
+      title: {
+          text: 'Estadística semanal de embotellamientos',
+          align: 'left'
+      },
+      xAxis: {
+          categories: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo']
+      },
+      yAxis: {
+          title: {
+              text: 'Total de embotellamientos'
+          }
+      },
+      series: [{
+          type: 'column',
+          name: 'Mañana',
+          data: mananas
+      }, {
+          type: 'column',
+          name: 'Tarde',
+          data: tardes
+      }, {
+          type: 'column',
+          name: 'Noche',
+          data: noches
+      }, {
+          type: 'spline',
+          name: 'Promedio Diario',
+          data: promedio,
+          marker: {
+              lineWidth: 2,
+              lineColor: Highcharts.getOptions().colors[3],
+              fillColor: 'white'
+          }
+      }]
+  });
+
+  // Clasificacion de los embotellamientos
+  Highcharts.chart('container-barras', {
+      chart: {
+          type: 'bar'
+      },
+      title: {
+          text: 'Clasificación de embotellamientos'
+      },
+      xAxis: {
+          categories: ['Mañana', 'Tarde', 'Noche'],
+          title: {
+              text: null
+          }
+      },
+      yAxis: {
+          min: 0,
+          title: {
+              text: 'Nro Embotellamientos',
+              align: 'high'
+          },
+          labels: {
+              overflow: 'justify'
+          }
+      },
+      tooltip: {
+          valueSuffix: ' embotellamientos'
+      },
+      plotOptions: {
+          bar: {
+              dataLabels: {
+                  enabled: true
+              }
+          }
+      },
+      series: [{
+          name: 'Emnotellamientos de hoy',
+          data: [{{eManana}},{{eTarde}},{{eNoche}}]
+      }]
+  });
+</script>
 {% endblock %}
