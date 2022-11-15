@@ -172,8 +172,8 @@ def indicadores(request):
 def login(request):
     return render(request, "login.html")
 
-def dashboardIndicadores(request):
-    return render(request, "dashboardIndicadores.html")
+def dashboardIndicadoresHistoricos(request):
+    return render(request, "dashboardIndicadoresHistoricos.html")
 
 class EstadisticasPage(TemplateView):
     template_name = "estadisticas.html"
@@ -397,11 +397,13 @@ def rutasDash(_request):
     viasVelocidad = list(Vehiculos.objects.filter(hora_actual__startswith=obtenerHora()[0].split(" ")[0]).values_list('velocidad', 'latitud', 'longitud','id_vehiculo'))
     viasVelocidad.sort(reverse=True)
     viasVelocidad = viasVelocidad[:8]
+    print(viasVelocidad)
     for c in viasVelocidad:
         reverse_geocode_result = gmaps.reverse_geocode((c[1], c[2]))
         try:
             if(reverse_geocode_result[0]['address_components'][1]['types'] == ['route']):
-                listaVias.append({"via": reverse_geocode_result[0]['address_components'][1]['long_name'] + ", Loja-Ecuador", "lat" : c[1], "long": c[2], 'velocidad':c[0]})
+                if(len(reverse_geocode_result[0]['address_components'][1]['long_name']) > 3):
+                    listaVias.append({"via": reverse_geocode_result[0]['address_components'][1]['long_name'] + ", Loja-Ecuador", "lat" : c[1], "long": c[2], 'velocidad':c[0]})
         except:
             pass
 
@@ -409,6 +411,68 @@ def rutasDash(_request):
         data = {'mensaje': "Correcto", "vias": listaVias}
     else:
         data = {'mensaje': "Error", "vias": listaVias}
+    return JsonResponse(data)
+
+def getValoresDashboardIndicadoresHistoricos(_request, fecha):
+
+    estadisticaManana = list()
+    estadisticaTarde = list()
+    estadisticaNoche = list()
+    fechaSeparada = fecha.split("-") #anio-mes-dia 2021-11-14
+    horaHistorica = datetime(int(fechaSeparada[0]), int(fechaSeparada[1]), int(fechaSeparada[2])) #Anio - mes - dia
+    nroDia = calendar.weekday(int(fechaSeparada[0]), int(fechaSeparada[1]), int(fechaSeparada[2]))
+    dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
+
+    if(dias[nroDia] == "Lunes"):
+            horaHistorica = horaHistorica - timedelta(days = 7)
+    elif(dias[nroDia] == "Martes"):
+            horaHistorica = horaHistorica - timedelta(days = 8)
+    elif(dias[nroDia] == "Miercoles"):
+            horaHistorica = horaHistorica - timedelta(days = 9)
+    elif(dias[nroDia] == "Jueves"):
+            horaHistorica = horaHistorica - timedelta(days = 10)
+    elif(dias[nroDia] == "Viernes"):
+            horaHistorica = horaHistorica - timedelta(days = 11)
+    elif(dias[nroDia] == "Sabado"):
+            horaHistorica = horaHistorica - timedelta(days = 12)
+    elif(dias[nroDia] == "Domingo"):
+            horaHistorica = horaHistorica - timedelta(days = 6)
+        
+    fecha = horaHistorica.strftime("%D")
+
+    eManana = 0
+    eTarde = 0
+    eNoche = 0
+    for x in range(1,8):
+        for h in range(6,12):
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            eManana = eManana + datosHoras
+
+        for h in range(12,19):
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            eTarde = eTarde + datosHoras
+
+        for h in range(19,24):
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            eNoche = eNoche + datosHoras
+        
+        horaHistorica = horaHistorica + timedelta(days = 1)
+        fecha = horaHistorica.strftime("%D")
+        eManana = int(eManana / 6)
+        eTarde = int(eTarde / 7)
+        eNoche = int(eNoche / 5)
+        estadisticaManana.append(eManana)
+        estadisticaTarde.append(eTarde)
+        estadisticaNoche.append(eNoche)
+
+    
+        
+    print(fecha)
+    if(len(estadisticaManana) > 0):
+        data = {'mensaje': "Correcto","estadisticaManana": estadisticaManana, "estadisticaTarde": estadisticaTarde, "estadisticaNoche": estadisticaNoche , "fecha": fecha}
+    else:
+        data = {'mensaje': "Error", "fecha": fecha}
+
     return JsonResponse(data)
 
 def ingreso(request):

@@ -29,6 +29,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js">
     </script>
     <script src="{% static 'js/wrap.js' %}"></script>
+    <script src="{% static 'js/dashIndicadores.js' %}"></script>
     <title>
       {% block title%}
       {% endblock%}
@@ -58,8 +59,8 @@
         </a>
         </div>
         <div>
-            <a href="{% url 'dashboardIndicadores' %}">
-            <img src="{% static 'img/things.png' %}" alt="Indicadores"> Indicadores
+            <a href="{% url 'dashboardIndicadoresHistoricos' %}">
+            <img src="{% static 'img/things.png' %}" alt="Indicadores"> Indicadores Históricos
         </a>
         </div>
         <div>

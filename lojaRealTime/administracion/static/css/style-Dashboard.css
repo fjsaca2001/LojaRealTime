@@ -260,3 +260,25 @@ body{
     font-size: 17px;
     color: #888;
 }
+.graficaDia{
+    width: 95% !important;
+    margin: auto !important;
+    padding-left: 10px !important;
+    margin-bottom: 25px !important;
+}
+.graficaDia h2{
+    text-align: center;
+    margin: 40px;
+    font-size: 45px;
+    color: #1B65A7;
+}
+.graficaDia p{
+    text-align: justify;
+    /*margin: 15px;*/
+    font-size: 20px;
+}
+.graficaHorarios{
+    display: inline-block;
+    margin: 0 20px;
+    vertical-align:top !important;
+}

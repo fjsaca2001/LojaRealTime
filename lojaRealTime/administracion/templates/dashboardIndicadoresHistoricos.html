@@ -1,0 +1,25 @@
+{% extends "masterDashboard.html" %}
+{% block title %}
+  LojaRealTime | DashBoard
+{% endblock%}
+
+{% block content%}
+{% load static %}
+<div class="seccionGraficas">
+  <div class="graficaDia">
+    <h2>Embotellamientos en la última semana</h2>
+    <div class="graficaHorarios" style="width: 65%;">
+      <figure class="highcharts-figure">
+        <div id="containerHorarios"></div>
+      </figure>
+    </div>
+    <div class="graficaHorarios" style="width: 25%;">
+      <input type="date" id="fechaSemanalTrafico">
+      <p class="highcharts-description">
+        En la gráfica <strong>embotellamientos por día </strong>. Se observa un promedio de los embotellamientos de la ciudad de Loja, dividida en horarios para una mejor visualización, la misma que se la realiza con rangos de horarios como: <strong><i>6 am - 12 pm</i></strong> corresponde a la mañana; <strong><i>12 pm - 7 pm</i></strong> corresponde a la tarde y finalmente de <strong><i>7 pm en adelante</i></strong> corresponde a noche. Esta información es calculada por medio de la velocidad del conductor de un vehículo tipo taxi y un intervalo de tiempo. El gráfico es interactivo y se puede seleccionar el horario al que desee ver.  
+      </p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

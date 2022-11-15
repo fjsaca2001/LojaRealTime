@@ -87,7 +87,6 @@ const localizacionesTodas = async () => {
 
 
 const marcarRutas = async () => {
-    
     try {
         var objConfDR = {
             map: map2
