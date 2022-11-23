@@ -552,3 +552,39 @@ h1 {
     margin: 0px 45px;
     display: inline-block;
 }
+.fechaSeleccionar{
+    text-align: center;
+    background-color: #E9ECEF;
+    border-radius: 10px 10px 0px 0px;
+}
+.fechaSeleccionar p{
+    background-color: #E9ECEF;
+    margin: 15px;
+}
+.fecha{
+    display: inline-block;
+}
+.fecha input{
+    font-size: 18px;
+    border-radius: 10px;
+    padding: 5px;
+    outline: none;
+    border: none;
+    width: 220px;
+    text-align: center;
+    letter-spacing: 5px;
+}
+.encabezadoHistorico{
+    padding: 10px 10px;
+    text-align: justify;
+    width: 30%;
+    background-color: #ffffff;
+    margin: auto;
+    color: #1B65A7;
+    border-radius: 10px;
+    box-shadow: 5px 5px #494a4a;
+    color: #000;
+}
+.bg-dark{
+    margin-left: 80% !important;
+}

@@ -4,7 +4,7 @@ let marcadores = [];
 // crea un nuevo objeto `Date`
 var today = new Date();
  
-const setListener = ()=>{
+const setListener = () => {
     document.querySelectorAll("nVia").forEach()
 }
 
@@ -81,7 +81,7 @@ const localizacionesTodas = async () => {
 
     } catch (e) {
         console.log(e)
-        //alert("No se encontraron vehiculos" + e)
+        alert("No se encontraron vehiculos" + e)
     }
 };
 

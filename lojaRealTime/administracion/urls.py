@@ -15,6 +15,12 @@ urlpatterns = [
    path('getUbicaciones/', views.getUbicaciones, name="getUbicaciones"),
    path('getValoresMapa/', views.getValoresMapa, name="getValoresMapa"),
    path('estadisticas/', EstadisticasPage.as_view(), name='estadisticas'),
+   # API cuando la fecha del grafico por dia cambie
+    path('estadisticas/getValoresDashboardIndicadoresHistoricos/<fecha>', views.getValoresDashboardIndicadoresHistoricos, name="getValoresDashboardIndicadoresHistoricos"),
+    # API cuando la fecha del grafico por dia cambie
+    path('estadisticas/getValoresDashboardIndicadoresHistoricos2/<fecha>', views.getValoresDashboardIndicadoresHistoricos2, name="getValoresDashboardIndicadoresHistoricos2"),
+    # API cuando la fecha del grafico reporte semanal cambie
+    path('estadisticas/getValoresDashboardIndicadoresHistoricos3/<fecha>', views.getValoresDashboardIndicadoresHistoricos3, name="getValoresDashboardIndicadoresHistoricos3"),
 
    #path('estadisticas/', views.estadisticas, name="estadisticas"),
    #path('estadisticas/estadisticasPost/', views.estadisticasPost, name="estadisticasPost"),
@@ -28,8 +34,23 @@ urlpatterns = [
     #path('dashboard/', views.dashboard, name="dashboard"),
     path('dashboard/', DashboardPage.as_view(), name='dashboard'),
     path('dashboardIndicadoresHistoricos/', views.dashboardIndicadoresHistoricos, name="dashboardIndicadoresHistoricos"),
+
+    # API cuando la fecha del grafico por dia cambie
     path('dashboardIndicadoresHistoricos/getValoresDashboardIndicadoresHistoricos/<fecha>', views.getValoresDashboardIndicadoresHistoricos, name="getValoresDashboardIndicadoresHistoricos"),
+
+    # API cuando la fecha del grafico por dia cambie
+    path('dashboardIndicadoresHistoricos/getValoresDashboardIndicadoresHistoricos2/<fecha>', views.getValoresDashboardIndicadoresHistoricos2, name="getValoresDashboardIndicadoresHistoricos2"),
+
+    # API cuando la fecha del grafico reporte semanal cambie
+    path('dashboardIndicadoresHistoricos/getValoresDashboardIndicadoresHistoricos3/<fecha>', views.getValoresDashboardIndicadoresHistoricos3, name="getValoresDashboardIndicadoresHistoricos3"),
+
+
     path('dashboard/getValoresMapaDash/', views.getValoresMapa, name="getValoresMapaDash"),
     path('dashboard/getRutasMapaDash/', views.rutasDash, name="getRutasMapaDash"),
+    path('dashboard/controlTransito/getRutasMapaDashFecha/<fecha>', views.rutasDashFecha, name="getRutasMapaDashFecha"),
+    path('dashboard/controlTransito/getUbicacionesCT/', views.getUbicaciones, name="getUbicacionesCT"),
+    path('dashboard/controlTransito/', views.controlTransito, name="controlTransito"),
+    path('dashboard/controlTransito/getVelocidades/<fechaMinima>/<fechaMaxima>', views.getVelocidades, name="getVelocidades"),
+    path('dashboard/appEstadisticas/', views.appEstadisticas, name="appEstadisticas"),
     path('dashboard/getUbicacionesDash/', views.getUbicaciones, name="getUbicacionesDash"),
 ]

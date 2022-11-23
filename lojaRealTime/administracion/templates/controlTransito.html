@@ -1,0 +1,239 @@
+{% extends "masterDashboard.html" %} 
+{% block title %} LojaRealTime | DashBoard
+{% endblock%} 
+{% block content%} 
+{% load static %}
+<script src="{% static 'js/controlTrafico.js' %}"></script>
+<h2 class="tituloEs">
+    Control de velocidad de taxis
+</h2>
+<div class="gridRangoVelocidad">
+    <div class="graficaRango" >
+        <figure class="highcharts-figure">
+            <div id="containerVelocidadRango"></div>
+        </figure>
+    </div>
+    <div class="seleccionarFechas">
+        <p class="highcharts-description">
+            A basic column chart comparing emissions by pollutant.
+            Oil and gas extraction has the overall highest amount of
+            emissions, followed by manufacturing industries and mining.
+            The chart is making use of the axis crosshair feature, to highlight
+            years as they are hovered over.
+        </p>
+        <div class="fechaSeleccionar2">
+            <div class="fecha2">
+              <p>Ingrese la fecha mínima: </p>
+            </div>
+            <div class="fecha2">
+              <input type="date" id="fechaRangoMin" class="calendario" />
+            </div>
+        </div>
+        <div class="fechaSeleccionar2">
+            <div class="fecha2">
+              <p>Ingrese la fecha máxima: </p>
+            </div>
+            <div class="fecha2">
+              <input type="date" id="fechaRangoMax" class="calendario" />
+            </div>
+        </div>
+    </div>
+    <div class="graficaPastel" >
+        <figure class="highcharts-figure">
+            <div id="containerVelocidadPastel"></div>
+        </figure>
+    </div>
+    <div class="topVelocidad">
+        <p class="highcharts-description">
+            Tabla de velocidades <strong>Top 10</strong> de taxis que mantienen la mayor velocidad.
+        </p>
+        <table class="content-table"> 
+            <thead> 
+                <tr> 
+                    <th>Posición</th> 
+                    <th>Nombre</th> 
+                    <th>Ventas cerradas</th> 
+                    <th>Subárea</th> 
+                </tr> 
+            </thead> 
+            <tbody> 
+                <tr> 
+                    <td>1</td> 
+                    <td>Sara</td> 
+                    <td>23</td> 
+                    <td>Ventas a mayoristas</td> 
+                </tr> 
+                    <td>2</td> 
+                    <td>Ernesto</td> 
+                    <td>13</td> 
+                    <td>Cuentas empresariales</td>
+                </tr> 
+                <tr> 
+                    <td>3</td> 
+                    <td>Nuria</td> 
+                    <td>11</td> 
+                    <td>Cuentas empresariales
+                    </td> 
+                </tr> 
+                <tr> 
+                    <td>3</td> 
+                    <td>Nuria</td> 
+                    <td>11</td> 
+                    <td>Cuentas empresariales
+                    </td> 
+                </tr> 
+                <tr> 
+                    <td>3</td> 
+                    <td>Nuria</td> 
+                    <td>11</td> 
+                    <td>Cuentas empresariales
+                    </td> 
+                </tr> 
+                <tr> 
+                    <td>3</td> 
+                    <td>Nuria</td> 
+                    <td>11</td> 
+                    <td>Cuentas empresariales
+                    </td> 
+                </tr> 
+                <tr> 
+                    <td>3</td> 
+                    <td>Nuria</td> 
+                    <td>11</td> 
+                    <td>Cuentas empresariales
+                    </td> 
+                </tr> 
+                <tr> 
+                    <td>3</td> 
+                    <td>Nuria</td> 
+                    <td>11</td> 
+                    <td>Cuentas empresariales
+                    </td> 
+                </tr> 
+                <tr> 
+                    <td>3</td> 
+                    <td>Nuria</td> 
+                    <td>11</td> 
+                    <td>Cuentas empresariales
+                    </td> 
+                </tr> 
+                <tr> 
+                    <td>3</td> 
+                    <td>Nuria</td> 
+                    <td>11</td> 
+                    <td>Cuentas empresariales
+                    </td> 
+                </tr> 
+            </tbody> 
+        </table>
+    </div>
+</div>
+
+<h2 class="tituloEs">Vías con mayor congestión de tráfico</h2>
+<div class="fechaSeleccionar2">
+    <div class="fecha2">
+      <p>Ingrese una fecha: </p>
+    </div>
+    <div class="fecha2">
+      <input type="date" id="fechaVias" class="calendario" />
+    </div>
+</div>
+
+<div class="grid-container">
+    <p id="reemplazar1"></p>
+    <p id="reemplazar2"></p>
+    <p id="reemplazar3"></p>
+    <p id="reemplazar4"></p>
+    <p id="reemplazar5"></p>
+    <p id="reemplazar6"></p>
+    <p id="reemplazar7"></p>
+    <p id="reemplazar8"></p>
+    <p id="reemplazar9"></p>
+    <p id="reemplazar10"></p>
+
+    <!--
+    <div class="grid-item">
+        <h3>20 Km/h</h3>
+        <p id="" style="margin-bottom: 0px;">10 de agosto</p>
+    </div>
+    <div class="grid-item">
+        <h3>20 Km/h</h3>
+        <p id="" style="margin-bottom: 0px;">Sucre</p>
+    </div>
+    <div class="grid-item">
+        <h3>20 Km/h</h3>
+        <p id="" style="margin-bottom: 0px;">Sucre</p>
+    </div>
+    <div class="grid-item">
+        <h3>20 Km/h</h3>
+        <p id="" style="margin-bottom: 0px;">Sucre</p>
+    </div>
+    <div class="grid-item">
+        <h3>20 Km/h</h3>
+        <p id="" style="margin-bottom: 0px;">Sucre</p>
+    </div>
+    <div class="grid-item">
+        <h3>20 Km/h</h3>
+        <p id="" style="margin-bottom: 0px;">Sucre</p>
+    </div>
+    <div class="grid-item">
+        <h3>20 Km/h</h3>
+        <p id="" style="margin-bottom: 0px;">Sucre</p>
+    </div>
+    -->
+</div> 
+<h2 class="tituloEs">Control de taxis actívos</h2>
+
+<div class="seccionTabla">
+    <div class="fechaSeleccionar2">
+        <div class="fecha2">
+          <p>Ingrese el intervalo de tiempo para actualizar la tabla: </p>
+        </div>
+        <div class="fecha2">
+            <select name="select" id="intervaloActualizar" class="selectTiempo">
+                <option value="30">30 Segundos</option>
+                <option value="60">60 Segundos</option>
+                <option value="120">2 Minutos</option>
+                <option value="180">3 Minutos</option>
+                <option value="300">5 Minutos</option>
+              </select>
+        </div>
+    </div>
+    <table id="table_id" class="display">
+        <thead>
+            <tr>
+                <th>Id Usuario</th>
+                <th>Id Vehiculo</th>
+                <th>Latitud</th>
+                <th>Longitud</th>
+                <th>Velocidad</th>
+                <th>Temperatura Cell</th>
+                <th>Bateria </th>
+                <th>Consumo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in datos %}
+                <tr>
+                    <td>{{v.id_usuario}}</td>
+                    <td>{{v.id_vehiculo}}</td>
+                    <td>{{v.latitud}}</td>
+                    <td>{{v.longitud}}</td>
+                    <td>{{v.velocidad}} km/h</td>
+                    <td>{{v.temperatura}}</td>
+                    <td>{{v.bateria}}</td>
+                    <td>{{v.consumo}} m</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+
+<script>
+    $(document).ready( function () {
+    $('#table_id').DataTable();
+} );
+</script>
+{% endblock %}
+

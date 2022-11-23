@@ -204,6 +204,7 @@ body{
     border:0;
     grid-column: span 3;
 }
+
 /*.infoPantalla{
     position: absolute;
     top:10vh;
@@ -275,10 +276,167 @@ body{
 .graficaDia p{
     text-align: justify;
     /*margin: 15px;*/
-    font-size: 20px;
+    font-size: 15px;
+    color: #888;
 }
 .graficaHorarios{
     display: inline-block;
     margin: 0 20px;
     vertical-align:top !important;
+}
+.encabezadoHistorico{
+    padding: 10px 10px;
+    text-align: justify;
+    width: 30%;
+    background-color: #ffffff;
+    margin: auto;
+    color: #1B65A7;
+    border-radius: 10px;
+    box-shadow: 5px 5px #494a4a;
+    color: #000;
+}
+.fechaSeleccionar{
+    text-align: center;
+    background-color: #E9ECEF;
+    border-radius: 10px 10px 0px 0px;
+    padding: 10px;
+}
+.fechaSeleccionar p{
+    background-color: #E9ECEF;
+    margin: 10px 5px;
+    font-size: 20px;
+}
+.fecha{
+    display: inline-block;
+}
+.fecha input{
+    font-size: 18px;
+    border-radius: 10px;
+    padding: 5px;
+    outline: none;
+    border: none;
+    width: 200px;
+    text-align: center;
+    letter-spacing: 5px;
+}
+
+.fechaSeleccionar2{
+    text-align: center;
+    background-color: #E9ECEF;
+    border-radius: 10px 10px 0px 0px;
+    padding: 10px;
+}
+.fechaSeleccionar2 p{
+    background-color: #E9ECEF;
+    margin: 10px 5px;
+    font-size: 20px;
+}
+.fecha2{
+    display: inline-block;
+}
+.fecha2 input{
+    font-size: 18px;
+    border-radius: 10px;
+    padding: 5px;
+    outline: none;
+    border: none;
+    width: 275px;
+    text-align: center;
+    letter-spacing: 7px;
+}
+.grid-container {
+    display: grid;
+    gap: 30px 30px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    background: #E9ECEF;
+    margin: 0px 0px 40px;
+    padding: 0px 30px 30px 30px;
+    border-radius: 0px 0px 10px 10px;
+}
+.grid-item{
+    border: solid 1px #C6C5C5;
+    padding: 5px 20px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    background: #FFFFFF;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: auto 10px;
+    height: 140px;
+}
+.grid-item h3{
+    font-size: 35px;
+    color: #4265D6;
+}
+.grid-item p{
+    font-size: 17px;
+    color: #888;
+}
+.bg-dark{
+    margin-left: 70% !important;
+}
+.tituloEs{
+    text-align: center !important;
+    margin: 20px !important;
+    font-size: 45px !important;
+    color: #1B65A7 !important;
+}
+.seccionTabla{
+    padding: 0px 30px 60px;
+}
+.selectTiempo{
+    background: #FFFFFF;
+    font-size: 18px;
+    border-radius: 10px;
+    padding: 5px;
+    outline: none;
+    border: none;
+    width: 275px;
+    text-align: center;
+    letter-spacing: 7px;
+}
+.gridRangoVelocidad{
+    display: grid;
+    gap: 30px 30px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    background: #E9ECEF;
+    margin: 0px 0px 40px;
+    padding: 30px 30px 30px 30px;
+    border-radius: 0px 0px 10px 10px;
+}
+.graficaRango{
+    border: solid 1px #C6C5C5;
+    padding: 5px 20px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    background: #FFFFFF;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: auto 10px;
+    grid-column: span 3;
+}
+.graficaPastel{
+    border: solid 1px #C6C5C5;
+    padding: 5px 20px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    background: #FFFFFF;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: auto 10px;
+    grid-column: span 2;
+}
+.topVelocidad{
+    grid-column: span 2;
+    border: solid 1px #C6C5C5;
+    padding: 5px 20px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    background: #FFFFFF;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
