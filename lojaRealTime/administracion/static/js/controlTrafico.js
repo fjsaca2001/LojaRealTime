@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
     //controlTransito()
     graficaVelicidadRango()
-    graficar()
+    graficaComparacionTaxi()
+    //graficar()
     //document.getElementById('intervaloActualizar').value = 30;
     //let intervalo = document.getElementById("intervaloActualizar");
     //actualizarTabla(intervalo)
@@ -105,7 +106,7 @@ const graficaVelicidadRango = () => {
     
     var fechaMin = ano + "-" + mes + "-" + dia;
 
-    //getVelocidad(fechaMin, fechaMax);
+    getVelocidad(fechaMin, fechaMax);
 
     // llamada cuando la fecha para la grafica semanal cambie
     fechaRangoMin.addEventListener('change', function () {
@@ -141,6 +142,126 @@ const graficaVelicidadRango = () => {
     });
 }
 
+const graficaComparacionTaxi = () => {
+    console.log("Entro graficar comparación")
+    fechaHoy = new Date();
+
+    var mes = fechaHoy.getMonth() + 1; //obteniendo mes
+    var dia = fechaHoy.getDate(); //obteniendo dia
+    var ano = fechaHoy.getFullYear(); //obteniendo año
+    if (dia < 10)
+        dia = '0' + dia; //agrega cero si el menor de 10
+    if (mes < 10)
+        mes = '0' + mes //agrega cero si el menor de 10
+    
+    var selectIdTaxi1 = document.getElementById('idTaxi1');
+    var selectIdTaxi2 = document.getElementById('idTaxi2');
+    var selectIdTaxi3 = document.getElementById('idTaxi3');
+
+    getVelocidadIdTaxi(0,0,0)
+
+    selectIdTaxi1.addEventListener('change', function(){
+
+        var selectedOption = this.options[selectIdTaxi1.selectedIndex];
+        var selectTaxi1 = selectedOption.value
+
+        var selectedOption = this.options[selectIdTaxi2.selectedIndex];
+        var selectTaxi2 = selectedOption.value
+
+        var selectedOption = this.options[selectIdTaxi3.selectedIndex];
+        var selectTaxi3 = selectedOption.value
+
+        getVelocidadIdTaxi(selectTaxi1, selectTaxi2, selectTaxi3)
+
+    });
+
+    selectIdTaxi2.addEventListener('change', function(){
+
+        var selectedOption = this.options[selectIdTaxi1.selectedIndex];
+        var selectTaxi1 = selectedOption.value
+
+        var selectedOption = this.options[selectIdTaxi2.selectedIndex];
+        var selectTaxi2 = selectedOption.value
+
+        var selectedOption = this.options[selectIdTaxi3.selectedIndex];
+        var selectTaxi3 = selectedOption.value
+
+        getVelocidadIdTaxi(selectTaxi1, selectTaxi2, selectTaxi3)
+
+    });
+
+    selectIdTaxi3.addEventListener('change', function(){
+
+        var selectedOption = this.options[selectIdTaxi1.selectedIndex];
+        var selectTaxi1 = selectedOption.value
+
+        var selectedOption = this.options[selectIdTaxi2.selectedIndex];
+        var selectTaxi2 = selectedOption.value
+
+        var selectedOption = this.options[selectIdTaxi3.selectedIndex];
+        var selectTaxi3 = selectedOption.value
+
+        getVelocidadIdTaxi(selectTaxi1, selectTaxi2, selectTaxi3)
+
+    });
+
+    /*document.getElementById('fechaRangoMax').value = ano + "-" + mes + "-" + dia;
+    var fechaMax = ano + "-" + mes + "-" + dia;
+    fechaHistorica = new Date();
+    fechaHistorica.setDate(fechaHoy.getDate() + (-7))
+
+    var mes = fechaHistorica.getMonth() + 1; //obteniendo mes
+    var dia = fechaHistorica.getDate(); //obteniendo dia
+    var ano = fechaHistorica.getFullYear(); //obteniendo año
+    if (dia < 10)
+        dia = '0' + dia; //agrega cero si el menor de 10
+    if (mes < 10)
+        mes = '0' + mes //agrega cero si el menor de 10
+    
+    document.getElementById('fechaRangoMin').value = ano + "-" + mes + "-" + dia;
+
+    let fechaRangoMin = document.getElementById("fechaRangoMin");
+    let fechaRangoMax = document.getElementById("fechaRangoMax");
+
+    
+    var fechaMin = ano + "-" + mes + "-" + dia;
+
+    getVelocidad(fechaMin, fechaMax);
+
+    // llamada cuando la fecha para la grafica semanal cambie
+    fechaRangoMin.addEventListener('change', function () {
+        fechaSeleccionada = new Date(parseInt((this.value).split("-")[0]), parseInt((this.value).split("-")[1]) - 1, parseInt((this.value).split("-")[2]));
+
+        fechaMaximaSeleccionada = new Date(parseInt((fechaMax).split("-")[0]), parseInt((fechaMax).split("-")[1]) - 1, parseInt((fechaMax).split("-")[2]))
+
+        fechaMin = this.value;
+
+        if (fechaSeleccionada < fechaHoy && fechaSeleccionada < fechaMaximaSeleccionada) {
+            getVelocidad(fechaMin, fechaMax) // anio-mes-dia 2021-11-14
+            //console.log("Correcto")
+        } else {
+            alert("La fecha debe ser menor al dia: " + fechaHoy.toLocaleDateString('es-es', { weekday: "long", year: "numeric", month: "short", day: "numeric" }))
+            document.getElementById('fechaRangoMin').value = fechaMin;
+        }
+    });
+
+    fechaRangoMax.addEventListener('change', function () {
+        fechaSeleccionada = new Date(parseInt((this.value).split("-")[0]), parseInt((this.value).split("-")[1]) - 1, parseInt((this.value).split("-")[2]));
+
+        fechaMax = this.value;
+
+        fechaMinimaSeleccionada = new Date(parseInt((fechaMin).split("-")[0]), parseInt((fechaMin).split("-")[1]) - 1, parseInt((fechaMin).split("-")[2]))
+
+        if (fechaSeleccionada < fechaHoy && fechaSeleccionada > fechaMinimaSeleccionada) {
+            getVelocidad(fechaMin, fechaMax) // anio-mes-dia 2021-11-14
+            //console.log("Correcto 2")
+        } else {
+            alert("La fecha debe ser menor al dia: " + fechaHoy.toLocaleDateString('es-es', { weekday: "long", year: "numeric", month: "short", day: "numeric" }))
+            document.getElementById('fechaRangoMax').value = ano + "-" + mes + "-" + dia;
+        }
+    });
+    */
+}
 
 const actualizarTabla = () => {
     //var TiempoIntervalo
@@ -193,11 +314,22 @@ const getTaxis = async () => {
 const getVelocidad = async (fechaMinima, fechaMaxima) => {
     console.log("Fecha Min: " + fechaMinima + " Fecha Max: " + fechaMaxima)
     try {
-        const response = await fetch("getRutasMapaDashFecha/" + fechaMinima + "/" + fechaMaxima);
+        const response = await fetch("getVelocidades/" + fechaMinima + "/" + fechaMaxima);
         const data = await response.json();
-        var c = 1;
         if (data.mensaje == "Correcto") {
-            
+            graficarVelocidadRango(data.id_vehiculos, data.velocidades)
+            htmlTabla = ""
+            cont = 0
+            data.Valores.forEach(vehiculo => {
+                if (cont % 2 == 0){
+                    clase = ""
+                }else{
+                    clase = 'class="alt"'
+                }
+                htmlTabla = htmlTabla + "<tr "+ clase +"><td>" + vehiculo[0] + "</td><td>" + vehiculo[2] + "</td><td>" + vehiculo[1] + " km/h</td></tr>"
+                cont = cont + 1
+            });
+            document.getElementById('reemplazarTablaV').innerHTML = htmlTabla;
         } else {
             alert("No se encontraron datos")
         }
@@ -208,29 +340,20 @@ const getVelocidad = async (fechaMinima, fechaMaxima) => {
     }
 };
 
-function graficar(){
+function graficarVelocidadRango(idTaxis, velocidades){
     Highcharts.chart('containerVelocidadRango', {
         chart: {
             type: 'column'
         },
         title: {
-            text: 'Velocidad de taxis'
+            text: 'Top Velocidad de Taxis Por Rango de Fecha'
         },
         xAxis: {
-            categories: [
-                '2010',
-                '2011',
-                '2012',
-                '2013',
-                '2014',
-                '2015',
-                '2016',
-                '2017',
-                '2018',
-                '2019',
-                '2020',
-                '2021'
-            ],
+            title: {
+                useHTML: true,
+                text: 'Id Vehiculo'
+            },
+            categories: idTaxis,
             crosshair: true
         },
         yAxis: {
@@ -240,9 +363,9 @@ function graficar(){
             }
         },
         tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            headerFormat: '<span style="font-size:10px"><b>Id Vehiculo: {point.key}</b></span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">Velocidad Promedio: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} km/h</b></td></tr>',
             footerFormat: '</table>',
             shared: true,
             useHTML: true
@@ -254,12 +377,102 @@ function graficar(){
             }
         },
         series: [{
-            name: 'Dias de la semana',
-            data: [13.93, 13.63, 13.73, 13.67, 14.37, 14.89, 14.56,
-                14.32, 14.13, 13.93, 13.21, 12.16]
+            name: 'Id_Vehiculo',
+            data: velocidades,
+            colorByPoint: true,
+            showInLegend: false,
+
         }]
     });
+}
 
+const getVelocidadIdTaxi = async (id1, id2, id3) => {
+    console.log("id1: " + id1 + " id2 " + id2 + " id3: " + id3)
+    try {
+        const response = await fetch("getVelocidadesPorId/" + id1 + "/" + id2 + "/" + id3);
+        const data = await response.json();
+        if (data.mensaje == "Correcto") {
+            graficarComparacionTaxi(data.listaUsuarios, data.listaDias, data.listaId1, data.listaId2, data.listaId3)
+            htmlTabla = ""
+            cont = 0
+            data.listaUsuarios.forEach(usuario => {
+                if (cont % 2 == 0){
+                    clase = ""
+                }else{
+                    clase = 'class="alt"'
+                }
+                htmlTabla = htmlTabla + "<tr "+ clase +"><td>" + usuario[1] + "</td><td>" + usuario[0] + "</td></tr>"
+                cont = cont + 1
+            });
+            document.getElementById('reemplazarTablaComp').innerHTML = htmlTabla;
+        } else {
+            alert("No se encontraron datos")
+        }
+
+    } catch (e) {
+        console.log(e)
+        alert("No se encontraron Datos")
+    }
+};
+
+function graficarComparacionTaxi(listaUsuarios, listaDias, listaId1, listaId2, listaId3){
+    Highcharts.chart('containerComparaciones', {
+
+        title: {
+            text: 'Comparación de velocidades'
+        },
+    
+        subtitle: {
+            text: 'Organizado por Id taxi'
+        },
+    
+        yAxis: {
+            title: {
+                text: 'Velocidad (Km/h)'
+            }
+        },
+    
+        xAxis: {
+            categories: listaDias,
+        },
+    
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+    
+    
+        series: [{
+            name: listaUsuarios[0][1],
+            data: listaId1
+        }, {
+            name: listaUsuarios[1][1],
+            data: listaId2
+        }, {
+            name: listaUsuarios[2][1],
+            data: listaId3
+        }],
+    
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        }
+    
+    });
+}
+
+function graficarPastel(){
     // Create the chart
     Highcharts.chart('containerVelocidadPastel', {
     chart: {

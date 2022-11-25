@@ -51,6 +51,7 @@ urlpatterns = [
     path('dashboard/controlTransito/getUbicacionesCT/', views.getUbicaciones, name="getUbicacionesCT"),
     path('dashboard/controlTransito/', views.controlTransito, name="controlTransito"),
     path('dashboard/controlTransito/getVelocidades/<fechaMinima>/<fechaMaxima>', views.getVelocidades, name="getVelocidades"),
+    path('dashboard/controlTransito/getVelocidadesPorId/<id1>/<id2>/<id3>', views.getVelocidadesPorId, name="getVelocidadesPorId"),
     path('dashboard/appEstadisticas/', views.appEstadisticas, name="appEstadisticas"),
     path('dashboard/getUbicacionesDash/', views.getUbicaciones, name="getUbicacionesDash"),
 ]

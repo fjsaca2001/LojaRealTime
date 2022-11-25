@@ -1,7 +1,8 @@
-body{
+body {
     background-color: #F2F4F5 !important;
 }
-#info{
+
+#info {
     height: 60px;
     display: flex;
     background-color: #1B65A7;
@@ -10,41 +11,46 @@ body{
     z-index: 2;
 }
 
-#info-contac img{
+#info-contac img {
     margin-left: 2em;
     width: auto;
 }
-#info-contac{
+
+#info-contac {
     width: 80%;
     margin-top: auto;
     margin-bottom: auto;
     justify-content: left;
 }
-#info-social{
+
+#info-social {
     width: 20%;
     margin-top: auto;
     margin-bottom: auto;
     text-align: center;
     display: flex;
 }
-#info-social p{
+
+#info-social p {
     color: #F2F4F5;
     font-size: 20px;
     margin-top: auto;
     margin-bottom: auto;
     font-family: "Poppins";
 }
-#info-social img{
+
+#info-social img {
     margin-left: 1em;
     margin-top: auto;
     margin-bottom: auto;
 }
-#info-social a{
+
+#info-social a {
     margin-top: auto;
     margin-bottom: auto;
 }
 
-#panel-lateral{
+#panel-lateral {
     width: 15%;
     background-color: #ffffff;
     padding-top: 20px;
@@ -55,7 +61,8 @@ body{
     color: #1B65A7;
     box-shadow: 5px 0px 5px -2px #d3d3d3;
 }
-#panel-lateral a{
+
+#panel-lateral a {
     margin: 20px;
     font-size: 15px;
     font-weight: 500;
@@ -63,24 +70,29 @@ body{
     color: #1B65A7;
     padding: auto;
 }
-#panel-lateral img{
+
+#panel-lateral img {
     margin: 20px;
     width: 18px;
 }
-#panel-lateral p{
+
+#panel-lateral p {
     font-size: 30px;
     color: #E2C112;
     margin: 20px 35px;
 }
-#panel-lateral div:hover{
+
+#panel-lateral div:hover {
     background-color: #FFC819;
     border-radius: 20px;
 }
-#content{
+
+#content {
     width: 100%;
     display: flex;
 }
-#contenidoIzq{
+
+#contenidoIzq {
     width: 90%;
     margin: 5px 35px;
     padding-top: 20px;
@@ -88,15 +100,17 @@ body{
     margin-top: 60px;
 }
 
-#footer{
+#footer {
     width: 100%;
     background-color: #2B2B2B;
     text-align: center;
 }
-#footer img{
+
+#footer img {
     padding: 5em 8em;
 }
-#footer p{
+
+#footer p {
     font-size: 20px;
     padding-bottom: 3em;
     padding-top: 2em;
@@ -104,47 +118,57 @@ body{
     border-top: solid 1px #4D4D4D;
     font-family: "Poppins";
 }
-.indicadorTarget{
+
+.indicadorTarget {
     display: inline-block;
     width: 30%;
     margin: 10px 10px 40px 10px;
     text-align: center;
     border-left: 2px solid #ADB2B5;
 }
-.indicadorTarget p{
+
+.indicadorTarget p {
     font-size: 15px;
     color: #888;
 }
-.indicadorTarget h1{
+
+.indicadorTarget h1 {
     font-size: 50px !important;
     color: #1B65A7;
     font-weight: bolder !important;
 }
-.indicadorTarget h4{
+
+.indicadorTarget h4 {
     font-size: 20px;
     color: #E2C112;
 }
+
 .dashRT {
     display: flex;
 }
-.dashRT-Central{
+
+.dashRT-Central {
     width: 100%;
     font-family: "Poppins";
 }
-.dashRT-Central h1{
+
+.dashRT-Central h1 {
     font-size: 30px;
 }
-.dashRT-Central h3{
+
+.dashRT-Central h3 {
     font-size: 20px;
     color: #4265D6;
     margin: 20px 30px;
 }
-.seccion-dashRT{
+
+.seccion-dashRT {
 
     margin: auto;
     width: 100%;
 }
-.secciones-dashRT{
+
+.secciones-dashRT {
     display: inline-grid;
     color: #293855;
     width: 31%;
@@ -155,25 +179,30 @@ body{
     border: 1px solid #C6C5C5;
     border-radius: 5px;
 }
-.secciones-dashRT p{
+
+.secciones-dashRT p {
     font-size: 15px;
     margin-top: 10px;
     color: #888;
     margin: 0px 10px;
 }
-.secciones-dashRT h3{
+
+.secciones-dashRT h3 {
     font-size: 40px;
     font-weight: 900;
 }
-.dashRT-Derecho{
+
+.dashRT-Derecho {
     margin: 10px auto;
     width: 30%;
     text-align: center;
 }
-.seccion-resumen{
+
+.seccion-resumen {
     margin-top: 20px;
 }
-.headResumen{
+
+.headResumen {
     font-size: 22px;
     padding-top: 10px;
     font-family: "Poppins";
@@ -181,27 +210,32 @@ body{
     border: 1px solid #C6C5C5;
     background-color: #ffe661;
 }
-.resumen{
+
+.resumen {
     padding: 10px;
 }
-.bodyResumen{
+
+.bodyResumen {
     background-color: #ffffff;
     border: 1px solid #C6C5C5;
     box-shadow: 1px 8px 4px -5px #888;
 }
-.bodyResumen h3{
+
+.bodyResumen h3 {
     font-size: 40px;
     font-weight: 900;
 }
-#map{
+
+#map {
     width: 96%;
     height: 640px;
-    border:0;
+    border: 0;
 }
-#map2{
+
+#map2 {
     width: 100%;
     height: 680px;
-    border:0;
+    border: 0;
     grid-column: span 3;
 }
 
@@ -232,18 +266,19 @@ body{
     flex: 1;
     padding: 2rem;
 }*/
-.highcharts-background{
+.highcharts-background {
     fill: #ffffff;
-    
+
 }
-.seccionMapaVelocidad{
+
+.seccionMapaVelocidad {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
     grid-gap: 40px;
     margin-bottom: 40px;
-}   
+}
 
-.seccioneCaracteristicas{
+.seccioneCaracteristicas {
     border: solid 1px #C6C5C5;
     padding: 5px 20px;
     border-radius: 10px;
@@ -253,38 +288,45 @@ body{
     flex-direction: column;
     justify-content: space-between;
 }
-.seccioneCaracteristicas h3{
+
+.seccioneCaracteristicas h3 {
     font-size: 35px;
     color: #4265D6;
 }
-.seccioneCaracteristicas p{
+
+.seccioneCaracteristicas p {
     font-size: 17px;
     color: #888;
 }
-.graficaDia{
+
+.graficaDia {
     width: 95% !important;
     margin: auto !important;
     padding-left: 10px !important;
     margin-bottom: 25px !important;
 }
-.graficaDia h2{
+
+.graficaDia h2 {
     text-align: center;
     margin: 40px;
     font-size: 45px;
     color: #1B65A7;
 }
-.graficaDia p{
+
+.graficaDia p {
     text-align: justify;
     /*margin: 15px;*/
     font-size: 15px;
     color: #888;
 }
-.graficaHorarios{
+
+.graficaHorarios {
     display: inline-block;
     margin: 0 20px;
-    vertical-align:top !important;
+    vertical-align: top !important;
 }
-.encabezadoHistorico{
+
+.encabezadoHistorico {
     padding: 10px 10px;
     text-align: justify;
     width: 30%;
@@ -295,21 +337,25 @@ body{
     box-shadow: 5px 5px #494a4a;
     color: #000;
 }
-.fechaSeleccionar{
+
+.fechaSeleccionar {
     text-align: center;
     background-color: #E9ECEF;
     border-radius: 10px 10px 0px 0px;
     padding: 10px;
 }
-.fechaSeleccionar p{
+
+.fechaSeleccionar p {
     background-color: #E9ECEF;
     margin: 10px 5px;
     font-size: 20px;
 }
-.fecha{
+
+.fecha {
     display: inline-block;
 }
-.fecha input{
+
+.fecha input {
     font-size: 18px;
     border-radius: 10px;
     padding: 5px;
@@ -320,21 +366,24 @@ body{
     letter-spacing: 5px;
 }
 
-.fechaSeleccionar2{
+.fechaSeleccionar2 {
     text-align: center;
     background-color: #E9ECEF;
     border-radius: 10px 10px 0px 0px;
     padding: 10px;
 }
-.fechaSeleccionar2 p{
+
+.fechaSeleccionar2 p {
     background-color: #E9ECEF;
     margin: 10px 5px;
     font-size: 20px;
 }
-.fecha2{
+
+.fecha2 {
     display: inline-block;
 }
-.fecha2 input{
+
+.fecha2 input {
     font-size: 18px;
     border-radius: 10px;
     padding: 5px;
@@ -344,6 +393,7 @@ body{
     text-align: center;
     letter-spacing: 7px;
 }
+
 .grid-container {
     display: grid;
     gap: 30px 30px;
@@ -353,7 +403,8 @@ body{
     padding: 0px 30px 30px 30px;
     border-radius: 0px 0px 10px 10px;
 }
-.grid-item{
+
+.grid-item {
     border: solid 1px #C6C5C5;
     padding: 5px 20px;
     border-radius: 10px;
@@ -365,27 +416,33 @@ body{
     margin: auto 10px;
     height: 140px;
 }
-.grid-item h3{
+
+.grid-item h3 {
     font-size: 35px;
     color: #4265D6;
 }
-.grid-item p{
+
+.grid-item p {
     font-size: 17px;
     color: #888;
 }
-.bg-dark{
+
+.bg-dark {
     margin-left: 70% !important;
 }
-.tituloEs{
+
+.tituloEs {
     text-align: center !important;
     margin: 20px !important;
     font-size: 45px !important;
     color: #1B65A7 !important;
 }
-.seccionTabla{
+
+.seccionTabla {
     padding: 0px 30px 60px;
 }
-.selectTiempo{
+
+.selectTiempo {
     background: #FFFFFF;
     font-size: 18px;
     border-radius: 10px;
@@ -396,16 +453,18 @@ body{
     text-align: center;
     letter-spacing: 7px;
 }
-.gridRangoVelocidad{
+
+.gridRangoVelocidad {
     display: grid;
     gap: 30px 30px;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
     background: #E9ECEF;
     margin: 0px 0px 40px;
     padding: 30px 30px 30px 30px;
     border-radius: 0px 0px 10px 10px;
 }
-.graficaRango{
+
+.graficaRango {
     border: solid 1px #C6C5C5;
     padding: 5px 20px;
     border-radius: 10px;
@@ -415,28 +474,166 @@ body{
     flex-direction: column;
     justify-content: space-evenly;
     margin: auto 10px;
+    grid-column: span 2;
+}
+
+.graficaPastel {
+    border: solid 1px #C6C5C5;
+    padding: 5px 20px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    background: #FFFFFF;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: auto 10px;
+    grid-column: span 2;
+}
+
+.topVelocidad {
+    grid-column: span 1;
+    padding: 5px 20px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.seleccionarFechas {}
+
+.seleccionarFechas .fechaSeleccionar2 {
+    display: inline-block;
+    background-color: #ffffff;
+    width: 48%;
+}
+
+.seleccionarFechas .fechaSeleccionar2 p {
+    display: inline-block;
+    background-color: #ffffff;
+}
+
+.seleccionarFechas .fechaSeleccionar2 input {
+    display: inline-block;
+    background-color: #E9ECEF;
+    width: 165px;
+    letter-spacing: 2px;
+}
+
+.datagrid table {
+    border-collapse: collapse;
+    text-align: left;
+    width: 100%;
+}
+
+.datagrid {
+    font: normal 17px/160% Arial, Helvetica, sans-serif;
+    background: #fff;
+    overflow: hidden;
+    border: 1px solid #006699;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.datagrid table td,
+.datagrid table th {
+    padding: 3px 10px;
+}
+
+.datagrid table thead th {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F));
+    background: -moz-linear-gradient(center top, #006699 5%, #00557F 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');
+    background-color: #006699;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: bold;
+    border-left: 1px solid #0070A8;
+}
+
+.datagrid table thead th:first-child {
+    border: none;
+}
+
+.datagrid table tbody td {
+    color: #00496B;
+    border-left: 1px solid #E1EEF4;
+    font-size: 17px;
+    font-weight: normal;
+}
+
+.datagrid table tbody .alt td {
+    background: #E1EEF4;
+    color: #00496B;
+}
+
+.datagrid table tbody td:first-child {
+    border-left: none;
+}
+
+.datagrid table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.datagrid table tfoot td div {
+    border-top: 1px solid #006699;
+    background: #E1EEF4;
+}
+
+.datagrid table tfoot td {
+    padding: 0;
+    font-size: 12px
+}
+
+.datagrid table tfoot td div {
+    padding: 2px;
+}
+
+.datagrid table tfoot td ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-align: right;
+}
+
+.datagrid table tfoot li {
+    display: inline;
+}
+
+.datagrid table tfoot li a {
+    text-decoration: none;
+    display: inline-block;
+    padding: 2px 8px;
+    margin: 1px;
+    color: #FFFFFF;
+    border: 1px solid #006699;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F));
+    background: -moz-linear-gradient(center top, #006699 5%, #00557F 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');
+    background-color: #006699;
+}
+
+.datagrid table tfoot ul.active,
+.datagrid table tfoot ul a:hover {
+    text-decoration: none;
+    border-color: #006699;
+    color: #FFFFFF;
+    background: none;
+    background-color: #00557F;
+}
+.hit-the-floor {
+    color: #1B65A7;
+    font-size: 28px;
+    font-weight: bold;
+    font-family: Helvetica;
+    text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15);
+}
+.hit-the-floor {
+    text-align: center;
     grid-column: span 3;
-}
-.graficaPastel{
-    border: solid 1px #C6C5C5;
-    padding: 5px 20px;
-    border-radius: 10px;
-    text-align: center;
-    display: flex;
-    background: #FFFFFF;
-    flex-direction: column;
-    justify-content: space-evenly;
-    margin: auto 10px;
-    grid-column: span 2;
-}
-.topVelocidad{
-    grid-column: span 2;
-    border: solid 1px #C6C5C5;
-    padding: 5px 20px;
-    border-radius: 10px;
-    text-align: center;
-    display: flex;
-    background: #FFFFFF;
-    flex-direction: column;
-    justify-content: space-evenly;
 }

@@ -8,124 +8,101 @@
     Control de velocidad de taxis
 </h2>
 <div class="gridRangoVelocidad">
+    <div class="hit-the-floor">
+        Promédio de velocidad por rango de fecha
+    </div>
     <div class="graficaRango" >
+        <div class="seleccionarFechas">
+            <div class="fechaSeleccionar2">
+                <div class="fecha2">
+                  <p>Ingrese la fecha mínima: </p>
+                </div>
+                <div class="fecha2">
+                  <input type="date" id="fechaRangoMin" class="calendario" />
+                </div>
+            </div>
+            <div class="fechaSeleccionar2">
+                <div class="fecha2">
+                  <p>Ingrese la fecha máxima: </p>
+                </div>
+                <div class="fecha2">
+                  <input type="date" id="fechaRangoMax" class="calendario" />
+                </div>
+            </div>
+        </div>
         <figure class="highcharts-figure">
             <div id="containerVelocidadRango"></div>
         </figure>
     </div>
-    <div class="seleccionarFechas">
+    <div class="topVelocidad">
         <p class="highcharts-description">
-            A basic column chart comparing emissions by pollutant.
-            Oil and gas extraction has the overall highest amount of
-            emissions, followed by manufacturing industries and mining.
-            The chart is making use of the axis crosshair feature, to highlight
-            years as they are hovered over.
+            <strong>Top</strong> de taxis que mantienen la mayor velocidad.
+            Moderado: 50km/h - 60km/h
         </p>
-        <div class="fechaSeleccionar2">
-            <div class="fecha2">
-              <p>Ingrese la fecha mínima: </p>
-            </div>
-            <div class="fecha2">
-              <input type="date" id="fechaRangoMin" class="calendario" />
-            </div>
+        <div class="datagrid">
+            <table>
+                <thead>
+                    <tr> 
+                        <th>Id Vehiculo</th> 
+                        <th>Id Contuctor</th> 
+                        <th>Velocidad</th> 
+                    </tr> 
+                </thead>
+                <tbody id="reemplazarTablaV">
+                    <!--Aqui van los valores desde JS-->
+                </tbody>
+            </table>
         </div>
-        <div class="fechaSeleccionar2">
-            <div class="fecha2">
-              <p>Ingrese la fecha máxima: </p>
-            </div>
-            <div class="fecha2">
-              <input type="date" id="fechaRangoMax" class="calendario" />
-            </div>
+    </div>
+    <div class="hit-the-floor">
+        Comparación de velocidad entre 3 taxis en los ultimos 5 dias
+    </div>
+    <div class="graficaPastel" >
+        <figure class="highcharts-figure">
+            <div id="containerComparaciones"></div>
+        </figure>
+    </div>
+    <div class="topVelocidad">
+        <p class="highcharts-description">
+            <strong>Compáre</strong> la velocidad promedio de varios taxis a lo largo de los ultimos dias.
+        </p>
+        <select class="form-select" aria-label="Default select example" id="idTaxi1">
+            <option selected value="0">Seleccione el ID del taxi 1</option>
+            {% for v in valores %}
+                <option value={{v}}>Taxi ID: {{v}}</option>
+            {% endfor %}
+        </select>
+        <select class="form-select" aria-label="Default select example" id="idTaxi2">
+            <option selected value="0">Seleccione el ID del taxi 2</option>
+            {% for v in valores %}
+                <option value={{v}}>Taxi ID: {{v}}</option>
+            {% endfor %}
+        </select>
+        <select class="form-select" aria-label="Default select example" id="idTaxi3">
+            <option selected value="0">Seleccione el ID del taxi 3</option>
+            {% for v in valores %}
+                <option value={{v}}>Taxi ID: {{v}}</option>
+            {% endfor %}
+        </select>
+        <button type="button" class="btn btn-primary" id="btnAleatorio">Aleatorio</button>
+        <div class="datagrid">
+            <table>
+                <thead>
+                    <tr> 
+                        <th>Id Vehiculo</th> 
+                        <th>Id Contuctor</th>
+                    </tr> 
+                </thead>
+                <tbody id="reemplazarTablaComp">
+                    <!-- Aqui se reemplazan los datos -->
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="graficaPastel" >
         <figure class="highcharts-figure">
             <div id="containerVelocidadPastel"></div>
         </figure>
-    </div>
-    <div class="topVelocidad">
-        <p class="highcharts-description">
-            Tabla de velocidades <strong>Top 10</strong> de taxis que mantienen la mayor velocidad.
-        </p>
-        <table class="content-table"> 
-            <thead> 
-                <tr> 
-                    <th>Posición</th> 
-                    <th>Nombre</th> 
-                    <th>Ventas cerradas</th> 
-                    <th>Subárea</th> 
-                </tr> 
-            </thead> 
-            <tbody> 
-                <tr> 
-                    <td>1</td> 
-                    <td>Sara</td> 
-                    <td>23</td> 
-                    <td>Ventas a mayoristas</td> 
-                </tr> 
-                    <td>2</td> 
-                    <td>Ernesto</td> 
-                    <td>13</td> 
-                    <td>Cuentas empresariales</td>
-                </tr> 
-                <tr> 
-                    <td>3</td> 
-                    <td>Nuria</td> 
-                    <td>11</td> 
-                    <td>Cuentas empresariales
-                    </td> 
-                </tr> 
-                <tr> 
-                    <td>3</td> 
-                    <td>Nuria</td> 
-                    <td>11</td> 
-                    <td>Cuentas empresariales
-                    </td> 
-                </tr> 
-                <tr> 
-                    <td>3</td> 
-                    <td>Nuria</td> 
-                    <td>11</td> 
-                    <td>Cuentas empresariales
-                    </td> 
-                </tr> 
-                <tr> 
-                    <td>3</td> 
-                    <td>Nuria</td> 
-                    <td>11</td> 
-                    <td>Cuentas empresariales
-                    </td> 
-                </tr> 
-                <tr> 
-                    <td>3</td> 
-                    <td>Nuria</td> 
-                    <td>11</td> 
-                    <td>Cuentas empresariales
-                    </td> 
-                </tr> 
-                <tr> 
-                    <td>3</td> 
-                    <td>Nuria</td> 
-                    <td>11</td> 
-                    <td>Cuentas empresariales
-                    </td> 
-                </tr> 
-                <tr> 
-                    <td>3</td> 
-                    <td>Nuria</td> 
-                    <td>11</td> 
-                    <td>Cuentas empresariales
-                    </td> 
-                </tr> 
-                <tr> 
-                    <td>3</td> 
-                    <td>Nuria</td> 
-                    <td>11</td> 
-                    <td>Cuentas empresariales
-                    </td> 
-                </tr> 
-            </tbody> 
-        </table>
     </div>
 </div>
 

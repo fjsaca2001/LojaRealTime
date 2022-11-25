@@ -20,7 +20,7 @@ from datetime import timedelta
 from geopy.distance import geodesic
 import googlemaps
 import calendar
-
+import sqlite3
 from administracion.models import Vehiculos
 
 gmaps = googlemaps.Client(key='AIzaSyBmcEHbItWXSbgIH8BiQuD6Ns5bfyBoLtY')
@@ -590,8 +590,68 @@ def getValoresDashboardIndicadoresHistoricos3(_request, fecha):
     return JsonResponse(data)
 
 def controlTransito(request):
+
     datos = postAPI()
-    return render(request, "controlTransito.html", {"datos": datos})
+    consulta = "SELECT DISTINCT id_vehiculo FROM vehiculos"
+    valores = consultaBASE(consulta)
+    idVehiculos = list()
+
+    for x in valores:
+        idVehiculos.append(x[0])
+
+    return render(request, "controlTransito.html", {"datos": datos, "valores":idVehiculos})
+
+
+def getVelocidadesPorId(_request, id1, id2, id3):
+
+    listaId1 = list()
+    listaId2 = list()
+    listaId3 = list()
+    listaDias = list()
+    listaUsuarios = list()
+    consulta = "SELECT DISTINCT id_usuario FROM vehiculos WHERE id_vehiculo = "+id1
+    listaUsuarios.append([consultaBASE(consulta)[0][0] if len(consultaBASE(consulta)) > 0 else 0, id1])
+    consulta = "SELECT DISTINCT id_usuario FROM vehiculos WHERE id_vehiculo = "+id2
+    listaUsuarios.append([consultaBASE(consulta)[0][0] if len(consultaBASE(consulta)) > 0 else 0, id2])
+    consulta = "SELECT DISTINCT id_usuario FROM vehiculos WHERE id_vehiculo = "+id3
+    listaUsuarios.append([consultaBASE(consulta)[0][0] if len(consultaBASE(consulta)) > 0 else 0, id3])
+    horaFecha = datetime.now()
+    horaFecha = horaFecha - timedelta(days=5)
+    fecha = horaFecha.strftime("%D")
+    dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
+
+    for d in range(1,6):
+        fecha = fecha.split("/")
+        nroDia = calendar.weekday(int(fecha[2]), int(fecha[0]), int(fecha[1]))
+        listaDias.append(dias[nroDia])
+        horaFecha = horaFecha + timedelta(days=1)
+        fecha = horaFecha.strftime("%D")
+
+        consulta = "SELECT ROUND(AVG(velocidad), 2) FROM vehiculos WHERE id_vehiculo = '" + id1 + "' AND hora_actual LIKE '" + fecha + "%'"
+        valores = consultaBASE(consulta)
+        listaId1.append(valores[0][0])
+        
+        consulta = "SELECT ROUND(AVG(velocidad), 2) FROM vehiculos WHERE id_vehiculo = '" + id2 + "' AND hora_actual LIKE '" + fecha + "%'"
+        valores = consultaBASE(consulta)
+        listaId2.append(valores[0][0])
+
+        consulta = "SELECT ROUND(AVG(velocidad), 2) FROM vehiculos WHERE id_vehiculo = '" + id3 + "' AND hora_actual LIKE '" + fecha + "%'"
+        valores = consultaBASE(consulta)
+        listaId3.append(valores[0][0])
+
+    data = {'mensaje': "Correcto", "listaUsuarios": listaUsuarios, "listaDias": listaDias, "listaId1": listaId1, "listaId2": listaId2, "listaId3": listaId3}
+
+    return JsonResponse(data)
+
+
+def consultaBASE(csql):
+
+    con = sqlite3.connect("/home/fjsaca/Documentos/proyectoGit/LojaRealTime/flask/tempVehiculos.db")
+    cur = con.cursor()
+    cur.execute(csql)
+    valores = cur.fetchall()
+
+    return valores
 
 def getVelocidades(_request, fechaMinima, fechaMaxima):
     
@@ -604,40 +664,50 @@ def getVelocidades(_request, fechaMinima, fechaMaxima):
 
     fechaMax = fechaMaximaH.strftime("%D")
     fechaMin = fechaMinimaH.strftime("%D")
+    print("fechaMax: ", fechaMax) #mes/dia/anio
+    print("fechaMin: ", fechaMin) #mes/dia/anio
 
-    vManana = 0
-    vTarde = 0
-    vNoche = 0
+    #vManana = 0
+    #vTarde = 0
+    #vNoche = 0
+    listaFechas = list()
+    diaNMin = int(fechaMin.split("/")[1])
+    diaNMax = int(fechaMax.split("/")[1])
 
-    for x in range(1,8):
-        for h in range(6,12):
-            datosVelocidades = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-            eManana = eManana + datosHoras
+    test = "SELECT id_vehiculo, ROUND(AVG(velocidad), 2) AS velocidades, id_usuario FROM vehiculos WHERE hora_actual LIKE '" + fechaMin + " %' "
 
-        for h in range(12,19):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-            eTarde = eTarde + datosHoras
+    while(diaNMin < diaNMax):
 
-        for h in range(19,24):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-            eNoche = eNoche + datosHoras
-        
-        horaHistorica = horaHistorica + timedelta(days = 1)
-        fecha = horaHistorica.strftime("%D")
-        eManana = int(eManana / 6)
-        eTarde = int(eTarde / 7)
-        eNoche = int(eNoche / 5)
-        estadisticaManana.append(eManana)
-        estadisticaTarde.append(eTarde)
-        estadisticaNoche.append(eNoche)
-        
-    print(fecha)
-    if(len(estadisticaManana) > 0):
-        data = {'mensaje': "Correcto","estadisticaManana": estadisticaManana, "estadisticaTarde": estadisticaTarde, "estadisticaNoche": estadisticaNoche , "fecha": fecha}
-    else:
-        data = {'mensaje': "Error", "fecha": fecha}
+        dia = ""
+        if(diaNMin < 9): 
 
-    data = {'mensaje': "Correcto", "fechaMin": fechaMinima, "fechaMax": fechaMaxima}
+            dia = "0" + str(int(fechaMin.split("/")[1]) + 1)
+        else:
+
+            dia = str(int(fechaMin.split("/")[1]) + 1)
+
+        fechaMin = fechaMin.split("/")[0] + "/" + dia + "/" + fechaMin.split("/")[2]
+        diaNMin = diaNMin + 1
+        listaFechas.append(fechaMin)
+
+    for f in listaFechas:
+        test = test + " OR hora_actual LIKE '" + f + " %'"
+    
+    test = test + "GROUP BY id_vehiculo ORDER BY velocidades DESC"
+
+    print(test)
+    
+    valores = consultaBASE(test)
+    valores = valores[:12]
+
+    idVehiculos = list()
+    velocidades = list()
+
+    for x in valores:
+        idVehiculos.append(x[0])
+        velocidades.append(x[1])
+
+    data = {'mensaje': "Correcto", "fechaMin": fechaMinima, "fechaMax": fechaMaxima, "Valores": valores, "id_vehiculos": idVehiculos, "velocidades": velocidades}
 
     return JsonResponse(data)
 
