@@ -55,7 +55,6 @@ const localizaciones = async () => {
         }
 
     } catch (e) {
-        console.log(e)
         alert("No se encontraron vehiculos")
     }
 };
@@ -66,7 +65,6 @@ const localizacionesTodas = async () => {
         const response = await fetch("getUbicacionesDash");
         const data = await response.json();
         const total = (Object.keys(data.vehiculos)).length;
-        //console.log(total)
         if (marcadores.length != 0) {
             eliminarMarcadores()
         }
@@ -80,7 +78,6 @@ const localizacionesTodas = async () => {
         }
 
     } catch (e) {
-        console.log(e)
         alert("No se encontraron vehiculos" + e)
     }
 };
@@ -107,14 +104,11 @@ const marcarRutas = async () => {
                 }
                 var ds = new google.maps.DirectionsService();
                 ds.route(objConfDS, funRutear);
-                console.log("Marcado")
                 function funRutear(resultados, status){
                     //Muestra la linea entre a y b
                     if(status == 'OK'){
-                        console.log("ENtro")
                         dr.setDirections(resultados);
                     }else{
-                        alert("Error")
                     }
                 }
                 c = c + 1;
@@ -125,7 +119,6 @@ const marcarRutas = async () => {
         }
 
     } catch (e) {
-        console.log(e)
         alert("No se encontraron rutas")
     }
 };
@@ -151,7 +144,6 @@ function initMap() {
         var today = new Date();
         var hora = today.toLocaleTimeString('en-US');
         document.getElementById('hora').innerHTML = "Hora: " + hora;
-        //console.log(hora)
     }, 5000);
 
     

@@ -643,6 +643,45 @@ def getVelocidadesPorId(_request, id1, id2, id3):
 
     return JsonResponse(data)
 
+def getVelocidadesPorIdAleatorio(_request):
+    valores = postAPI()
+    ids = (valores[random.randint(0, len(postAPI()))]['id_vehiculo'], valores[random.randint(0, len(postAPI()))]['id_vehiculo'],valores[random.randint(0, len(postAPI()))]['id_vehiculo'])
+    data = {'mensaje': "Correcto", "ids": ids}
+
+    return JsonResponse(data)
+
+def getGPS(_request):
+
+    fechaHoy = obtenerHora()[0]
+    fechaHoy = fechaHoy.split(" ")[0]
+ 
+    consultaGPS0 = "select DISTINCT id_usuario, id_vehiculo from vehiculos WHERE gps = 0 and hora_actual LIKE '" + fechaHoy +"%'"
+    
+    consultaGPS1 = "select DISTINCT id_usuario, id_vehiculo from vehiculos WHERE gps = 1 and hora_actual LIKE '" + fechaHoy + "%'"
+
+    gps0 = consultaBASE(consultaGPS0)
+    gps1 = consultaBASE(consultaGPS1)
+
+    data = {'mensaje': "Correcto", "totalGPS0": len(gps0), "totalGPS1": len(gps1), "dataGPS0": gps0}
+
+    return JsonResponse(data)
+
+def getGPSdia(_request, fecha):
+
+    fechaSeparada = fecha.split("-") #anio-mes-dia 2021-11-14
+    horaHistorica = datetime(int(fechaSeparada[0]), int(fechaSeparada[1]), int(fechaSeparada[2])) #Anio - mes - dia
+    fecha = horaHistorica.strftime("%D")
+
+    consultaGPS0 = "select DISTINCT id_usuario, id_vehiculo from vehiculos WHERE gps = 0 and hora_actual LIKE '" + fecha +"%'"
+    
+    consultaGPS1 = "select DISTINCT id_usuario, id_vehiculo from vehiculos WHERE gps = 1 and hora_actual LIKE '" + fecha + "%'"
+
+    gps0 = consultaBASE(consultaGPS0)
+    gps1 = consultaBASE(consultaGPS1)
+
+    data = {'mensaje': "Correcto", "totalGPS0": len(gps0), "totalGPS1": len(gps1), "dataGPS0": gps0}
+
+    return JsonResponse(data)
 
 def consultaBASE(csql):
 

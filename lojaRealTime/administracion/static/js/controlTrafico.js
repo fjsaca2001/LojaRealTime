@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    //controlTransito()
+    controlTransito()
     graficaVelicidadRango()
     graficaComparacionTaxi()
     //graficar()
@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Funciones para marcar vias con velocidades para Control Trafico
 const controlTransito = () => {
-    console.log("Entro")
     fechaHoy = new Date();
     var mes = fechaHoy.getMonth() + 1; //obteniendo mes
     var dia = fechaHoy.getDate(); //obteniendo dia
@@ -26,11 +25,10 @@ const controlTransito = () => {
     document.getElementById('fechaVias').value = ano + "-" + mes + "-" + dia;
     let fechaVias = document.getElementById("fechaVias");
 
-    graficar(ano + "-" + mes + "-" + dia);
+    marcarRutasCT(ano + "-" + mes + "-" + dia);
 
     fechaVias.addEventListener('change', function () {
         fechaSeleccionada = new Date(parseInt((this.value).split("-")[0]), parseInt((this.value).split("-")[1]) - 1, parseInt((this.value).split("-")[2]));
-        console.log((this.value).split("-")[0], (this.value).split("-")[1], (this.value).split("-")[2])
         if (fechaSeleccionada < fechaHoy) {
             marcarRutasCT(this.value) // anio-mes-dia 2021-11-14
         } else {
@@ -67,14 +65,12 @@ const marcarRutasCT = async (fecha) => {
         }
 
     } catch (e) {
-        console.log(e)
         alert("No se encontraron rutas")
     }
 };
 
 // Funciones para marcar vias con velocidades para Control Trafico
 const graficaVelicidadRango = () => {
-    console.log("Entro graficar")
     fechaHoy = new Date();
 
     var mes = fechaHoy.getMonth() + 1; //obteniendo mes
@@ -118,7 +114,6 @@ const graficaVelicidadRango = () => {
 
         if (fechaSeleccionada < fechaHoy && fechaSeleccionada < fechaMaximaSeleccionada) {
             getVelocidad(fechaMin, fechaMax) // anio-mes-dia 2021-11-14
-            //console.log("Correcto")
         } else {
             alert("La fecha debe ser menor al dia: " + fechaHoy.toLocaleDateString('es-es', { weekday: "long", year: "numeric", month: "short", day: "numeric" }))
             document.getElementById('fechaRangoMin').value = fechaMin;
@@ -134,7 +129,6 @@ const graficaVelicidadRango = () => {
 
         if (fechaSeleccionada < fechaHoy && fechaSeleccionada > fechaMinimaSeleccionada) {
             getVelocidad(fechaMin, fechaMax) // anio-mes-dia 2021-11-14
-            //console.log("Correcto 2")
         } else {
             alert("La fecha debe ser menor al dia: " + fechaHoy.toLocaleDateString('es-es', { weekday: "long", year: "numeric", month: "short", day: "numeric" }))
             document.getElementById('fechaRangoMax').value = ano + "-" + mes + "-" + dia;
@@ -143,7 +137,6 @@ const graficaVelicidadRango = () => {
 }
 
 const graficaComparacionTaxi = () => {
-    console.log("Entro graficar comparación")
     fechaHoy = new Date();
 
     var mes = fechaHoy.getMonth() + 1; //obteniendo mes
@@ -204,65 +197,11 @@ const graficaComparacionTaxi = () => {
         getVelocidadIdTaxi(selectTaxi1, selectTaxi2, selectTaxi3)
 
     });
-
-    /*document.getElementById('fechaRangoMax').value = ano + "-" + mes + "-" + dia;
-    var fechaMax = ano + "-" + mes + "-" + dia;
-    fechaHistorica = new Date();
-    fechaHistorica.setDate(fechaHoy.getDate() + (-7))
-
-    var mes = fechaHistorica.getMonth() + 1; //obteniendo mes
-    var dia = fechaHistorica.getDate(); //obteniendo dia
-    var ano = fechaHistorica.getFullYear(); //obteniendo año
-    if (dia < 10)
-        dia = '0' + dia; //agrega cero si el menor de 10
-    if (mes < 10)
-        mes = '0' + mes //agrega cero si el menor de 10
-    
-    document.getElementById('fechaRangoMin').value = ano + "-" + mes + "-" + dia;
-
-    let fechaRangoMin = document.getElementById("fechaRangoMin");
-    let fechaRangoMax = document.getElementById("fechaRangoMax");
-
-    
-    var fechaMin = ano + "-" + mes + "-" + dia;
-
-    getVelocidad(fechaMin, fechaMax);
-
-    // llamada cuando la fecha para la grafica semanal cambie
-    fechaRangoMin.addEventListener('change', function () {
-        fechaSeleccionada = new Date(parseInt((this.value).split("-")[0]), parseInt((this.value).split("-")[1]) - 1, parseInt((this.value).split("-")[2]));
-
-        fechaMaximaSeleccionada = new Date(parseInt((fechaMax).split("-")[0]), parseInt((fechaMax).split("-")[1]) - 1, parseInt((fechaMax).split("-")[2]))
-
-        fechaMin = this.value;
-
-        if (fechaSeleccionada < fechaHoy && fechaSeleccionada < fechaMaximaSeleccionada) {
-            getVelocidad(fechaMin, fechaMax) // anio-mes-dia 2021-11-14
-            //console.log("Correcto")
-        } else {
-            alert("La fecha debe ser menor al dia: " + fechaHoy.toLocaleDateString('es-es', { weekday: "long", year: "numeric", month: "short", day: "numeric" }))
-            document.getElementById('fechaRangoMin').value = fechaMin;
-        }
-    });
-
-    fechaRangoMax.addEventListener('change', function () {
-        fechaSeleccionada = new Date(parseInt((this.value).split("-")[0]), parseInt((this.value).split("-")[1]) - 1, parseInt((this.value).split("-")[2]));
-
-        fechaMax = this.value;
-
-        fechaMinimaSeleccionada = new Date(parseInt((fechaMin).split("-")[0]), parseInt((fechaMin).split("-")[1]) - 1, parseInt((fechaMin).split("-")[2]))
-
-        if (fechaSeleccionada < fechaHoy && fechaSeleccionada > fechaMinimaSeleccionada) {
-            getVelocidad(fechaMin, fechaMax) // anio-mes-dia 2021-11-14
-            //console.log("Correcto 2")
-        } else {
-            alert("La fecha debe ser menor al dia: " + fechaHoy.toLocaleDateString('es-es', { weekday: "long", year: "numeric", month: "short", day: "numeric" }))
-            document.getElementById('fechaRangoMax').value = ano + "-" + mes + "-" + dia;
-        }
-    });
-    */
 }
-
+function btnAleatorio(){
+    const btnAl = document.getElementById('btnAleatorio');
+    getVelocidadIdTaxiAleatorio()
+}
 const actualizarTabla = () => {
     //var TiempoIntervalo
     /*TiempoIntervalo = setInterval(() => {
@@ -278,6 +217,24 @@ const actualizarTabla = () => {
     });*/
     getTaxis()
 }
+
+const getVelocidadIdTaxiAleatorio = async () => {
+    try {
+        const response = await fetch("getVelocidadesPorIdAleatorio/");
+        const data = await response.json();
+        if (data.mensaje == "Correcto") {
+            document.getElementById('idTaxi1').value = data.ids[0];
+            document.getElementById('idTaxi2').value = data.ids[1];
+            document.getElementById('idTaxi3').value = data.ids[2];
+            getVelocidadIdTaxi(data.ids[0], data.ids[1], data.ids[2])
+        } else {
+            alert("No se encontraron datos")
+        }
+
+    } catch (e) {
+        alert("No se encontraron Datos")
+    }
+};
 
 const getTaxis = async () => {
     try {
@@ -306,13 +263,11 @@ const getTaxis = async () => {
         }
 
     } catch (e) {
-        console.log(e)
         alert("No se encontraron rutas")
     }
 };
 
 const getVelocidad = async (fechaMinima, fechaMaxima) => {
-    console.log("Fecha Min: " + fechaMinima + " Fecha Max: " + fechaMaxima)
     try {
         const response = await fetch("getVelocidades/" + fechaMinima + "/" + fechaMaxima);
         const data = await response.json();
@@ -335,7 +290,6 @@ const getVelocidad = async (fechaMinima, fechaMaxima) => {
         }
 
     } catch (e) {
-        console.log(e)
         alert("No se encontraron Datos")
     }
 };
@@ -387,7 +341,6 @@ function graficarVelocidadRango(idTaxis, velocidades){
 }
 
 const getVelocidadIdTaxi = async (id1, id2, id3) => {
-    console.log("id1: " + id1 + " id2 " + id2 + " id3: " + id3)
     try {
         const response = await fetch("getVelocidadesPorId/" + id1 + "/" + id2 + "/" + id3);
         const data = await response.json();
@@ -410,7 +363,6 @@ const getVelocidadIdTaxi = async (id1, id2, id3) => {
         }
 
     } catch (e) {
-        console.log(e)
         alert("No se encontraron Datos")
     }
 };
@@ -748,33 +700,3 @@ function graficarPastel(){
     });
 
 }
-
-/*function dataTabla(data){
-    console.log("Entro")
-    console.log(Object.values(data))
-    let vehiculos = { }
-    $(document).ready( function () {
-        $('#table_id').DataTable({
-            data: Object.values(data),
-            columns: [
-                { title: "acuri"},
-                { title: "altitud"},
-                { title: "bateria"},
-                { title: "conexion"},
-                { title: "consumo"},
-                { title: "fecha_hora"},
-                { title: "direccion"},
-                { title: "estado"},
-                { title: "gps"},
-                { title: "id_usuario"},
-                { title: "id_vehiculo"},
-                { title: "latitud"},
-                { title: "longitud"},
-                { title: "red"},
-                { title: "temperatura"},
-                { title: "velocidad"},
-            ],
-
-        });
-    } );
-}*/

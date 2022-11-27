@@ -637,3 +637,44 @@ body {
     text-align: center;
     grid-column: span 3;
 }
+.gridAppEstadisticas{
+    display: grid;
+    gap: 30px 30px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+    background: #E9ECEF;
+    margin: 0px 0px 40px;
+    padding: 30px 30px 30px 30px;
+    border-radius: 0px 0px 10px 10px;
+}
+.graficaEstadisticas{
+    border: solid 1px #C6C5C5;
+    padding: 5px 20px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    background: #FFFFFF;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: auto 10px;
+    grid-column: span 1;
+}
+.fechaSeleccionarEstadistica{
+
+}
+.fechaSeleccionarEstadistica .fecha2 {
+    display: inline-block;
+    background-color: #ffffff;
+}
+.fechaSeleccionarEstadistica input {
+    font-size: 18px;
+    border-radius: 10px;
+    padding: 5px;
+    outline: none;
+    border: none;
+    width: 200px;
+    text-align: center;
+    letter-spacing: 3px;
+}
+.tablaGrafica{
+
+}
