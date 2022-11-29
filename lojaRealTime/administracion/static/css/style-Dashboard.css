@@ -498,7 +498,7 @@ body {
     display: flex;
     text-align: center;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
 .seleccionarFechas {}
@@ -647,6 +647,7 @@ body {
     border-radius: 0px 0px 10px 10px;
 }
 .graficaEstadisticas{
+    height: -webkit-fill-available;
     border: solid 1px #C6C5C5;
     padding: 5px 20px;
     border-radius: 10px;
@@ -677,4 +678,11 @@ body {
 }
 .tablaGrafica{
 
+}
+.botonesConexion{
+    display: inline-block;
+    padding: 15px;
+}
+.botonesConexion button{
+    margin: 0px 8%;
 }

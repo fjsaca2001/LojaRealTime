@@ -601,7 +601,6 @@ def controlTransito(request):
 
     return render(request, "controlTransito.html", {"datos": datos, "valores":idVehiculos})
 
-
 def getVelocidadesPorId(_request, id1, id2, id3):
 
     listaId1 = list()
@@ -683,6 +682,250 @@ def getGPSdia(_request, fecha):
 
     return JsonResponse(data)
 
+def getConexion(_request, nroBtn):
+    # nroBtn = 0 -> 7 Dias; nroBtn = 15 Dias -> 3g; nroBtn = 2 -> 1 mes
+
+    listaDias = list() # Divicion por dias
+    lista3G = list() # Divicion 3g
+    lista4G = list() # Divicion 4g
+    listaWifi = list() # Divicion wifi
+
+    horaFecha = datetime.now()
+
+    if(nroBtn == 0):
+        horaFecha = horaFecha - timedelta(days=7)
+        dias = 7
+    elif(nroBtn == 1):
+        horaFecha = horaFecha - timedelta(days=15)
+        dias = 15
+    elif(nroBtn == 2):
+        horaFecha = horaFecha - timedelta(days=30)
+        dias = 30
+
+    # 0 -> Wifi; 1 -> 3g; 2 -> 4g
+    
+    diasS = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
+    for d in range(0, dias):
+        fecha = horaFecha.strftime("%D")
+        print(fecha)
+        consultaConexionWifi = "SELECT DISTINCT id_usuario, conexion FROM vehiculos WHERE hora_actual LIKE '" + fecha +"%' AND conexion = 0 ORDER BY id_usuario"
+
+        consultaConexion3g = "SELECT DISTINCT id_usuario, conexion FROM vehiculos WHERE hora_actual LIKE '" + fecha +"%' AND conexion = 1 ORDER BY id_usuario"
+
+        consultaConexion4g = "SELECT DISTINCT id_usuario, conexion FROM vehiculos WHERE hora_actual LIKE '" + fecha +"%' AND conexion = 2 ORDER BY id_usuario"
+
+        dbwifi = consultaBASE(consultaConexionWifi)
+        db3g = consultaBASE(consultaConexion3g)
+        db4g = consultaBASE(consultaConexion4g)
+        nroDia = calendar.weekday(int(fecha.split("/")[2]), int(fecha.split("/")[0]), int(fecha.split("/")[1]))
+        listaWifi.append(len(dbwifi))
+        lista3G.append(len(db3g))
+        lista4G.append(len(db4g))
+        listaDias.append(diasS[nroDia] + ", " +fecha.split("/")[1])
+
+        horaFecha = horaFecha + timedelta(days=1)
+
+    data = {'mensaje': "Correcto", "listaWifi": listaWifi, "lista3G": lista3G, "lista4G": lista4G , "listaDias": listaDias,"fecha": fecha}
+
+    return JsonResponse(data)
+
+def getTemperatura(_request, idUsuario):
+ 
+    hManana = ("06","07","08","09","10","11")
+    hTarde = ("12","13","14","15","14","17")
+    hNoche = ("18","19","20","21","22","23")
+
+    listaManana = list() # Divicion por dias
+    listaTarde = list() # Divicion 3g
+    listaNoche = list() # Divicion 4g
+    listaDias = list()
+    horaFecha = datetime.now()
+    horaFecha = horaFecha - timedelta(days=7)
+
+    diasS = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
+    #SELECT id_usuario, ROUND(AVG(temperatura),1) FROM vehiculos WHERE id_usuario = '2731' AND hora_actual LIKE '11/22/22 07%'
+    for d in range (0,7):
+        sumaManana = 0
+        sumaTarde = 0
+        sumaNoche = 0
+        fecha = horaFecha.strftime("%D")
+        nroDia = calendar.weekday(int(fecha.split("/")[2]), int(fecha.split("/")[0]), int(fecha.split("/")[1]))
+
+        for h in range(0,5):
+            consultaHmanana = "SELECT ROUND(AVG(temperatura),1) FROM vehiculos WHERE id_usuario = '" + idUsuario + "' AND hora_actual LIKE '" + fecha + " " + hManana[h] + "%'"
+            dbManana = consultaBASE(consultaHmanana)
+            sumaManana = sumaManana + int(dbManana[0][0] or 0)
+            
+            consultaHmanana = "SELECT ROUND(AVG(temperatura),1) FROM vehiculos WHERE id_usuario = '" + idUsuario + "' AND hora_actual LIKE '" + fecha + " " + hTarde[h] + "%'"
+            dbManana = consultaBASE(consultaHmanana)
+            sumaTarde = sumaTarde + int(dbManana[0][0] or 0)
+
+            consultaHmanana = "SELECT ROUND(AVG(temperatura),1) FROM vehiculos WHERE id_usuario = '" + idUsuario + "' AND hora_actual LIKE '" + fecha + " " + hNoche[h] + "%'"
+            dbManana = consultaBASE(consultaHmanana)
+            sumaNoche = sumaNoche + int(dbManana[0][0] or 0)
+        
+        horaFecha = horaFecha + timedelta(days=1)
+
+        listaManana.append(round(sumaManana/6, 1))
+        listaTarde.append(round(sumaTarde/6, 1))
+        listaNoche.append(round(sumaNoche/6, 1))
+        listaDias.append(diasS[nroDia] + ", " +fecha.split("/")[1])
+
+    data = {'mensaje': "Correcto", "listaManana": listaManana, "listaTarde": listaTarde, "listaNoche": listaNoche, "listaDias": listaDias}
+
+    return JsonResponse(data)
+
+def getTemperaturaGeneral(_request, fechaTempGen):
+    
+    fechaSeparada = fechaTempGen.split("-") #anio-mes-dia 2021-11-14
+    horaHistorica = datetime(int(fechaSeparada[0]), int(fechaSeparada[1]), int(fechaSeparada[2])) #Anio - mes - dia
+    fecha = horaHistorica.strftime("%D")
+
+    hManana = ("06","07","08","09","10","11")
+    hTarde = ("12","13","14","15","14","17")
+    hNoche = ("18","19","20","21","22","23")
+
+    rManana = 0
+    rTarde = 0 
+    rNoche = 0
+
+
+    for h in range(0,5):
+        consultaHmanana = "SELECT ROUND(AVG(temperatura),1) FROM vehiculos WHERE hora_actual LIKE '" + fecha + " " + hManana[h] + "%'"
+        dbManana = consultaBASE(consultaHmanana)
+        rManana = rManana + int(dbManana[0][0] or 0)
+            
+        consultaHmanana = "SELECT ROUND(AVG(temperatura),1) FROM vehiculos WHERE hora_actual LIKE '" + fecha + " " + hTarde[h] + "%'"
+        dbManana = consultaBASE(consultaHmanana)
+        rTarde = rTarde + int(dbManana[0][0] or 0)
+
+        consultaHmanana = "SELECT ROUND(AVG(temperatura),1) FROM vehiculos WHERE hora_actual LIKE '" + fecha + " " + hNoche[h] + "%'"
+        dbManana = consultaBASE(consultaHmanana)
+        rNoche = rNoche + int(dbManana[0][0] or 0)
+
+    data = {'mensaje': "Correcto", "rManana": round(rManana/6,1), "rTarde": round(rTarde/6,1), "rNoche": round(rNoche/6,1)}
+
+    return JsonResponse(data)
+
+def getTemperaturaAnalisis(_request, fechaTempGen):
+    
+    fechaSeparada = fechaTempGen.split("-") #anio-mes-dia 2021-11-14
+    horaHistorica = datetime(int(fechaSeparada[0]), int(fechaSeparada[1]), int(fechaSeparada[2])) #Anio - mes - dia
+    fecha = horaHistorica.strftime("%D")
+    #SELECT temperatura FROM vehiculos WHERE hora_actual LIKE '11/22/22%' AND temperatura = 30 GROUP BY id_usuario
+    consulta = "SELECT temperatura FROM vehiculos WHERE hora_actual LIKE '" + fecha + "%' AND temperatura > 30 GROUP BY id_usuario"
+    resultConsulta = consultaBASE(consulta)
+    mas30 = len(resultConsulta)
+            
+    consulta = "SELECT temperatura FROM vehiculos WHERE hora_actual LIKE '" + fecha + "%' AND (temperatura < 30 AND temperatura > 0) GROUP BY id_usuario"
+    resultConsulta = consultaBASE(consulta)
+    menos30 = len(resultConsulta)
+
+    consulta = "SELECT temperatura FROM vehiculos WHERE hora_actual LIKE '" + fecha + "%' AND temperatura = 30 GROUP BY id_usuario"
+    resultConsulta = consultaBASE(consulta)
+    igual30 = len(resultConsulta)
+
+    consulta = "SELECT temperatura FROM vehiculos WHERE hora_actual LIKE '" + fecha + "%' AND temperatura = 0 GROUP BY id_usuario"
+    resultConsulta = consultaBASE(consulta)
+    igual0 = len(resultConsulta)
+
+    data = {'mensaje': "Correcto", "mas30": mas30, "menos30": menos30, "igual30": igual30, "igual0": igual0}
+
+    return JsonResponse(data)
+
+def getConsumo(_request, idUsuario, horario):
+
+    if(horario == "manana"):
+        horas = ("06","07","08","09","10","11")
+    elif(horario == "tarde"):
+        horas = ("12","13","14","15","14","17")
+    else:
+        horas = ("18","19","20","21","22","23")
+
+    listaConsumo = list() # Divicion por dias
+    horaFecha = datetime.now()
+    fecha = horaFecha.strftime("%D")
+    #SELECT ROUND(AVG(consumo),1) FROM vehiculos WHERE id_usuario = '2731' AND hora_actual LIKE '11/22/22 07%'
+    for h in horas:
+        consulta = "SELECT ROUND(AVG(consumo),1) FROM vehiculos WHERE id_usuario = '" + idUsuario + "' AND hora_actual LIKE '" + fecha + " " + h + "%'"
+        dbManana = consultaBASE(consulta)
+        listaConsumo.append(int(dbManana[0][0] or 0))
+
+    data = {'mensaje': "Correcto", "listaConsumo": listaConsumo, "horas": horas}
+
+    return JsonResponse(data)
+
+def getConsumoGeneral(_request, fecha, btnValores):
+
+    fechaSeparada = fecha.split("-") #anio-mes-dia 2021-11-14
+    horaHistorica = datetime(int(fechaSeparada[0]), int(fechaSeparada[1]), int(fechaSeparada[2])) #Anio - mes - dia
+    fecha = horaHistorica.strftime("%D")
+
+    #SELECT id_usuario, ROUND(AVG(consumo),1) AS promConsumo FROM vehiculos WHERE hora_actual LIKE '11/22/22%' GROUP BY id_usuario ORDER BY promConsumo
+
+    consulta = "SELECT id_usuario, ROUND(AVG(consumo),1) AS promConsumo FROM vehiculos WHERE hora_actual LIKE '" + fecha +"%' GROUP BY id_usuario ORDER BY promConsumo DESC"
+
+    datosConsumo = consultaBASE(consulta)
+    listaId = list()
+    listaConsumo = list()
+    for x in datosConsumo:
+        listaId.append(x[0])
+        listaConsumo.append(x[1])
+
+    if(btnValores == 0):
+        listaId = listaId[:50]
+        listaConsumo = listaConsumo[:50]
+
+    elif(btnValores == 2):
+        listaId = listaId[-50:]
+        listaConsumo = listaConsumo[-50:]
+    data = {'mensaje': "Correcto", "listaId": listaId, "listaConsumo": listaConsumo}
+
+    return JsonResponse(data)
+
+def getBateria(_request, idUsuario, btnTiempo):
+
+    listaFechas = list()
+    listaBateria = list()
+    horaFecha = datetime.now()
+    fecha = horaFecha.strftime("%D")
+    hora = horaFecha.strftime("%H:%M")
+
+    tiempo = (15, 30, 60)
+    tiempo = tiempo[btnTiempo]
+
+    horaFecha = horaFecha - timedelta(minutes = tiempo)
+
+    for x in range(1, tiempo + 1):
+        fecha = horaFecha.strftime("%D")
+        hora = horaFecha.strftime("%H:%M")
+        horaConsulta = fecha + " " + hora
+        consulta = "SELECT bateria FROM vehiculos WHERE hora_actual LIKE '"+ horaConsulta + "%' AND id_usuario = '" + idUsuario + "'"
+        resultadoConsulta = consultaBASE(consulta)
+        print(consulta)
+        listaFechas.append(hora)
+        listaBateria.append("null" if not resultadoConsulta else resultadoConsulta[0][0])
+        horaFecha = horaFecha + timedelta(minutes = 1)
+
+    data = {'mensaje': "Correcto", 'fecha': fecha, "hora": hora, "listaFechas": listaFechas, "listaBateria": listaBateria, "idUsuario": idUsuario}
+
+    return JsonResponse(data)
+
+def getBateriaAhora(_request):
+    mas50 = 0
+    menos50 = 0
+    igual50 = 0
+    for x in postAPI():
+        if(x['bateria'] > 50):
+            mas50 = mas50 + 1
+        elif(x['bateria'] < 50):
+            menos50 = menos50 + 1
+        elif(x['bateria'] == 50):
+            igual50 = igual50 + 1
+
+    data = {"mensaje": "Correcto", "mas50": mas50, "menos50": menos50, "igual50": igual50}
+    return JsonResponse(data)
+
 def consultaBASE(csql):
 
     con = sqlite3.connect("/home/fjsaca/Documentos/proyectoGit/LojaRealTime/flask/tempVehiculos.db")
@@ -703,9 +946,6 @@ def getVelocidades(_request, fechaMinima, fechaMaxima):
 
     fechaMax = fechaMaximaH.strftime("%D")
     fechaMin = fechaMinimaH.strftime("%D")
-    print("fechaMax: ", fechaMax) #mes/dia/anio
-    print("fechaMin: ", fechaMin) #mes/dia/anio
-
     #vManana = 0
     #vTarde = 0
     #vNoche = 0
@@ -734,8 +974,6 @@ def getVelocidades(_request, fechaMinima, fechaMaxima):
     
     test = test + "GROUP BY id_vehiculo ORDER BY velocidades DESC"
 
-    print(test)
-    
     valores = consultaBASE(test)
     valores = valores[:12]
 
@@ -751,7 +989,16 @@ def getVelocidades(_request, fechaMinima, fechaMaxima):
     return JsonResponse(data)
 
 def appEstadisticas(request):
-    return render(request, 'appEstadisticas.html')
+
+    datos = postAPI()
+    consulta = "SELECT DISTINCT id_usuario FROM vehiculos"
+    valores = consultaBASE(consulta)
+    idVehiculos = list()
+
+    for x in valores:
+        idVehiculos.append(x[0])
+
+    return render(request, 'appEstadisticas.html', {"valores": idVehiculos})
 
 def ingreso(request):
     email=request.POST.get('email')

@@ -2,18 +2,23 @@
 {% endblock%} {% block content%} {% load static %}
 <script src="{% static 'js/appEstadistica.js' %}"></script>
 
-<h2 class="tituloEs">Estadísticas del aplicativo</h2>
+<h2 class="tituloEs">Estadísticas del App</h2>
 
 <div class="gridAppEstadisticas">
+  <div class="hit-the-floor" style="text-align: left">
+    Uso del GPS del dispositivo
+  </div>
   <div class="graficaEstadisticas">
     <figure class="highcharts-figure">
       <div id="containerGPS"></div>
     </figure>
   </div>
   <div class="topVelocidad">
-    <p class="highcharts-description">Número de dispositivos</p>
     <div class="datagrid">
       <table>
+        <p class="highcharts-description" style="font-weight: bold">
+          Número de dispositivos
+        </p>
         <thead>
           <tr>
             <th>GPS On</th>
@@ -24,10 +29,13 @@
           <!--Aqui van los valores desde JS-->
         </tbody>
       </table>
-    </div>
-    <p class="highcharts-description">Dispositivos con GPS Off</p>
-    <div class="datagrid">
       <table>
+        <p
+          class="highcharts-description"
+          style="border-top: solid 1px #006699 !important; font-weight: bold"
+        >
+          Dispositivos con GPS Off
+        </p>
         <thead>
           <tr>
             <th>Id Vehiculo</th>
@@ -53,10 +61,189 @@
       </figure>
     </div>
   </div>
+  <div class="hit-the-floor" style="text-align: left">
+    Tipo de Conexión de los dispositivos
+  </div>
+  <div class="graficaEstadisticas" style="grid-column: span 3">
+    <div class="botonesConexion">
+      <button
+        onclick="btn7dias()"
+        type="button"
+        class="btn btn-secondary"
+        id="u7d"
+      >
+        Ultímos 7 días
+      </button>
+      <button
+        onclick="btn15dias()"
+        type="button"
+        class="btn btn-secondary"
+        id="u15d"
+      >
+        Ultímos 15 días
+      </button>
+      <button
+        onclick="btn1mes()"
+        type="button"
+        class="btn btn-secondary"
+        id="uMes"
+      >
+        Ultímo mes
+      </button>
+    </div>
+    <figure class="highcharts-figure">
+      <div id="containerConexion"></div>
+    </figure>
+  </div>
 
+  <div class="hit-the-floor" style="text-align: left">
+    Temperatura de los dispositivos
+  </div>
+  <div class="graficaEstadisticas">
+    <select
+      class="form-select"
+      aria-label="Default select example"
+      id="idUsuario"
+    >
+      <option selected value="0">Seleccione el ID del Usuario</option>
+      {% for v in valores %}
+      <option value="{{v}}">User ID: {{v}}</option>
+      {% endfor %}
+    </select>
+    <div class="fechaSeleccionarEstadistica">
+      <figure class="highcharts-figure">
+        <div id="containerTemperatura"></div>
+      </figure>
+    </div>
+  </div>
+  <div class="graficaEstadisticas">
+    <div class="fecha2">
+      <input type="date" id="fechaTempGen" class="calendario" />
+    </div>
+    <div class="fechaSeleccionarEstadistica">
+      <figure class="highcharts-figure">
+        <div id="containerPromTempHorario"></div>
+      </figure>
+    </div>
+  </div>
+  <div class="graficaEstadisticas">
+    <div class="fecha2">
+      <input type="date" id="fechaAnalisisTemp" class="calendario" />
+    </div>
+    <div class="fechaSeleccionarEstadistica">
+      <figure class="highcharts-figure">
+        <div id="containerAnalisisTem"></div>
+      </figure>
+    </div>
+  </div>
+
+  <div class="hit-the-floor" style="text-align: left">
+    Consumo de internet de los dispositivos
+  </div>
+  <div class="graficaEstadisticas">
+    <select
+      class="form-select"
+      aria-label="Default select example"
+      id="idUsuarioConsumo"
+    >
+      <option selected value="0">Seleccione el ID del Usuario</option>
+      {% for v in valores %}
+      <option value="{{v}}">User ID: {{v}}</option>
+      {% endfor %}
+    </select>
+    <select
+      class="form-select"
+      aria-label="Default select example"
+      id="horario"
+    >
+      <option selected value="0">Seleccione el Horario</option>
+      <option value="manana">Mañana: 06 am - 11:59 pm</option>
+      <option value="tarde">Tarde: 12 pm - 17:59 pm{{v}}</option>
+      <option value="noche">Noche: 18pm - Adelante</option>
+    </select>
+    <div class="fechaSeleccionarEstadistica">
+      <figure class="highcharts-figure">
+        <div id="containerConsumo"></div>
+      </figure>
+    </div>
+  </div>
+  <div class="graficaEstadisticas" style="grid-column: span 2">
+    <div class="fecha2">
+      <input type="date" id="fechaConsumoGeneral" class="calendario" />
+    </div>
+    <div class="botonesConexion">
+      <button onclick="mConsumo()" type="button" class="btn btn-secondary" id="mConsumo">
+        Mayores Consumo
+      </button>
+      <button onclick="tConsumo()" type="button" class="btn btn-secondary" id="tConsumo">
+        Todo
+      </button>
+      <button
+        onclick="minConsumo()"
+        type="button"
+        class="btn btn-secondary"
+        id="minConsumo"
+      >
+        Menores Consumo
+      </button>
+    </div>
+    <div class="fechaSeleccionarEstadistica">
+      <figure class="highcharts-figure">
+        <div id="containerConsumoGeneral"></div>
+      </figure>
+    </div>
+  </div>
+  <div class="hit-the-floor" style="text-align: left">
+    Bateria de los dispositivos 
+  </div>
+  <div class="graficaEstadisticas" style="grid-column: span 2">
+    <div class="fecha2">
+      <select
+      class="form-select"
+      aria-label="Default select example"
+      id="idUsuarioBateria" style="display: inline; width:auto;"
+    >
+      <option selected value="0">Seleccione el ID del Usuario</option>
+      {% for v in valores %}
+      <option value="{{v}}">User ID: {{v}}</option>
+      {% endfor %}
+    </select>
+    </div>
+    <div class="botonesConexion">
+      <button onclick="bateriaHora()" type="button" class="btn btn-secondary" id="bateriaHora">
+        Ultima Hora
+      </button>
+      <button onclick="bateriaMediaHora()" type="button" class="btn btn-secondary" id="bateriaMediaHora">
+        Ultima Media Hora
+      </button>
+      <button
+        onclick="bateriaCuartoHora()"
+        type="button"
+        class="btn btn-secondary"
+        id="bateriaCuartoHora"
+      >
+        Ultimos 15 min
+      </button>
+    </div>
+    <div class="fechaSeleccionarEstadistica">
+      <figure class="highcharts-figure">
+        <div id="containerConsumoBateria"></div>
+      </figure>
+    </div>
+  </div>
+  <div class="graficaEstadisticas">
+    <button
+        onclick="btnActualizarPastel()"
+        type="button"
+        class="btn btn-secondary"
+        id="btnActualizarPastel"
+      >Actualizar</button>
+    <figure class="highcharts-figure">
+      <div id="containerBateriaPastel"></div>
+    </figure>
+  </div>
 </div>
 <!--
-<h2 class="tituloEs">Taxis con tipos de conexion (Conexion = 0,1,2)</h2>
 <h2 class="tituloEs">Estado general del App (estado = 0,1,2,3,4,5,6,7)</h2>
 <h2 class="tituloEs">Temperatura del dispositivo en tiempo real (Temperatura)</h2>
 <h2 class="tituloEs">Consumo del dispositivo (Consumo)</h2>
