@@ -94,25 +94,44 @@ const consumoDataGeneral = async (fecha, btnConsumo) => {
     }
 }
 function getConsumo() {
+    fechaHoy = new Date();
+    var mes = fechaHoy.getMonth() + 1; //obteniendo mes
+    var dia = fechaHoy.getDate(); //obteniendo dia
+    var ano = fechaHoy.getFullYear(); //obteniendo año
+    if (dia < 10)
+        dia = '0' + dia; //agrega cero si el menor de 10
+    if (mes < 10)
+        mes = '0' + mes //agrega cero si el menor de 10
+
+    // llamada cuando la fecha cambie
+    document.getElementById('fechaConsumoGeneral').value = ano + "-" + mes + "-" + dia;
+    document.getElementById('fechaConsumoUsuario').value = ano + "-" + mes + "-" + dia;
     // llamada cuando cambie
     let idUsuarioConsumo = document.getElementById("idUsuarioConsumo");
     let horario = document.getElementById("horario");
+    let fechaConsumoUsuario = document.getElementById("fechaConsumoUsuario");
+    
     graficaTemperatura()
-    consumoData('2731', 'manana');
+    consumoData('2731', 'manana', fechaConsumoUsuario.value);
     document.getElementById('idUsuarioConsumo').value = '2731'
     document.getElementById('horario').value = 'manana'
 
     idUsuarioConsumo.addEventListener('change', function () {
-        consumoData(this.value, document.getElementById('horario').value)
+        consumoData(this.value, document.getElementById('horario').value, document.getElementById('fechaConsumoUsuario').value)
     });
 
     horario.addEventListener('change', function () {
-        consumoData(document.getElementById('idUsuarioConsumo').value, this.value)
+        consumoData(document.getElementById('idUsuarioConsumo').value, this.value, document.getElementById('fechaConsumoUsuario').value)
     });
+
+    fechaConsumoUsuario.addEventListener('change', function () {
+        consumoData(document.getElementById('idUsuarioConsumo').value, this.value, document.getElementById('fechaConsumoUsuario').value)
+    });
+
 }
-const consumoData = async (idUsuario, horario) => {
+const consumoData = async (idUsuario, horario, fecha) => {
     try {
-        const response = await fetch("getConsumo/" + idUsuario + "/" + horario);
+        const response = await fetch("getConsumo/" + idUsuario + "/" + horario + "/" + fecha + "/" );
         const data = await response.json();;
         if (data.mensaje == "Correcto") {
             graficarConsumo(data.listaConsumo, data.horas)
@@ -216,6 +235,7 @@ function getTemperatura() {
     // llamada cuando cambie
     let idUsuario = document.getElementById("idUsuario");
     graficaTemperatura()
+    document.getElementById("idUsuario").value = '2731'
     temperaturaData('2731');
 
     idUsuario.addEventListener('change', function () {
@@ -754,7 +774,7 @@ function graficarConsumoBateria(listaFechas, listaBateria, idUsuario) {
         },
         xAxis: {
             title: {
-                text: 'Tiempo'
+                text: 'Tiempo '
             },
             categories: listaFechas,
         },

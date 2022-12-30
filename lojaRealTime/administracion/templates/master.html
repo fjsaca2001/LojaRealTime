@@ -154,7 +154,8 @@
   -->
   <!-- Link del mapa generado por API Google-->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmcEHbItWXSbgIH8BiQuD6Ns5bfyBoLtY&callback=initMap"></script>
-  <script>
+  <!--
+    <script>
     const myCarouselElement = document.querySelector('#carouselExampleCaptions')
     const carousel = new bootstrap.Carousel(myCarouselElement, {
       interval: 100,
@@ -162,13 +163,14 @@
       wrap: true
     })
   </script>
+-->
     {% block content%}
     {% endblock%}
 
 
     <div id="footer">
-        <img src="{% static 'img/logoUtpl.png' %}" alt="Logo">
-        <img src="{% static 'img/logoClipp.png' %}" alt="Logo">
+        <img src="{% static 'img/logoUtpl.png' %}" alt="LogoUtpl">
+        <img src="{% static 'img/logoClipp.png' %}" alt="LogoClipp">
         <p>Todos los derechos reservados 2022</p>
     </div>
 </body>

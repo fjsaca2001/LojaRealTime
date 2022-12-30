@@ -49,4 +49,52 @@
     </div>
   </div>
 </div>
+
+<div class="gridTarget">
+  <div class="blog-card alt">
+    <div class="meta">
+      <div class="photo" style="background-image: url(https://storage.googleapis.com/chydlx/codepen/blog-cards/image-2.jpg)"></div>
+      <ul class="details">
+        <li class="date">July. 15, 2015</li>
+      </ul>
+    </div>
+    <div class="description">
+      <h1>Av. con mayor velocidad</h1>
+      <h2>Avenidas de la ciudad de Loja</h2>
+      {% for calle in avVelocidad %}
+            <p class="card-text">{{calle}}</p>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="blog-card alt">
+    <div class="meta">
+      <div class="photo" style="background-image: url(https://storage.googleapis.com/chydlx/codepen/blog-cards/image-2.jpg)"></div>
+      <ul class="details">
+        <li class="date">July. 15, 2015</li>
+      </ul>
+    </div>
+    <div class="description">
+      <h1>Vias con mayor congestión</h1>
+      <h2>Vias de la ciudad de Loja</h2>
+      {% for calle in viasCongestion %}
+            <p class="card-text">{{calle}}</p>
+          {% endfor %}
+    </div>
+  </div>
+  <div class="blog-card alt">
+    <div class="meta">
+      <div class="photo" style="background-image: url(https://storage.googleapis.com/chydlx/codepen/blog-cards/image-2.jpg)"></div>
+      <ul class="details">
+        <li class="date">July. 15, 2015</li>
+      </ul>
+    </div>
+    <div class="description">
+      <h1>Vias con menor velocidad</h1>
+      <h2>Velocidad menor al promedio</h2>
+      {% for via in viasMenorCongestion %}
+          <p class="card-text">{{via}}</p>
+          {% endfor %}
+    </div>
+  </div>
+</div>
 {% endblock %}

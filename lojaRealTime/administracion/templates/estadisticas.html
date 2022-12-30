@@ -1,26 +1,103 @@
 {% extends "master.html" %} {% block title %} LojaRealTime | Indicadores de
 Movilidad {% endblock%} {% block content%} {% load static %}
 <script src="{% static 'js/estadisticas.js' %}"></script>
-<div aria-live="polite" aria-atomic="true" class="bg-dark position-relative bd-example-toasts">
-    <div class="toast-container p-3" id="toastPlacement">
-      <div class="toast">
-        <div class="toast-header">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-square-fill" viewBox="0 0 16 16">
-            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
-          </svg>
-          <strong class="me-auto">Indicadores históricos</strong>
-          <small>Ahora</small>
-        </div>
-        <div class="toast-body">
-          En estos gráficos puede seleccionar el día o la semana que quiere
-      representar en las graficas, ya que recolecta datos ya almacenados en
-      nuestra base de datos.
-        </div>
+<div
+  aria-live="polite"
+  aria-atomic="true"
+  class="bg-dark position-relative bd-example-toasts"
+>
+  <div class="toast-container p-3" id="toastPlacement">
+    <div class="toast">
+      <div class="toast-header">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-info-square-fill"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+          />
+        </svg>
+        <strong class="me-auto">Indicadores históricos</strong>
+        <small>Ahora</small>
+      </div>
+      <div class="toast-body">
+        En estos gráficos puede seleccionar el día o la semana que quiere
+        representar en las graficas, ya que recolecta datos ya almacenados en
+        nuestra base de datos.
       </div>
     </div>
   </div>
+</div>
+
 <div class="seccionGraficas">
   <div class="graficaDia">
+    <h2>Vialidad de la ciudad</h2>
+  <div class="gridTarget">
+    <div class="blog-card">
+      <div class="meta">
+        <div
+          class="photo"
+          style="
+            background-image: url({% static "img/imgAvLoja.jpg" %});
+          "
+        ></div>
+        <ul class="details">
+          <li class="date">Datos del día de hoy</li>
+        </ul>
+      </div>
+      <div class="description">
+        <h1>Av. con mayor velocidad</h1>
+        <h2>Avenidas de la ciudad de Loja</h2>
+        {% for calle in avVelocidad %}
+        <p class="card-text">{{calle}}</p>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="blog-card">
+      <div class="meta">
+        <div
+          class="photo"
+          style="
+            background-image: url({% static "img/imgAvLoja3.jpg" %});
+          "
+        ></div>
+        <ul class="details">
+          <li class="date">Datos del día de hoy</li>
+        </ul>
+      </div>
+      <div class="description">
+        <h1>Vias con mayor congestión</h1>
+        <h2>Vias de la ciudad de Loja</h2>
+        {% for calle in viasCongestion %}
+        <p class="card-text">{{calle}}</p>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="blog-card">
+      <div class="meta">
+        <div
+          class="photo"
+          style="
+            background-image: url({% static "img/imgAvLoja2.jpeg" %});
+          "
+        ></div>
+        <ul class="details">
+          <li class="date">Datos del día de hoy</li>
+        </ul>
+      </div>
+      <div class="description">
+        <h1>Vias con menor velocidad</h1>
+        <h2>Velocidad menor al promedio</h2>
+        {% for calle in viasMenorCongestion %}
+        <p class="card-text">{{calle}}</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
     <h2>Embotellamientos en la última semana</h2>
     <div class="graficaHorarios" style="width: 70%">
       <figure class="highcharts-figure">
@@ -92,147 +169,8 @@ Movilidad {% endblock%} {% block content%} {% load static %}
   </div>
 
   <script type="application/javascript">
-    $(document).ready(function(){
-      $('.toast').toast('show');
-    });
-          // Data retrieved from https://netmarketshare.com/
-
-      Highcharts.chart('containerHorarios', {
-          chart: {
-              type: 'column'
-          },
-          title: {
-              text: 'Reporte de embotellamiento en base a horarios'
-          },
-          subtitle: {
-              text: 'Horarios: ' + 'Mañana: 6am - 12pm; Tarde: 12pm - 19pm; Noche: 19pm - 12am'
-          },
-          xAxis: {
-              categories: [
-                  'Lunes',
-                  'Martes',
-                  'Miercoles',
-                  'Jueves',
-                  'Viernes',
-                  'Sabado',
-                  'Domingo'
-              ],
-              crosshair: true
-          },
-          yAxis: {
-              title: {
-                  useHTML: true,
-                  text: 'Número de embotellamientos'
-              }
-          },
-          tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-              pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                  '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-          },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              }
-          },
-          series: [{
-              name: 'Mañana',
-              data: {{ estadisticaManana }}
-
-          }, {
-              name: 'Tarde',
-              data: {{ estadisticaTarde }}
-
-          }, {
-              name: 'Noche',
-              data: {{ estadisticaNoche }}
-
-          }]
-      });
-
-      // Data retrieved from https://olympics.com/en/olympic-games/beijing-2022/medals
-    estadisticasSemana = {{estadisticasSemana|safe}}
-    console.log(estadisticasSemana[0])
-    Highcharts.chart('container-semana', {
-        chart: {
-            type: 'pie',
-            options3d: {
-                enabled: true,
-                alpha: 45
-            }
-        },
-        title: {
-            text: 'Reporte semanal de embotellamientos'
-        },
-        subtitle: {
-            text: 'Reporte diario'
-        },
-        plotOptions: {
-            pie: {
-                innerSize: 100,
-                depth: 45
-            }
-        },
-        series: [{
-            name: 'Numero de embotellamientos',
-            data: [
-                ['Lunes', estadisticasSemana[0]],
-                ['Martes', estadisticasSemana[1]],
-                ['Miercoles', estadisticasSemana[2]],
-                ['Jueves', estadisticasSemana[3]],
-                ['Viernes', estadisticasSemana[4]],
-                ['Sabado', estadisticasSemana[5]],
-                ['Domingo', estadisticasSemana[6]],
-            ]
-        }]
-    });
-
-    // Data retrieved https://en.wikipedia.org/wiki/List_of_cities_by_average_temperature
-    Highcharts.chart('container-Dia', {
-        chart: {
-            type: 'spline'
-        },
-        title: {
-            text: 'Embotellamientos de hoy'
-        },
-        subtitle: {
-            text: 'Horarios: ' + 'Mañana: 6am - 12pm; Tarde: 12pm - 19pm; Noche: 19pm - 12am'
-        },
-        xAxis: {
-            categories: ['Mañana', 'Tarde', 'Noche'],
-            accessibility: {
-                description: 'Months of the year'
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Número de embotellamientos'
-            }
-        },
-        tooltip: {
-            crosshairs: true,
-            shared: true
-        },
-        plotOptions: {
-            spline: {
-                marker: {
-                    radius: 4,
-                    lineColor: '#666666',
-                    lineWidth: 1
-                }
-            }
-        },
-        series: [{
-            name: 'Embotellamientos',
-            marker: {
-                symbol: 'square'
-            },
-            data: {{estadisticaDia}}
-        }]
+    $(document).ready(function () {
+      $(".toast").toast("show");
     });
   </script>
   {% endblock %}

@@ -80,7 +80,7 @@ def getValoresMapa(_request):
         for vehiculosAntiguo in datosTiempoAtras:
             if(vehiculoActual.id_vehiculo == vehiculosAntiguo.id_vehiculo):
                 distanciaVelocidad = calcularDistancia(float(vehiculoActual.longitud), float(vehiculoActual.latitud), float(vehiculosAntiguo.longitud), float(vehiculosAntiguo.latitud))
-                if (distanciaVelocidad[1] < 10 and (distanciaVelocidad[0] > 0.09 and distanciaVelocidad[0] < 0.4)):
+                if (distanciaVelocidad[1] < 8 and (distanciaVelocidad[0] > 0.1 and distanciaVelocidad[0] < 0.3)):
                     dic = {"latitud": vehiculoActual.latitud, "longitud": vehiculoActual.longitud, "id_vehiculo" : vehiculoActual.id_vehiculo, "hora_actual": vehiculoActual.hora_actual, "distancia": round(distanciaVelocidad[0], 2), "velocidad" : round(distanciaVelocidad[1],2)}
                     datosActuales.append(dic)
 
@@ -174,105 +174,58 @@ def login(request):
 def dashboardIndicadoresHistoricos(request):
     return render(request, "dashboardIndicadoresHistoricos.html")
 
-class EstadisticasPage(TemplateView):
-    template_name = "estadisticas.html"
+def estadisticas(request):
+    avVelocidad = list()
+    viasCongestion = list()
+    viasMenorCongestion = list()
 
-    def estadisticasPost(self):
-        #Resumen del trfico (Mañana, tarde, noche)
-        estadisticasDias = list()
-        estadisticaManana = list()
-        estadisticaTarde = list()
-        estadisticaNoche = list()
-        estadisticasSemana = list()
-        horaFechaActual = datetime.now()
-        fecha = horaFechaActual.strftime("%D")
-        mes, dia, anio = (int(i) for i in fecha.split("/"))
-        nroDia = calendar.weekday(anio, mes, dia)
-        dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
-        
-        if(dias[nroDia] == "Lunes"):
-            horaFechaActual = horaFechaActual - timedelta(days = 7)
-        elif(dias[nroDia] == "Martes"):
-            horaFechaActual = horaFechaActual - timedelta(days = 8)
-        elif(dias[nroDia] == "Miercoles"):
-            horaFechaActual = horaFechaActual - timedelta(days = 9)
-        elif(dias[nroDia] == "Jueves"):
-            horaFechaActual = horaFechaActual - timedelta(days = 10)
-        elif(dias[nroDia] == "Viernes"):
-            horaFechaActual = horaFechaActual - timedelta(days = 11)
-        elif(dias[nroDia] == "Sabado"):
-            horaFechaActual = horaFechaActual - timedelta(days = 12)
-        elif(dias[nroDia] == "Domingo"):
-            horaFechaActual = horaFechaActual - timedelta(days = 6)
-        
-        fecha = horaFechaActual.strftime("%D")
+    # Consulta que retorna todos los vehiculos en tiempo actual
+    datosTiempoReal = Vehiculos.objects.filter(hora_actual__startswith=obtenerHora()[0])
 
-        eManana = 0
-        eTarde = 0
-        eNoche = 0
-        for x in range(1,8):
-            for h in range(6,12):
-                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-                eManana = eManana + datosHoras
+    # Consulta que retorna todos los vehiculos en 3 min antes actual
+    datosTiempoAtras = Vehiculos.objects.filter(hora_actual__startswith=obtenerHora()[1])
+    # Obtencion de las avenidas con mayor velocidad
+    for vehiculoActual in datosTiempoReal:
+        for vehiculosAntiguo in datosTiempoAtras:
+            if(vehiculoActual.id_vehiculo == vehiculosAntiguo.id_vehiculo):
+                distanciaVelocidad = calcularDistancia(float(vehiculoActual.longitud), float(vehiculoActual.latitud), float(vehiculosAntiguo.longitud), float(vehiculosAntiguo.latitud))
+                if (distanciaVelocidad[1] > 30):
+                    reverse_geocode_result = gmaps.reverse_geocode((vehiculoActual.latitud, vehiculoActual.longitud))
+                    if("Av." in reverse_geocode_result[0]['formatted_address']):
+                        try:
+                            if(reverse_geocode_result[0]['address_components'][1]['types'] == ['route']):
+                                avVelocidad.append(reverse_geocode_result[0]['address_components'][1]['long_name'])
+                        except:
+                            pass
+                    else:
+                        try:
+                            if(reverse_geocode_result[0]['address_components'][1]['types'] == ['route']):
+                                viasMenorCongestion.append(reverse_geocode_result[0]['address_components'][1]['long_name'])
+                        except:
+                                pass 
+                elif(distanciaVelocidad[1] < 10):
+                    reverse_geocode_result = gmaps.reverse_geocode((vehiculoActual.latitud, vehiculoActual.longitud))
+                    try:
+                        if(reverse_geocode_result[0]['address_components'][1]['types'] == ['route']):
+                            viasCongestion.append(reverse_geocode_result[0]['address_components'][1]['long_name'])
+                    except:
+                            pass
 
-            for h in range(12,19):
-                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-                eTarde = eTarde + datosHoras
+    if len(viasCongestion) > 10:
+        viasCongestion = random.choices(viasCongestion, k=7)
 
-            for h in range(19,24):
-                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-                eNoche = eNoche + datosHoras
-            
-            horaFechaActual = horaFechaActual + timedelta(days = 1)
-            fecha = horaFechaActual.strftime("%D")
-            eManana = int(eManana / 6)
-            eTarde = int(eTarde / 7)
-            eNoche = int(eNoche / 5)
-            estadisticasSemana.append(eManana + eTarde + eNoche)
-            estadisticasDias.append([eManana, eTarde, eNoche])
-            estadisticaManana.append(eManana)
-            estadisticaTarde.append(eTarde)
-            estadisticaNoche.append(eNoche)
+    # Vias centricas con menor congestion 
+    viasMenorCongestion = set(viasMenorCongestion)
+    avVelocidad = set(avVelocidad)
+    viasCongestion = set(viasCongestion)
+    if len(viasMenorCongestion) > 10:
+        try:
+            viasMenorCongestion = random.choices(viasMenorCongestion, k=10)
+        except:
+            pass
 
-        return estadisticasSemana, estadisticasDias, estadisticaManana, estadisticaTarde, estadisticaNoche
+    return render(request, "estadisticas.html", {"avVelocidad": avVelocidad, "viasCongestion": viasCongestion, "viasMenorCongestion": viasMenorCongestion})
 
-    def estadisticaHoy(self):
-        #Resumen del trfico (Mañana, tarde, noche)
-        hora = datetime.now()
-        fecha = hora.strftime("%D")
-
-        eManana = 0
-        eTarde = 0
-        eNoche = 0
-        for h in range(6,12):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-            eManana = eManana + datosHoras
-
-        for h in range(12,19):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-            eTarde = eTarde + datosHoras
-
-        for h in range(19,24):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
-            eNoche = eNoche + datosHoras
-        
-        eManana = int(eManana / 6)
-        eTarde = int(eTarde / 7)
-        eNoche = int(eNoche / 5)
-        return [eManana, eTarde, eNoche]
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        estadisticas = self.estadisticasPost()
-        context['estadisticasSemana'] = estadisticas[0]
-        context['estadisticasDias'] = estadisticas[1]
-        context['estadisticaManana'] = estadisticas[2]
-        context['estadisticaTarde'] = estadisticas[3]
-        context['estadisticaNoche'] = estadisticas[4]
-        context['estadisticaDia'] = self.estadisticaHoy()
-
-        return context
-        
 class DashboardPage(TemplateView):
     template_name = "dashboard.html"
 
@@ -302,20 +255,20 @@ class DashboardPage(TemplateView):
         eTarde = 0
         eNoche = 0
         for h in range(6,12):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
             eManana = eManana + datosHoras
 
         for h in range(12,19):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
             eTarde = eTarde + datosHoras
 
         for h in range(19,24):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + hora.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
             eNoche = eNoche + datosHoras
         
-        eManana = int(eManana / 6)
-        eTarde = int(eTarde / 7)
-        eNoche = int(eNoche / 5)
+        eManana = int(eManana / 12)
+        eTarde = int(eTarde / 14)
+        eNoche = int(eNoche / 10)
 
         return len(postAPI()), vParados, vehiculosHoy, listaVias, eManana, eTarde, eNoche,coordenadasVias
 
@@ -352,22 +305,22 @@ class DashboardPage(TemplateView):
         eNoche = 0
         for x in range(1,8):
             for h in range(6,12):
-                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
                 eManana = eManana + datosHoras
 
             for h in range(12,19):
-                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
                 eTarde = eTarde + datosHoras
 
             for h in range(19,24):
-                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+                datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaFechaActual.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
                 eNoche = eNoche + datosHoras
             
             horaFechaActual = horaFechaActual + timedelta(days = 1)
             fecha = horaFechaActual.strftime("%D")
-            eManana = int(eManana / 6)
-            eTarde = int(eTarde / 7)
-            eNoche = int(eNoche / 5)
+            eManana = int(eManana / 12)
+            eTarde = int(eTarde / 14)
+            eNoche = int(eNoche / 10)
             estadisticaManana.append(eManana)
             estadisticaTarde.append(eTarde)
             estadisticaNoche.append(eNoche)
@@ -468,15 +421,15 @@ def getValoresDashboardIndicadoresHistoricos(_request, fecha):
     eNoche = 0
     for x in range(1,8):
         for h in range(6,12):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
             eManana = eManana + datosHoras
 
         for h in range(12,19):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
             eTarde = eTarde + datosHoras
 
         for h in range(19,24):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
             eNoche = eNoche + datosHoras
         
         horaHistorica = horaHistorica + timedelta(days = 1)
@@ -513,15 +466,15 @@ def getValoresDashboardIndicadoresHistoricos2(_request, fecha):
     eNoche = 0
 
     for h in range(6,12):
-        datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+        datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
         eManana = eManana + datosHoras
 
     for h in range(12,19):
-        datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+        datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
         eTarde = eTarde + datosHoras
 
     for h in range(19,24):
-        datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+        datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
         eNoche = eNoche + datosHoras
     
     eManana = int(eManana / 6)
@@ -566,15 +519,15 @@ def getValoresDashboardIndicadoresHistoricos3(_request, fecha):
 
     for x in range(1,8):
         for h in range(6,12):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
             eManana = eManana + datosHoras
 
         for h in range(12,19):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
             eTarde = eTarde + datosHoras
 
         for h in range(19,24):
-            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=3).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
+            datosHoras = Vehiculos.objects.filter(hora_actual__startswith=(fecha + " " + horaHistorica.replace(hour = h).strftime("%H"))).filter(velocidad__gte=4).filter(velocidad__lt=5).values_list('latitud', 'longitud').distinct().values_list('id_vehiculo').distinct().count()
             eNoche = eNoche + datosHoras
             
         horaHistorica = horaHistorica + timedelta(days = 1)
@@ -586,6 +539,29 @@ def getValoresDashboardIndicadoresHistoricos3(_request, fecha):
         estadisticasSemana.append(eManana + eTarde + eNoche)
 
     data = {'mensaje': "Correcto","estadisticasSemana": estadisticasSemana , "fecha": fecha}
+
+    return JsonResponse(data)
+
+def getValoresDashboardIndicadoresHistoricosTaxisActivos(_request, fecha):
+
+    hManana = ("06","07","08","09","10","11", "12")
+    hTarde = ("13","14","15","14","17", "18")
+    hNoche = ("19","20","21","22","23", "00")
+
+    fechaSeparada = fecha.split("-") #anio-mes-dia 2021-11-14
+    horaHistorica = datetime(int(fechaSeparada[0]), int(fechaSeparada[1]), int(fechaSeparada[2])) #Anio - mes - dia
+    fecha = horaHistorica.strftime("%D")
+
+    consulta = "SELECT DISTINCT id_usuario FROM vehiculos WHERE hora_actual LIKE '" + fecha + " " + hManana[0] + "%' OR hora_actual LIKE '" + fecha + " " + hManana[1] + "%' OR hora_actual LIKE '" + fecha + " " + hManana[2] + "%' OR hora_actual LIKE '" + fecha + " " + hManana[3] + "%' OR hora_actual LIKE '" + fecha + " " + hManana[4] + "%' OR hora_actual LIKE '" + fecha + " " + hManana[5] + "%' OR hora_actual LIKE '" + fecha + " " + hManana[6] + "%'"
+    sumaManana = len(consultaBASE(consulta))
+
+    consulta = "SELECT DISTINCT id_usuario FROM vehiculos WHERE hora_actual LIKE '" + fecha + " " + hTarde[0] + "%' OR hora_actual LIKE '" + fecha + " " + hTarde[1] + "%' OR hora_actual LIKE '" + fecha + " " + hTarde[2] + "%' OR hora_actual LIKE '" + fecha + " " + hTarde[3] + "%' OR hora_actual LIKE '" + fecha + " " + hTarde[4] + "%' OR hora_actual LIKE '" + fecha + " " + hTarde[5] + "%'"
+    sumaTarde = len(consultaBASE(consulta))
+
+    consulta = "SELECT DISTINCT id_usuario FROM vehiculos WHERE hora_actual LIKE '" + fecha + " " + hNoche[0] + "%' OR hora_actual LIKE '" + fecha + " " + hNoche[1] + "%' OR hora_actual LIKE '" + fecha + " " + hNoche[2] + "%' OR hora_actual LIKE '" + fecha + " " + hNoche[3] + "%' OR hora_actual LIKE '" + fecha + " " + hNoche[4] + "%' OR hora_actual LIKE '" + fecha + " " + hNoche[5] + "%'"
+    sumaNoche = len(consultaBASE(consulta))
+
+    data = {'mensaje': "Correcto", "sumaManana": sumaManana, "sumaTarde": sumaTarde, "sumaNoche": sumaNoche}
 
     return JsonResponse(data)
 
@@ -769,6 +745,18 @@ def getTemperatura(_request, idUsuario):
         listaManana.append(round(sumaManana/6, 1))
         listaTarde.append(round(sumaTarde/6, 1))
         listaNoche.append(round(sumaNoche/6, 1))
+
+        for x in range(0, len(listaManana)):
+            if(listaManana[x] == 0):
+                listaManana[x] = "null"
+            
+            if(listaTarde[x] == 0):
+                listaTarde[x] = "null"
+
+            if(listaNoche[x] == 0):
+                listaNoche[x] = "null"
+
+        
         listaDias.append(diasS[nroDia] + ", " +fecha.split("/")[1])
 
     data = {'mensaje': "Correcto", "listaManana": listaManana, "listaTarde": listaTarde, "listaNoche": listaNoche, "listaDias": listaDias}
@@ -833,7 +821,7 @@ def getTemperaturaAnalisis(_request, fechaTempGen):
 
     return JsonResponse(data)
 
-def getConsumo(_request, idUsuario, horario):
+def getConsumo(_request, idUsuario, horario, fecha):
 
     if(horario == "manana"):
         horas = ("06","07","08","09","10","11")
@@ -843,13 +831,20 @@ def getConsumo(_request, idUsuario, horario):
         horas = ("18","19","20","21","22","23")
 
     listaConsumo = list() # Divicion por dias
-    horaFecha = datetime.now()
-    fecha = horaFecha.strftime("%D")
+
+    fechaSeparada = fecha.split("-") #anio-mes-dia 2021-11-14
+    horaHistorica = datetime(int(fechaSeparada[0]), int(fechaSeparada[1]), int(fechaSeparada[2])) #Anio - mes - dia
+    fecha = horaHistorica.strftime("%D")
+
     #SELECT ROUND(AVG(consumo),1) FROM vehiculos WHERE id_usuario = '2731' AND hora_actual LIKE '11/22/22 07%'
     for h in horas:
         consulta = "SELECT ROUND(AVG(consumo),1) FROM vehiculos WHERE id_usuario = '" + idUsuario + "' AND hora_actual LIKE '" + fecha + " " + h + "%'"
         dbManana = consultaBASE(consulta)
         listaConsumo.append(int(dbManana[0][0] or 0))
+
+    for x in range(0, len(listaConsumo)):
+        if(listaConsumo[x] == 0):
+            listaConsumo[x] = "null"
 
     data = {'mensaje': "Correcto", "listaConsumo": listaConsumo, "horas": horas}
 

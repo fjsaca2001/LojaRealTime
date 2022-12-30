@@ -1,11 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
-    getFecha()
-    graficarSemanaHistorica()
-    graficarDiaHistorico()
-    graficaReporteSemanalHistorico()
+    getFechaDash()
+    //Grafica barras horarios
+    graficarSemanaHistoricaDash()
+    // grafica de puntos dia
+    graficarDiaHistoricoDash()
+    // Grafica barras taxis
+    graficarTaxisPorHorarios()
+    // Grafica pastel
+    graficaReporteSemanalHistoricoDash((0,0,0,0,0,0,0))
+    
 });
 
-function getFecha() {
+function getFechaDash() {
     fechaHoy = new Date();
     var mes = fechaHoy.getMonth() + 1; //obteniendo mes
     var dia = fechaHoy.getDate(); //obteniendo dia
@@ -18,13 +24,13 @@ function getFecha() {
     // llamada cuando la fecha para la grafica semanal cambie
     document.getElementById('fechaSemanalTrafico').value = ano + "-" + mes + "-" + dia;
     let fechaA = document.getElementById("fechaSemanalTrafico");
-    valoresFechaSemanal(ano + "-" + mes + "-" + dia);
+    valoresFechaSemanalDash(ano + "-" + mes + "-" + dia);
 
     fechaA.addEventListener('change', function () {
         fechaSeleccionada = new Date(parseInt((this.value).split("-")[0]), parseInt((this.value).split("-")[1]) - 1, parseInt((this.value).split("-")[2]));
         console.log((this.value).split("-")[0], (this.value).split("-")[1], (this.value).split("-")[2])
         if (fechaSeleccionada < fechaHoy) {
-            valoresFechaSemanal(this.value) // anio-mes-dia 2021-11-14
+            valoresFechaSemanalDash(this.value) // anio-mes-dia 2021-11-14
         } else {
             alert("La fecha debe ser menor al dia: " + fechaHoy.toLocaleDateString('es-es', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) )
             document.getElementById('fechaSemanalTrafico').value = ano + "-" + mes + "-" + dia;
@@ -34,13 +40,13 @@ function getFecha() {
     //Llamada cuando la fecha del grafico por dia cambie
     document.getElementById('fechaDiaTrafico').value = ano + "-" + mes + "-" + dia;
     let fechaD = document.getElementById("fechaDiaTrafico");
-    valoresFechaDia(ano + "-" + mes + "-" + dia);
+    valoresFechaDiaDash(ano + "-" + mes + "-" + dia);
 
     fechaD.addEventListener('change', function () {
         fechaSeleccionada = new Date(parseInt((this.value).split("-")[0]), parseInt((this.value).split("-")[1]) - 1, parseInt((this.value).split("-")[2]));
         console.log((this.value).split("-")[0], (this.value).split("-")[1], (this.value).split("-")[2])
         if (fechaSeleccionada < fechaHoy) {
-            valoresFechaDia(this.value) // anio-mes-dia 2021-11-14
+            valoresFechaDiaDash(this.value) // anio-mes-dia 2021-11-14
         } else {
             alert("La fecha debe ser menor al dia: " + fechaHoy.toLocaleDateString('es-es', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) )
             document.getElementById('fechaSemanalTrafico').value = ano + "-" + mes + "-" + dia;
@@ -50,13 +56,30 @@ function getFecha() {
     //Llamada cuando la fecha del grafico reporte semanal cambie
     document.getElementById('fechaDiaSemanalTrafico').value = ano + "-" + mes + "-" + dia;
     let fechaSemanal = document.getElementById("fechaDiaSemanalTrafico");
-    valoresFechaReporte(ano + "-" + mes + "-" + dia);
+    valoresFechaReporteDash(ano + "-" + mes + "-" + dia);
 
     fechaSemanal.addEventListener('change', function () {
         fechaSeleccionada = new Date(parseInt((this.value).split("-")[0]), parseInt((this.value).split("-")[1]) - 1, parseInt((this.value).split("-")[2]));
         console.log((this.value).split("-")[0], (this.value).split("-")[1], (this.value).split("-")[2])
         if (fechaSeleccionada < fechaHoy) {
-            valoresFechaReporte(this.value) // anio-mes-dia 2021-11-14
+            valoresFechaReporteDash(this.value) // anio-mes-dia 2021-11-14
+        } else {
+            alert("La fecha debe ser menor al dia: " + fechaHoy.toLocaleDateString('es-es', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) )
+            document.getElementById('fechaSemanalTrafico').value = ano + "-" + mes + "-" + dia;
+        }
+    });
+
+
+    //Llamada cuando la fecha del grafico reporte semanal cambie
+    document.getElementById('fechaTaxisConectados').value = ano + "-" + mes + "-" + dia;
+    let fechaTaxisConectados = document.getElementById("fechaTaxisConectados");
+    valoresFechaTaxisConectados(ano + "-" + mes + "-" + dia);
+
+    fechaTaxisConectados.addEventListener('change', function () {
+        fechaSeleccionada = new Date(parseInt((this.value).split("-")[0]), parseInt((this.value).split("-")[1]) - 1, parseInt((this.value).split("-")[2]));
+        console.log((this.value).split("-")[0], (this.value).split("-")[1], (this.value).split("-")[2])
+        if (fechaSeleccionada < fechaHoy) {
+            valoresFechaTaxisConectados(this.value) // anio-mes-dia 2021-11-14
         } else {
             alert("La fecha debe ser menor al dia: " + fechaHoy.toLocaleDateString('es-es', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) )
             document.getElementById('fechaSemanalTrafico').value = ano + "-" + mes + "-" + dia;
@@ -64,14 +87,40 @@ function getFecha() {
     });
 
 }
+// llamada cuando la fecha para la grafica semanal cambie
+const valoresFechaTaxisConectados = async (fecha) => {
+    try {
+        const response = await fetch("getValoresDashboardIndicadoresHistoricosTaxisActivos/" + fecha);
+        const data = await response.json();
+        if (data.mensaje == "Correcto") {
+            graficarTaxisPorHorarios(data.sumaManana, data.sumaTarde, data.sumaNoche); //dManana, dTarde, dNoche
+        }
+
+    } catch (e) {
+        console.log(e)
+        alert("No se encontraron datos")
+    }
+};
 
 // llamada cuando la fecha para la grafica semanal cambie
-const valoresFechaSemanal = async (fecha) => {
+const valoresFechaSemanalDash = async (fecha) => {
     try {
         const response = await fetch("getValoresDashboardIndicadoresHistoricos/" + fecha);
         const data = await response.json();
+        dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
+        htmlTabla = ''
         if (data.mensaje == "Correcto") {
-            graficarSemanaHistorica(data.estadisticaManana, data.estadisticaTarde, data.estadisticaNoche); //dManana, dTarde, dNoche
+            graficarSemanaHistoricaDash(data.estadisticaManana, data.estadisticaTarde, data.estadisticaNoche); //dManana, dTarde, dNoche
+            for (let i = 0; i < dias.length; i++) {
+                suma = (data.estadisticaManana[i] + data.estadisticaTarde[i] + data.estadisticaNoche[i])/3
+                if (i % 2 == 0) {
+                    clase = ""
+                } else {
+                    clase = 'class="alt"'
+                }
+                htmlTabla = htmlTabla + "<tr " + clase + "><td>" + dias[i] + "</td><td>" + Math.round(suma) + "</td></tr>"
+            }
+            document.getElementById('reemplazarTablaEmbotellamientos').innerHTML = htmlTabla;
         }
 
     } catch (e) {
@@ -81,12 +130,12 @@ const valoresFechaSemanal = async (fecha) => {
 };
 
 //Llamada cuando la fecha del grafico por dia cambie
-const valoresFechaDia = async (fecha) => {
+const valoresFechaDiaDash = async (fecha) => {
     try {
         const response = await fetch("getValoresDashboardIndicadoresHistoricos2/" + fecha);
         const data = await response.json();
         if (data.mensaje == "Correcto") {
-            graficarDiaHistorico(data.eManana, data.eTarde, data.eNoche); //dManana, dTarde, dNoche
+            graficarDiaHistoricoDash(data.eManana, data.eTarde, data.eNoche); //dManana, dTarde, dNoche
         }
 
     } catch (e) {
@@ -96,12 +145,12 @@ const valoresFechaDia = async (fecha) => {
 };
 
 //Llamada cuando la fecha del grafico por dia cambie
-const valoresFechaReporte = async (fecha) => {
+const valoresFechaReporteDash = async (fecha) => {
     try {
         const response = await fetch("getValoresDashboardIndicadoresHistoricos3/" + fecha);
         const data = await response.json();
         if (data.mensaje == "Correcto") {
-            graficaReporteSemanalHistorico(data.estadisticasSemana); //dManana, dTarde, dNoche
+            graficaReporteSemanalHistoricoDash(data.estadisticasSemana); //dManana, dTarde, dNoche
         }
 
     } catch (e) {
@@ -111,7 +160,7 @@ const valoresFechaReporte = async (fecha) => {
 };
 
 // llamada cuando la fecha para la grafica semanal cambie
-function graficarSemanaHistorica(estadisticaManana, estadisticaTarde, estadisticaNoche) {
+function graficarSemanaHistoricaDash(estadisticaManana, estadisticaTarde, estadisticaNoche) {
     Highcharts.chart('containerHorarios', {
         chart: {
             type: 'column'
@@ -171,7 +220,7 @@ function graficarSemanaHistorica(estadisticaManana, estadisticaTarde, estadistic
 }
 
 //Llamada cuando la fecha del grafico por dia cambie
-function graficarDiaHistorico(eManana, eTarde, eNoche){
+function graficarDiaHistoricoDash(eManana, eTarde, eNoche){
     // Data retrieved https://en.wikipedia.org/wiki/List_of_cities_by_average_temperature
     Highcharts.chart('container-Dia', {
         chart: {
@@ -219,7 +268,7 @@ function graficarDiaHistorico(eManana, eTarde, eNoche){
 }
 
 //Llamada cuando la fecha del grafico reporte semanal cambie
-function graficaReporteSemanalHistorico(estadisticasSemana){
+function graficaReporteSemanalHistoricoDash(estadisticasSemana){
     Highcharts.chart('container-semana', {
         chart: {
             type: 'pie',
@@ -251,6 +300,49 @@ function graficaReporteSemanalHistorico(estadisticasSemana){
                 ['Sabado', estadisticasSemana[5]],
                 ['Domingo', estadisticasSemana[6]],
             ]
+        }]
+    });
+}
+
+function graficarTaxisPorHorarios(sumaManana, sumaTarde, sumaNoche){
+    Highcharts.chart('containerTaxisPorHorarios', {
+        chart: {
+            type: 'bar'
+        },
+        title: {
+            text: 'Clasificación de taxis conectados'
+        },
+        xAxis: {
+            categories: ['Mañana', 'Tarde', 'Noche'],
+            title: {
+                text: null
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Nro de taxis',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+        tooltip: {
+            valueSuffix: ''
+        },
+        plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+        series: [{
+            name: 'Taxis conectados',
+            data: [sumaManana,sumaTarde,sumaNoche],
+            colorByPoint: true,
+            showInLegend: false,
         }]
     });
 }

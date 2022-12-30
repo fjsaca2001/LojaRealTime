@@ -1,7 +1,6 @@
 {% extends "masterDashboard.html" %} {% block title %} LojaRealTime | DashBoard
 {% endblock%} {% block content%} {% load static %}
 <script src="{% static 'js/dashIndicadores.js' %}"></script>
-
 <div aria-live="polite" aria-atomic="true" class="bg-dark position-relative bd-example-toasts">
   <div class="toast-container p-3" id="toastPlacement">
     <div class="toast">
@@ -20,70 +19,112 @@
     </div>
   </div>
 </div>
-<div class="seccionGraficas">
-  <!-- Grafica semanal -->
-  <div class="graficaDia">
-    <h2>Reporte histórico de embotellamientos semanal</h2>
-    <div class="graficaHorarios" style="width: 65%">
-      <div class="fechaSeleccionar">
-        <div class="fecha">
-          <p>Ingrese una fecha:</p>
-        </div>
-        <div class="fecha">
-          <input type="date" id="fechaSemanalTrafico" class="calendario" />
-        </div>
-      </div>
-      <figure class="highcharts-figure">
-        <div id="containerHorarios"></div>
-      </figure>
-      <p class="highcharts-description">
-        <strong>Nota: </strong> Se observan los embotellamientos de la ciudad de Loja, dividida en horarios para una mejor visualización. Este gráfico es interactivo y
-        se puede seleccionar el horario al que desee ver.
-      </p>
-    </div>
-    <div class="graficaHorarios" style="width: 28%">
-      <div class="fechaSeleccionar">
-        <div class="fecha">
-          <p>Ingrese una fecha: </p>
-        </div>
-        <div class="fecha">
-          <input type="date" id="fechaDiaSemanalTrafico" class="calendario" />
-        </div>
-      </div>
-      <figure class="highcharts-figure">
-        <div id="container-semana"></div>
-      </figure>
-      <p class="highcharts-description">
-        <strong>Nota: </strong> Se observan los embotellamientos de la ciudad de Loja, dividida en días para una mejor visualización.
-      </p>
-    </div>
-  </div>
 
-  <!-- Grafica del dia -->
-  <div class="graficaDia">
-    <h2>Embotellamientos de hoy y Reporte semanal
-    </h2>
-    <div class="graficaHorarios" style="width: 30%">
-      <div class="fechaSeleccionar"">
-        <div class="fecha">
-          <p>Ingrese una fecha: </p>
-        </div>
-        <div class="fecha">
-          <input type="date" id="fechaDiaTrafico" class="calendario" />
-        </div>
+<h2 class="tituloEs">Indicadores Histórico</h2>
+
+<div class="gridAppEstadisticas">
+  <div class="hit-the-floor" style="text-align: left">
+    Embotellamientos semanales
+  </div>
+  <div class="graficaHorarios" style="grid-column: span 2">
+    <figure class="highcharts-figure">
+      <div id="containerHorarios"></div>
+    </figure>
+    <p class="highcharts-description">
+      <strong>Nota: </strong> Se observan los embotellamientos de la ciudad de Loja, dividida en horarios para una mejor visualización. Este gráfico es interactivo y
+      se puede seleccionar el horario al que desee ver.
+    </p>
+  </div>
+  <div class="topVelocidad" style="justify-content: flex-start;">
+    <div class="fechaSeleccionar">
+      <div class="fecha">
+        <p>Ingrese una fecha:</p>
       </div>
-      <figure class="highcharts-figure">
-        <div id="container-Dia"></div>
-      </figure>
-      <p class="highcharts-description">
-        <strong>Nota: </strong> Se observan los embotellamientos de la ciudad de Loja, dividida en horarios para una mejor visualización.
-      </p>      
+      <div class="fecha">
+        <input type="date" id="fechaSemanalTrafico" class="calendario" />
+      </div>
+    </div>
+    <div class="datagrid">
+      <table>
+        <p
+          class="highcharts-description"
+          style="border-top: solid 1px #006699 !important; font-weight: bold"
+        >
+          Promedio de embotellamientos
+        </p>
+        <thead>
+          <tr>
+            <th>Dia</th>
+            <th>Nro Embotellamientos</th>
+          </tr>
+        </thead>
+        <tbody id="reemplazarTablaEmbotellamientos">
+          <!--Aqui van los valores desde JS-->
+        </tbody>
+      </table>
     </div>
   </div>
+  <div class="hit-the-floor" style="text-align: center; grid-column: span 1; font-size: 22px;">
+    Embotellamientos totales por semana
+  </div>
+  <div class="hit-the-floor" style="text-align: center; grid-column: span 1; font-size: 22px;">
+    Embotellamientos por dia
+  </div>
+  <div class="hit-the-floor" style="text-align: center; grid-column: span 1; font-size: 22px;">
+    Taxis conectados por horarios
+  </div>
+  <div class="graficaHorarios">
+    <div class="fechaSeleccionar">
+      <div class="fecha">
+        <p>Ingrese una fecha: </p>
+      </div>
+      <div class="fecha">
+        <input type="date" id="fechaDiaSemanalTrafico" class="calendario" />
+      </div>
+    </div>
+    <figure class="highcharts-figure">
+      <div id="container-semana"></div>
+    </figure>
+    <p class="highcharts-description">
+      <strong>Nota: </strong> Se observan los embotellamientos de la ciudad de Loja, dividida en días para una mejor visualización.
+    </p>
+  </div>
+  <div class="graficaHorarios">
+    <div class="fechaSeleccionar"">
+      <div class="fecha">
+        <p>Ingrese una fecha: </p>
+      </div>
+      <div class="fecha">
+        <input type="date" id="fechaDiaTrafico" class="calendario" />
+      </div>
+    </div>
+    <figure class="highcharts-figure">
+      <div id="container-Dia"></div>
+    </figure>
+    <p class="highcharts-description">
+      <strong>Nota: </strong> Se observan los embotellamientos de la ciudad de Loja, dividida en horarios para una mejor visualización.
+    </p>      
+  </div>
+  <div class="graficaHorarios">
+    <div class="fechaSeleccionar"">
+      <div class="fecha">
+        <p>Ingrese una fecha: </p>
+      </div>
+      <div class="fecha">
+        <input type="date" id="fechaTaxisConectados" class="calendario" />
+      </div>
+    </div>
+    <figure class="highcharts-figure">
+      <div id="containerTaxisPorHorarios"></div>
+    </figure>
+    <p class="highcharts-description">
+      <strong>Nota: </strong> Se observan los embotellamientos de la ciudad de Loja, dividida en horarios para una mejor visualización.
+    </p>      
+  </div>
+</div>
   <script>
     $(document).ready(function(){
       $('.toast').toast('show');
     });
   </script>
   {% endblock %}
-</div>

@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     graficarSemanaHistorica()
     graficarDiaHistorico()
     graficaReporteSemanalHistorico()
+    graficaReporteSemanalHistorico()
 });
 
 function getFecha() {
