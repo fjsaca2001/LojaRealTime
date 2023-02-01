@@ -13,9 +13,9 @@ Al estar trabajando con un API que envia datos constantemente se ha creado una a
 ### Ejecución
 pendiente
 ## Proyecto Django 
+Todo lo relacionado con las paginas HTML se han desarrollado con el Framework Django, por ello tambien se realizan las vistas, configuraciones y calculos necesarios. Por lo que se considerara el proyecto principal
 ### Configuración
->  Todo lo relacionado con las paginas HTML se han desarrollado con el Framework Django, por ello tambien se realizan las vistas, configuraciones
-> y calculos necesarios. Tambien se debe modificar las siguentes direcciones:
+> A este proyecto solamente se debe modificar las siguentes direcciones de varios archivos ya que al estar en local y pasala a un servidor estas direcciones se veran afectadas. Considerar lo siguiente:
 - Modificar la direccion que se encuentra dentro de la carpeta lojaRealTime en el archivo settings.py en la linea 59, donde se indica la direccion de los templates del proyecto
 - Modificar la direccion que se encuentra dentro de la carpeta lojaRealTime en el archivo settings.py en la linea 81, donde se indica la direccion de la base de datos SQLite
 - Modificar la direccion que se encuentra dentro de la carpeta lojaRealTime en el archivo settings.py en la linea 125, donde se indica la direccion de la los archivos etaticos, donde se encuentras lo JS, imagenes, etc. 
