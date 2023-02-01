@@ -19,5 +19,6 @@ Todo lo relacionado con las paginas HTML se han desarrollado con el Framework Dj
 - Modificar la direccion que se encuentra dentro de la carpeta lojaRealTime en el archivo settings.py en la linea 59, donde se indica la direccion de los templates del proyecto
 - Modificar la direccion que se encuentra dentro de la carpeta lojaRealTime en el archivo settings.py en la linea 81, donde se indica la direccion de la base de datos SQLite
 - Modificar la direccion que se encuentra dentro de la carpeta lojaRealTime en el archivo settings.py en la linea 125, donde se indica la direccion de la los archivos etaticos, donde se encuentras lo JS, imagenes, etc. 
+- Modificar la direccion que se encuentra dentro de la carpeta administracion en el archivo views.py en la linea 77, donde se indica la direccion de la base de datos SQLite
 ### Ejecución
 pendiente
