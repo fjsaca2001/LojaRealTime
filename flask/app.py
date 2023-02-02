@@ -75,6 +75,7 @@ def createApp():
         db.session.add(newVehiculo)
     db.session.commit()
     print("Ejecucion Dormida")
+    #sleep(348)
     sleep(58)
 while(True):
     createApp()

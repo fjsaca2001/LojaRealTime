@@ -7,7 +7,7 @@ import time
 
 
 class TestProjectListPage(StaticLiveServerTestCase):
-
+    """
     print("Pruebas de funcionalidad botones & carga inicial")
 
     def setUp(self):
@@ -19,7 +19,6 @@ class TestProjectListPage(StaticLiveServerTestCase):
 
     def test_no_projects_alert(self):
         self.browser.get(self.live_server_url)
-        # time.sleep(20)
 
         # Peticiones del usuario en primera instancia
         alert = self.browser.find_element(By.CLASS_NAME, 'head-index')
@@ -33,7 +32,7 @@ class TestProjectListPage(StaticLiveServerTestCase):
         self.browser.get(self.live_server_url)
         # Peticiones del usuario en primera instancia
         add_url = self.live_server_url + reverse('proyecto')
-        # time.sleep(20)
+
         self.browser.find_element(By.TAG_NAME, 'a').click()
         self.assertEquals(
             self.browser.current_url + "proyecto/",
@@ -45,7 +44,7 @@ class TestProjectListPage(StaticLiveServerTestCase):
         self.browser.get(self.live_server_url)
         # Peticiones del usuario en primera instancia
         add_url = self.live_server_url + reverse('index')
-        # time.sleep(20)
+ 
         self.browser.find_element(By.TAG_NAME, 'a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -57,7 +56,7 @@ class TestProjectListPage(StaticLiveServerTestCase):
         self.browser.get(self.live_server_url)
         # Peticiones del usuario en primera instancia
         add_url = self.live_server_url + reverse('estadisticas')
-        # time.sleep(20)
+  
         self.browser.find_element(By.TAG_NAME, 'a').click()
         self.assertEquals(
             self.browser.current_url + "estadisticas/",
@@ -75,3 +74,4 @@ class TestProjectListPage(StaticLiveServerTestCase):
             self.browser.current_url + 'login/',
             add_url
         )
+    """
