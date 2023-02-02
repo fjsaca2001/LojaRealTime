@@ -54,3 +54,6 @@ python3 manage.py runserver
 4. El resultado debe ser algo así
 
 ![image](https://user-images.githubusercontent.com/49170845/216139431-ccf32a9b-711c-40fe-a48a-4d9d527a0d4a.png)
+
+# Dirección de la estructura de la BD
+[Estructura de la base de datos del proyecto ](https://github.com/fjsaca2001/LojaRealTime/blob/main/flask/tempVehiculos.db.sql)
